@@ -5,15 +5,13 @@ mkdir -p ~/dotfiles/backups
 
 # create symbolic links
 echo "[+] Creating symbolic links, moving current dotfiles to ~/dotfiles/backups"
-for dotfile in .vimrc .zshrc .zpreztorc .zshenv .aliases .tmux.conf; do
+for dotfile in .vimrc .zshrc .aliases .tmux.conf; do
 	if [ -f ~/$dotfile ]; then
 		mv --backup=t ~/$dotfile ~/dotfiles/backups
 	fi
 	ln -s ~/dotfiles/$dotfile ~/$dotfile
 	echo "[+] Created $dotfile"
 done
-
-# hyperterm for mac
 
 # create i3 setup
 echo "Would you like to set up i3 for linux?"
