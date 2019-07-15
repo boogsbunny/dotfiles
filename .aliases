@@ -1,0 +1,52 @@
+# general
+alias gg="exit"
+alias c="clear"
+alias cls="clear"
+# ignore node_modules folder with grep
+alias grep="grep --color=auto --exclude-dir=\node_modules"
+alias cprs="tar -czvf" # create gzip archive
+alias extr="tar -xzvf" # extract gzip archive
+alias wget="wget -c" # resume downloads
+
+# directory navigation
+alias cd..="cd .."
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
+
+# package manager
+alias agi="sudo apt-get install"
+alias agu="sudo apt-get update"
+alias agup="sudo apt-get upgrade"
+alias agr="sudo apt-get remove"
+alias agar="sudo apt-get autoremove"
+alias aar="sudo add-apt-repository"
+
+# programming
+alias rb="ruby"
+alias irbs="irb --simple-prompt"
+alias py="python -m IPython"
+alias ac="source venv/bin/activate"
+alias de="deactivate"
+
+# alias clang++="clang++-5.0"
+# alias cpp="clang++-5.0"
+# alias cdb="clang++-5.0 -Wall -g"
+# alias a="./a.out"
+
+# git
+alias gpom="git push -u origin master"
+alias gpw="git config credential.helper 'cache --timeout=72000'"
+
+# i3
+alias spotify="~/snap --force-device-scale-factor=1.5"
+alias N='nautilus --no-desktop&'
+
+# stardict
+alias ger="sdcv -u \"English-German\""
+
+# okular
+alias okular="open ~/Applications/KDE/okular.app"
+
+# tmux
+#alias tmux="tmux -2"
