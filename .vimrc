@@ -25,7 +25,7 @@ Plug 'flazz/vim-colorschemes' " a bunch of colorschemes
 
 " build and install autocompleter
 Plug 'ervandew/supertab' " tab for omnicompletion
-Plug 'w0rp/ale' " linting
+" Plug 'w0rp/ale' " linting
 Plug 'xolox/vim-misc' " dependency for vim-easytags
 Plug 'xolox/vim-easytags' " easy tag generation for jumping to definitions
 Plug 'tpope/vim-surround' " easily change surrounding brackets, quotes, etc.
@@ -83,7 +83,7 @@ set foldlevelstart=12     " don't autofold unless there are 12 indents
 set undodir=~/.vim/undodir
 set undofile              " persistent undo
 
-"set pastetoggle=<F2>      " switch to paste mode to paste easily
+set pastetoggle=<F2>      " switch to paste mode to paste easily
 "set clipboard=unnamedplus " use system clipboard
 
 set shellpipe=>           " hide ack searches from stdout
@@ -240,12 +240,12 @@ set t_RV= " fixes broken first line in rendering
 "--------------------------------"
 "              ale               "
 "--------------------------------"
-let g:ale_fixers = {'javascript': ['prettier', 'eslint'], 'python': ['autopep8']}
-let g:ale_fix_on_save = 1
-let g:ale_lint_on_text_changed = 'never'
-let g:ale_lint_on_enter = 0
-let g:ale_completion_enabled = 1
-
+" let g:ale_fixers = {'javascript': ['prettier', 'eslint'], 'python': ['autopep8']}
+" let g:ale_fix_on_save = 1
+" let g:ale_lint_on_text_changed = 'never'
+" let g:ale_lint_on_enter = 0
+" let g:ale_completion_enabled = 1
+"
 "--------------------------------"
 "             CtrlP              "
 "--------------------------------"
@@ -352,3 +352,46 @@ if !exists('g:airline_symbols')
   let g:airline_symbols = {}
 endif
 let g:airline_symbols.space = "\ua0"
+
+
+
+" Compatible with ranger 1.4.2 through 1.7.*
+"
+" Add ranger as a file chooser in vim
+"
+" If you add this code to the .vimrc, ranger can be started using the command
+" ":RangerChooser" or the keybinding "<leader>r".  Once you select one or more
+" files, press enter and ranger will quit again and vim will open the selected
+" files.
+
+function! RangeChooser()
+    let temp = tempname()
+    " The option "--choosefiles" was added in ranger 1.5.1. Use the next line
+    " with ranger 1.4.2 through 1.5.0 instead.
+    "exec 'silent !ranger --choosefile=' . shellescape(temp)
+    if has("gui_running")
+        exec 'silent !xterm -e ranger --choosefiles=' . shellescape(temp)
+    else
+        exec 'silent !ranger --choosefiles=' . shellescape(temp)
+    endif
+    if !filereadable(temp)
+        redraw!
+        " Nothing to read.
+        return
+    endif
+    let names = readfile(temp)
+    if empty(names)
+        redraw!
+        " Nothing to open.
+        return
+    endif
+    " Edit the first item.
+    exec 'edit ' . fnameescape(names[0])
+    " Add any remaning items to the arg list/buffer list.
+    for name in names[1:]
+        exec 'argadd ' . fnameescape(name)
+    endfor
+    redraw!
+endfunction
+command! -bar RangerChooser call RangeChooser()
+nnoremap <leader>r :<C-U>RangerChooser<CR>
