@@ -1,2 +1,0 @@
-;; org-clock-save.el - Bugis-MacBook-Pro.local at <2019-06-15 Sat 18:48>
-(setq org-clock-stored-history '(("/Users/bugiabdulkarim/Documents/journal/20190413" . 140) ("/Users/bugiabdulkarim/Documents/journal/20190421" . 49) ("/Users/bugiabdulkarim/Documents/journal/20190421" . 191) ("/Users/bugiabdulkarim/Documents/journal/20190509" . 110) ("/Users/bugiabdulkarim/Documents/journal/20190615" . 141)))
