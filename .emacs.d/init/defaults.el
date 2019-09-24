@@ -71,6 +71,18 @@
 	  (let ((w (length (number-to-string (count-lines (point-min) (point-max))))))
 	    (concat "%" (number-to-string w) "d ")) line) 'face 'linum)))
 
+;; SLIME clear buffer
+(global-set-key (kbd "C-l") 'slime-repl-clear-buffer)
+
+;; ~a~% shortcut
+(global-set-key (kbd "C-.") '"~a~%")
+
+;; ` shortcut
+(global-set-key (kbd "C-'") '"`")
+
+;; delete current input
+;;(global-set-key (kbd "C-d") 'slime-repl-delete-current-input)
+
 
 ;; disable some features and settings
 (put 'narrow-to-region 'disabled nil)
