@@ -236,7 +236,7 @@ exec_always gsettings set org.nemo.desktop show-desktop-icons false
 # STARTUP PROGRAMS
 
 # Redshift
-exec --no-startup-id redshift
+#exec --no-startup-id redshift
 
 # MPD
 #exec --no-startup-id mpd
@@ -244,29 +244,25 @@ exec --no-startup-id redshift
 # Spotify
 #exec --no-startup-id spotify
 
-# Google chrome
-#exec --no-startup-id google-chrome
-
 # Wallpaper
 #switch to random wallpaper
 #exec_always --no-startup-id feh --randomize -r --bg-fill ~/Pictures/wallpapers/
 #exec_always --no-startup-id feh -r --bg-fill ~/Pictures/wallpapers/deathNote/42.jpg
 #exec_always --no-startup-id feh -r --bg-center ~/Pictures/wallpapers/attackOnTitan/114.jpg
-exec_always --no-startup-id feh -r --bg-fill ~/Pictures/wallpapers/attackOnTitan/82.png
+# exec_always --no-startup-id feh -r --bg-fill ~/Pictures/wallpapers/attackOnTitan/82.png
 
 # Dunst
-  #exec --no-startup-id dunst
+exec --no-startup-id dunst
 
 # Polybar
 exec_always --no-startup-id ~/.config/polybar/launch.sh
-
 
 # Compton
 #exec_always --no-startup-id "compton --blur-background --blur-strength 5 --inactive-opacity 0.9"
 exec_always --no-startup-id compton
 for_window [class="^.*"] border pixel 3
-#
-#exec_always --no-startup-id compton
+
+exec_always --no-startup-id compton
 # Bluetooth
 bindsym $mod+Shift+b exec ~/dotfiles/scripts/toggle_bluetooth.sh
 bindsym $mod+Shift+m exec ~/dotfiles/scripts/connect_to_bose.sh

@@ -1,0 +1,15 @@
+#!/usr/bin/env sh
+
+# background
+setbg &
+# bind keys
+sxhkd &
+# speed xrate up
+xset r rate 300 50 &
+# remove idle mouse
+unclutter &
+# transparency
+xcompmgr &
+# notifications
+dunst &
+mpdupdate &
