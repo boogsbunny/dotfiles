@@ -42,6 +42,7 @@ Plug 'tpope/vim-fugitive' " Git wrapper
 Plug 'vim-scripts/indentpython.vim' " alternative indentation script for python
 Plug 'vim-latex/vim-latex'
 Plug 'xuhdev/vim-latex-live-preview' " lively previewing LaTeX PDF output
+Plug 'davidhalter/jedi-vim' " code completion python
 
 call plug#end()
 "--------------------------------"
@@ -71,10 +72,10 @@ set incsearch             " show search hits as you type
 set ignorecase            " ignore case when searching
 set smartcase             " override ignore case if uppercase letters in pattern
 
-set tabstop=4             " make tabs 4-spaces wide
-set shiftwidth=4          " make indents correspond to one tab
 
-set smartindent           " indent after brackets
+set tabstop=4 " show existing tab with 4 spaces width
+set shiftwidth=4 " when indenting with '>', use 4 spaces width
+set expandtab " On pressing tab, insert 4 spaces
 
 set foldmethod=indent
 set foldminlines=5        " min num of lines before a block is foldable
@@ -107,6 +108,9 @@ au BufNewFile, BufRead *.js, *.html, *.css:
 \ set softtabstop=2
 \ set shiftwidth=2
 autocmd Filetype javascript setlocal ts=2 sw=2 sts=0 noexpandtab
+" CPP
+autocmd FileType cpp setlocal ts=2 sts=2 sw=2
+
 "--------------------------------"
 "            Mappings            "
 "--------------------------------"
