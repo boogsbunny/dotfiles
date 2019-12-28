@@ -45,6 +45,7 @@ Plug 'xuhdev/vim-latex-live-preview' " lively previewing LaTeX PDF output
 Plug 'davidhalter/jedi-vim' " code completion python
 
 call plug#end()
+
 "--------------------------------"
 "         General Config         "
 "--------------------------------"
@@ -169,6 +170,12 @@ nnoremap <silent> <S-Up> :m-2<cr>
 nnoremap <silent> <S-Down> :m+<cr>
 inoremap <silent> <S-Up> <Esc>:m-2<cr>i
 inoremap <silent> <S-Down> <Esc>:m+<cr>i
+" move lines with Shift + k/j
+nnoremap <silent> <S-k> :m-2<cr>
+nnoremap <silent> <S-j> :m+<cr>
+inoremap <silent> <S-k> <Esc>:m-2<cr>i
+inoremap <silent> <S-j> <Esc>:m+<cr>i
+
 
 " toggle line number type
 nnoremap <silent> <F3> :call ToggleNumber()<cr>
@@ -192,11 +199,11 @@ map <leader>g :Ack!
 
 " close quickfix window
 map <silent> <leader>gq :ccl<cr>
+
 "--------------------------------"
 "     React Native Mappings      "
 "--------------------------------"
 autocmd FileType javascript inoremap <leader>tx <Text></Text><Space><++>
-
 
 "--------------------------------"
 "             Colors             "
@@ -307,6 +314,16 @@ let g:startify_custom_header = [
 " let g:ycm_global_ycm_extra_conf = "~/.vim/.ycm_extra_conf.py"
 " set completeopt-=preview
 " highlight Pmenu ctermbg=0 ctermfg=5
+
+"--------------------------------"
+"          Dasht                 "
+"--------------------------------"
+" search related docsets
+nnoremap <Leader>k :Dasht<Space>
+" search ALL the docsets
+nnoremap <Leader><Leader>k :Dasht!<Space>
+" use current window to show results
+let g:dasht_results_window = 'enew'
 
 "--------------------------------"
 "           Functions            "
