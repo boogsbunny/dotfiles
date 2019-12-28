@@ -42,7 +42,7 @@ Plug 'tpope/vim-fugitive' " Git wrapper
 Plug 'vim-scripts/indentpython.vim' " alternative indentation script for python
 Plug 'vim-latex/vim-latex'
 Plug 'xuhdev/vim-latex-live-preview' " lively previewing LaTeX PDF output
-Plug 'davidhalter/jedi-vim' " code completion python
+" Plug 'davidhalter/jedi-vim' " code completion python
 
 call plug#end()
 
