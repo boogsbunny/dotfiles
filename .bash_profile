@@ -1,1 +1,1 @@
-.profile
+/home/bugi/Repos/dotfiles/.profile

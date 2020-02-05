@@ -7,7 +7,13 @@
 "      silverserver-ag: for the ack plugin       "
 "      exuberant-ctags: for easytags plugin      "
 "================================================"
-
+"
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+"
 "---------------------------------"
 "            Plugins              "
 "---------------------------------"
@@ -27,7 +33,7 @@ Plug 'flazz/vim-colorschemes' " a bunch of colorschemes
 Plug 'ervandew/supertab' " tab for omnicompletion
 " Plug 'w0rp/ale' " linting
 Plug 'xolox/vim-misc' " dependency for vim-easytags
-Plug 'xolox/vim-easytags' " easy tag generation for jumping to definitions
+" Plug 'xolox/vim-easytags' " easy tag generation for jumping to definitions
 Plug 'tpope/vim-surround' " easily change surrounding brackets, quotes, etc.
 Plug 'terryma/vim-expand-region' " highlight increasingly larger regions of text
 Plug 'octol/vim-cpp-enhanced-highlight' "additional cpp syntax support
