@@ -1,8 +1,6 @@
 ;;--------------------------------;
-;; Company
+;; HTTP REST client
 ;;--------------------------------;
 
-(use-package company
+(use-package restclient
   :ensure t)
-
-(add-hook 'after-init-hook 'global-company-mode)

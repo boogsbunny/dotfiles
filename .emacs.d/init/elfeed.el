@@ -1,8 +1,6 @@
 ;;--------------------------------;
-;; Company
+;; Elfeed -> Emacs Web Feed Reader
 ;;--------------------------------;
 
-(use-package company
+(use-package elfeed
   :ensure t)
-
-(add-hook 'after-init-hook 'global-company-mode)

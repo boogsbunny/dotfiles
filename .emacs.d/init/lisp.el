@@ -10,7 +10,7 @@
     (("C-c C-v C-v" . slime-vari-describe-symbol))
     :config
     (setq slime-lisp-implementations
-	  '((sbcl  ("/usr/local/bin/sbcl") :coding-system utf-8-unix)
+	  '((sbcl  ("/usr/bin/sbcl") :coding-system utf-8-unix)
             (sbcl "--dynamic-space-size" "2GB")
             (sbcl  ("sbcl") :coding-system utf-8-unix)
             )
@@ -23,13 +23,18 @@
     (add-hook 'slime-repl-mode-hook       'my-lisp-repl-hook))
   )
 
+;; Set your lisp system and, optionally, some contribs
+;;(setq inferior-lisp-program "/opt/sbcl/bin/sbcl")
+;;(setq slime-contribs '(slime-fancy))
+
 (defun my-lisp-mode-hook ()
   (paredit-mode +1)
   (setq indent-tabs-mode nil)
   (whitespace-mode 1))
 
 (defun my-lisp-repl-hook ()
-  (paredit-mode +1))
+  (paredit-mode +1)
+  '(lambda () (local-set-key) (kbd "C-l") 'slime-repl-clear-buffer))
 
 ;;--------------------------------
 ;; Helpers

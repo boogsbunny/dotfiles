@@ -1,8 +1,6 @@
 ;;--------------------------------;
-;; Company
+;; Ledger mode
 ;;--------------------------------;
 
-(use-package company
+(use-package ledger-mode
   :ensure t)
-
-(add-hook 'after-init-hook 'global-company-mode)

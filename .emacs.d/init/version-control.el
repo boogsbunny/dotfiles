@@ -1,5 +1,5 @@
 ;;--------------------------------;
-;; Version Control Stuff
+;; Version Control
 ;;--------------------------------;
 
 (use-package magit
@@ -14,6 +14,3 @@
                           'magit-insert-unpushed-to-upstream
                           'magit-insert-unpushed-to-upstream-or-recent
                           'replace))
-
-
-

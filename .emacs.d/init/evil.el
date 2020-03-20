@@ -3,38 +3,53 @@
 ;;--------------------------------;
 
 (use-package evil
-  :ensure t)
-(evil-mode 1)
+  :ensure t
+  :init
+  (setq evil-want-integration t) ;; This is optional since it's already set to t by default.
+  (setq evil-want-keybinding nil)
+  :config
+  (evil-mode 1))
 
-;; map 'jk' 'kj' to esc
-(use-package key-chord
-  :ensure t)
-(key-chord-mode 1)
-(key-chord-define evil-insert-state-map "jk" 'evil-normal-state)
+(use-package evil-collection
+  :after evil
+  :ensure t
+  :config
+  (evil-collection-init))
 
-;; map ";" to ":"
+;; EVIL key bindings in org mode
+(use-package evil-org
+  :ensure t
+  :after org
+  :config
+  (add-hook 'org-mode-hook 'evil-org-mode)
+  (add-hook 'evil-org-mode-hook
+            (lambda ()
+              (evil-org-set-key-theme)))
+  (require 'evil-org-agenda)
+  (evil-org-agenda-set-keys))
+
+(use-package evil-magit
+  :after evil
+  :ensure t)
+
+;; sane bindings
+(defun boogs/jk ()
+  (interactive)
+  (let* ((initial-key ?j)
+         (final-key ?k)
+         (timeout 0.1)
+         (event (read-event nil nil timeout)))
+    (if event
+        ;; timeout met
+        (if (and (characterp event) (= event final-key))
+            (evil-normal-state)
+          (insert initial-key)
+          (push event unread-command-events))
+      ;; timeout exceeded
+      (insert initial-key))))
+
+(define-key evil-insert-state-map (kbd "j") 'boogs/jk)
+
 (eval-after-load 'evil-maps
 	'(progn
-		 (define-key evil-motion-state-map (kbd ";") 'evil-ex)))
-
-;; Vim like shifting selected text to left "<<" or right ">>"
-(defun shift-text (distance)
-  (if (use-region-p)
-      (let ((mark (mark)))
-        (save-excursion
-          (indent-rigidly (region-beginning)
-                          (region-end)
-                          distance)
-          (push-mark mark t t)
-          (setq deactivate-mark nil)))
-    (indent-rigidly (line-beginning-position)
-                    (line-end-position)
-                    distance)))
-
-(defun shift-right (count)
-  (interactive "p")
-  (shift-text count))
-
-(defun shift-left (count)
-  (interactive "p")
-  (shift-text (- count)))
+       (define-key evil-motion-state-map (kbd ";") 'evil-ex)))

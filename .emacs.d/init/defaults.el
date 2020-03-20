@@ -7,11 +7,11 @@
 (setq coding-system-for-read 'utf-8)
 (setq coding-system-for-write 'utf-8)
 
+;; avoid outdated byte-compiled elisp files
+(setq load-prefer-newer t)
+
 ;; Ignore bell
 (setq ring-bell-function #'ignore)
-
-;; Highlight column (vertical line) of text
-;;(require 'column-marker)
 
 ;; Save copied text from outside emacs when yanking
 (setq save-interprogram-paste-before-kill t)
@@ -22,8 +22,8 @@
 ;; Make cursor width of the character it is under
 (setq x-stretch-cursor t)
 
-;; set tabs to 2 spaces
-(setq-default tab-width 2)
+;; set tabs to 4 spaces
+(setq-default tab-width 4)
 (setq-default indent-tabs-mode nil)
 
 ;; disable cursor blinking
@@ -31,6 +31,10 @@
 
 ;; highlight current line
 (global-hl-line-mode 1)
+;;(set-face-attribute hl-line-face nil :underline t)
+(set-face-background 'hl-line nil)
+(set-face-foreground 'hl-line nil)
+(set-face-underline  'hl-line t)
 
 ;; highlight matching parenthesis
 (show-paren-mode 1)
@@ -42,7 +46,7 @@
 (global-prettify-symbols-mode +1)
 
 ;; show trailing whitespace
-(setq-default show-trailing-whitespace t)
+;;(setq-default show-trailing-whitespace t)
 
 ;; delete trailing whitespace on save
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
@@ -62,27 +66,14 @@
 (setq backward-delete-char-untabify-method 'hungry)
 
 ;; Turn on line numbers
-(defvar linum-format)
-(global-linum-mode t)
-(setq linum-format
-      (lambda (line)
-	(propertize
-	 (format
-	  (let ((w (length (number-to-string (count-lines (point-min) (point-max))))))
-	    (concat "%" (number-to-string w) "d ")) line) 'face 'linum)))
+(global-display-line-numbers-mode 1)
+(setq display-line-numbers 'relative)
 
-;; SLIME clear buffer
-(global-set-key (kbd "C-l") 'slime-repl-clear-buffer)
-
-;; ~a~% shortcut
-(global-set-key (kbd "C-.") '"~a~%")
-
-;; ` shortcut
-(global-set-key (kbd "C-'") '"`")
-
-;; delete current input
-;;(global-set-key (kbd "C-d") 'slime-repl-delete-current-input)
-
+;; Window resizing
+(global-set-key (kbd "M-C-h") 'shrink-window-horizontally)
+(global-set-key (kbd "M-C-l") 'enlarge-window-horizontally)
+(global-set-key (kbd "M-C-j") 'shrink-window)
+(global-set-key (kbd "M-C-k") 'enlarge-window)
 
 ;; disable some features and settings
 (put 'narrow-to-region 'disabled nil)

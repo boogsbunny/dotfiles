@@ -14,45 +14,44 @@
 
 ;;------------------------------------------------------------
 
-(add-to-list 'custom-theme-load-path "~/.emacs.d/themes/")
-(load-theme 'zenburn t)
-(require 'package)
-(add-to-list 'package-archives
-             '("melpa-stable" . "https://stable.melpa.org/packages/"))
-
-;;------------------------------------------------------------
-
-(load-user-file "init/early.el")
+(load-user-file "init/packages.el")
 (load-user-file "init/defaults.el")
 (load-user-file "init/defuns.el")
 (load-user-file "init/version-control.el")
 (load-user-file "init/org-mode.el")
 (load-user-file "init/evil.el")
 (load-user-file "init/docker.el")
-(load-user-file "init/paredit.el")
 (load-user-file "init/rcirc.el")
 (load-user-file "init/tmp-files.el")
 (load-user-file "init/yasnippet.el")
-(load-user-file "init/ansi-term.el")
 (load-user-file "init/autocomplete.el")
 (load-user-file "init/company.el")
 (load-user-file "init/dired.el")
 (load-user-file "init/flycheck.el")
 (load-user-file "init/lisp.el")
+(load-user-file "init/helm.el")
+(load-user-file "init/rust.el")
+(load-user-file "init/styles.el")
+(load-user-file "init/ledger.el")
+(load-user-file "init/dashboard.el")
+(load-user-file "init/python.el")
+(load-user-file "init/projectile.el")
+(load-user-file "init/restclient.el")
+(load-user-file "init/lsp.el")
+(load-user-file "init/lispy.el")
 
 ;;------------------------------------------------------------
-
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(custom-enabled-themes (quote (zenburn)))
- '(package-archives
+ '(custom-safe-themes
    (quote
-    (("gnu" . "https://elpa.gnu.org/packages/")
-     ("melpa" . "https://stable.melpa.org/packages/"))))
- '(package-selected-packages (quote (## magit use-package evil))))
+    ("d6db7498e2615025c419364764d5e9b09438dfe25b044b44e1f336501acd4f5b" default)))
+ '(package-selected-packages
+   (quote
+    (cargo dap-mode powerline helm slime evil restclient elpy dashboard evil-magit evil-collection ledger-mode zenburn-theme yasnippet use-package solarized-theme slime-docker rust-mode paredit org-journal org-bullets magit leetcode key-chord helm-projectile flycheck evil-org dockerfile-mode docker company auto-complete airline-themes))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

@@ -1,5 +1,0 @@
-(package-initialize)
-(setenv "LANG" "en_US.UTF-8")
-(setq default-directory "~/")
-(add-to-list 'load-path "~/.emacs.d/addons/")
-(defvar is-osx (string-equal "darwin" (symbol-name system-type)))
