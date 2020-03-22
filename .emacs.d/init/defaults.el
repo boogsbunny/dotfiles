@@ -2,7 +2,7 @@
 ;; Default settings
 ;;--------------------------------;
 
-;; Encoding
+;; encoding
 (prefer-coding-system 'utf-8)
 (setq coding-system-for-read 'utf-8)
 (setq coding-system-for-write 'utf-8)
@@ -10,7 +10,14 @@
 ;; avoid outdated byte-compiled elisp files
 (setq load-prefer-newer t)
 
-;; Ignore bell
+;; support for emacs pinentry
+(use-package pinentry
+  :ensure t)
+(setq epa-pinentry-mode 'loopback)
+(when (require 'pinentry nil t)
+  (pinentry-start))
+
+;; ignore bell
 (setq ring-bell-function #'ignore)
 
 ;; Save copied text from outside emacs when yanking
@@ -51,7 +58,7 @@
 ;; delete trailing whitespace on save
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
-;; Remove the GUI Emacs clutter
+;; remove the GUI Emacs clutter
 (if window-system
     (tool-bar-mode -1)
 )
@@ -65,11 +72,11 @@
 ;; properly delete tabs using backspace
 (setq backward-delete-char-untabify-method 'hungry)
 
-;; Turn on line numbers
+;; turn on line numbers
 (global-display-line-numbers-mode 1)
 (setq display-line-numbers 'relative)
 
-;; Window resizing
+;; window resizing
 (global-set-key (kbd "M-C-h") 'shrink-window-horizontally)
 (global-set-key (kbd "M-C-l") 'enlarge-window-horizontally)
 (global-set-key (kbd "M-C-j") 'shrink-window)

@@ -1,0 +1,98 @@
+# -*- mode: conf-space; -*-
+
+IMAPAccount gmail
+Host imap.gmail.com
+Port 993
+User bugrahanabdulkarim@gmail.com
+PassCmd "pass email/bugrahanabdulkarim@gmail.com"
+SSLType IMAPS
+
+IMAPStore gmail-remote
+Account gmail
+
+MaildirStore gmail-local
+# The trailing "/" is important
+Path ~/.cache/mail/gmail/
+Inbox ~/.cache/mail/gmail/inbox
+
+Channel gmail-all
+Master :gmail-remote:
+Slave :gmail-local:
+Patterns * "!Sent"
+Create Both
+Expunge Both
+SyncState *
+
+Channel gmail-sent
+Master :gmail-remote:
+Slave :gmail-local:
+Patterns !* "Sent"
+Create Both
+Expunge Both
+SyncState *
+
+################################################################################
+
+IMAPAccount uva
+Host imap.gmail.com
+Port 993
+User ba2ra@virginia.edu
+PassCmd "pass email/ba2ra@virginia.edu"
+SSLType IMAPS
+
+IMAPStore uva-remote
+Account uva
+
+MaildirStore uva-local
+# The trailing "/" is important
+Path ~/.cache/mail/uva/
+Inbox ~/.cache/mail/uva/inbox
+
+Channel uva-all
+Master :uva-remote:
+Slave :uva-local:
+Patterns * "!Sent"
+Create Both
+Expunge Both
+SyncState *
+
+Channel uva-sent
+Master :uva-remote:
+Slave :uva-local:
+Patterns !* "Sent"
+Create Both
+Expunge Both
+SyncState *
+
+################################################################################
+
+IMAPAccount vg
+Host mail.privateemail.com
+Port 993
+User boogs@venatores.group
+PassCmd "pass email/boogs@venatores.group"
+SSLType IMAPS
+
+IMAPStore vg-remote
+Account vg
+
+MaildirStore vg-local
+# The trailing "/" is important
+Path ~/.cache/mail/vg/
+Inbox ~/.cache/mail/vg/inbox
+
+Channel vg-all
+Master :vg-remote:
+Slave :vg-local:
+Patterns * "!Sent"
+Create Both
+Expunge Both
+SyncState *
+
+Channel vg-sent
+Master :vg-remote:
+Slave :vg-local:
+Patterns !* "Sent"
+Create Both
+Expunge Both
+SyncState *
