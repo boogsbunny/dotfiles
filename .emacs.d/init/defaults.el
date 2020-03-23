@@ -59,9 +59,7 @@
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 ;; remove the GUI Emacs clutter
-(if window-system
-    (tool-bar-mode -1)
-)
+(tool-bar-mode -1)
 (menu-bar-mode -1)
 (scroll-bar-mode -1)
 (setq inhibit-startup-message t)

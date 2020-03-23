@@ -1,13 +1,28 @@
 #!/usr/bin/env sh
 
-# export PATH="$PATH:$(du "$HOME/.local/bin/" | cut -f2 | tr '\n' ':' | sed 's/:*$//')"
-export EDITOR="vim"
+appendpath () {
+	[ $# -eq 2 ] && PATHVAR=$2 || PATHVAR=PATH
+	[ -d "$1" ] || return
+	eval echo \$$PATHVAR | grep -q "\(:\|^\)$1\(:\|$\)" && return
+	eval export $PATHVAR="\$$PATHVAR:$1"
+}
+
+appendpath "${HOME}/.local/bin"
+
+for i in emacsclient em emacs vim nano vi; do
+	command -v $i >/dev/null 2>&1 && export EDITOR=$i && break
+done
+GIT_EDITOR="$EDITOR"
+VISUAL="$EDITOR"
+[ "$GIT_EDITOR" = em ] && GIT_EDITOR=emc
+[ "$VISUAL" = emc ] && VISUAL=emc
+export GIT_EDITOR
+export VISUAL
 export TERMINAL="screen-256color"
 export BROWSER="firefox"
 export READER="zathura"
 export FILE="ranger"
 export MANWIDTH=80
-
 LESSHISTFILE='-'
 
 ## SSH-Agent

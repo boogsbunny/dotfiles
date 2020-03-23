@@ -3,4 +3,4 @@
 [ -f "$HOME/.xprofile" ] && . ~/.xprofile
 [[ -f ~/.Xmodmap ]] && xmodmap ~/.Xmodmap
 
-exec i3
+exec dwm

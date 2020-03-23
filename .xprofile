@@ -1,15 +1,9 @@
 #!/usr/bin/env sh
 
-# background
-setbg &
-# bind keys
-sxhkd &
-# speed xrate up
-xset r rate 300 50 &
-# remove idle mouse
-unclutter &
-# transparency
-xcompmgr &
-# notifications
-dunst &
-mpdupdate &
+setbg & # background
+xset r rate 300 50 & # speed xrate up
+unclutter & # remove idle mouse
+xcompmgr & # transparency
+dunst & # notifications
+mpd-module-update # update the mpd module check
+redshift -l 38.9:77.0 -t 6500:3500 & # redshift

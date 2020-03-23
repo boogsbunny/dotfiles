@@ -1,0 +1,36 @@
+#!/bin/sh
+
+if [ "$1" = "-h" ]; then
+	cat <<EOF>&2
+Usage: ${0##*/} [OPTIONS] [FILES]
+
+Start emacsclient in terminal or in X window if possible. Server is started on
+demand.
+
+The calling script can have different names:
+
+- emc: the Emacs instance is opened in the current terminal.
+- emw: if graphical, tell the client to wait.
+
+All emacsclient(1) options are supported:
+
+$(emacsclient --help)
+
+EOF
+	exit
+fi
+
+if [ "${0##*/}" = "emc" ]; then
+	## Force terminal mode
+	param="-t"
+else
+	## If Emacs cannot start in graphical mode, -c will act just like -t.
+	param="-c"
+	if [ "${0##*/}" != "emw" ] && [ -n "$DISPLAY" ] && [ "$(emacs --batch -Q --eval='(message (if (fboundp '"'"'tool-bar-mode) "X" "TTY"))' 2>&1)" = X ]; then
+		## Don't wait if not called with "emw" and if Emacs can start in graphical mode.
+		## The Emacs batch test checks whether it was compiled with GUI suppport.
+		param="$param -n"
+	fi
+fi
+
+emacsclient $param -a "" "$@"
