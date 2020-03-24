@@ -131,3 +131,10 @@
 (defun shift-left (count)
   (interactive "p")
   (shift-text (- count)))
+
+;; bind multiple keys
+(defun global-set-keys (key def &rest bindings)
+  (while key
+    (global-set-key (kbd key) def)
+    (setq key (pop bindings)
+          def (pop bindings))))

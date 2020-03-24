@@ -74,11 +74,26 @@
 (global-display-line-numbers-mode 1)
 (setq display-line-numbers 'relative)
 
+;; autofill
+(when (getenv "MANWIDTH")
+  (setq-default fill-column (string-to-number (getenv "MANWIDTH"))))
+(add-hook 'text-mode-hook 'turn-on-auto-fill)
+
 ;; window resizing
 (global-set-key (kbd "M-C-h") 'shrink-window-horizontally)
 (global-set-key (kbd "M-C-l") 'enlarge-window-horizontally)
 (global-set-key (kbd "M-C-j") 'shrink-window)
 (global-set-key (kbd "M-C-k") 'enlarge-window)
+
+;; windmove mode
+(when (fboundp 'windmove-default-keybindings)
+  (global-set-keys
+   "C-M-h" 'windmove-left
+   "C-M-j" 'windmove-down
+   "C-M-k" 'windmove-up
+   "C-M-l" 'windmove-right
+   "C-M-o" 'delete-other-windows
+   "C-M-c" 'delete-window))
 
 ;; disable some features and settings
 (put 'narrow-to-region 'disabled nil)

@@ -15,8 +15,8 @@
 ;;------------------------------------------------------------
 
 (load-user-file "init/packages.el")
-(load-user-file "init/defaults.el")
 (load-user-file "init/defuns.el")
+(load-user-file "init/defaults.el")
 (load-user-file "init/version-control.el")
 (load-user-file "init/org-mode.el")
 (load-user-file "init/evil.el")
