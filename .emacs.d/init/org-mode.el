@@ -52,7 +52,7 @@
          "* TODO %^{DESCRIPTION}\n SCHEDULED: <%<%Y-%m-%d %a %^{FREQUENCY}>>\n :PROPERTIES:\n :STYLE: habit\n :END:")
         ("tb" "BOOK RECOMMENDATION entry" entry (file+headline "inbox.org" "Books")
          "* SOMEDAY %^{AUTHOR} - %^{TITLE}\n :PROPERTIES:\n :CREATED: %U\n :PAGES: %^{PAGES}\n :GENRE: %^{GENRE}\n :END:\n - Recommended by: %^{recommended by}\n")
-        ("ti" "IDEA entry" entry (file+headline "inbox.org" "Tasks")
+        ("ti" "IDEA entry" entry (file "tickler.org")
          "* SOMEDAY %^{TITLE}\n - %^{DESCRIPTION}\n :PROPERTIES:\n :CREATED: %U\n :END:")))
 
 (setq org-agenda-files '("~/org"))

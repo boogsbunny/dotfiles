@@ -8,6 +8,7 @@ appendpath () {
 }
 
 appendpath "${HOME}/.local/bin"
+appendpath "${HOME}/.local/bin/statusbar"
 
 for i in emacsclient em emacs vim nano vi; do
 	command -v $i >/dev/null 2>&1 && export EDITOR=$i && break
@@ -20,6 +21,7 @@ export GIT_EDITOR
 export VISUAL
 export TERMINAL="screen-256color"
 export BROWSER="firefox"
+export STATUSBAR="dwmblocks"
 export READER="zathura"
 export FILE="ranger"
 export MANWIDTH=80
