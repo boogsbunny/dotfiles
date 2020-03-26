@@ -59,9 +59,11 @@
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 ;; remove the GUI Emacs clutter
-(tool-bar-mode 0)
+;; (tool-bar-mode 0)
 (menu-bar-mode 0)
-(scroll-bar-mode 0)
+;; (scroll-bar-mode 0)
+(when (fboundp 'tool-bar-mode) (tool-bar-mode 0))
+(when (fboundp 'scroll-bar-mode) (scroll-bar-mode 0))
 (setq inhibit-startup-message t)
 
 ;; disable lockfiles
