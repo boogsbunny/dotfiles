@@ -11,21 +11,21 @@
   (evil-mode 1))
 
 (use-package evil-collection
-  :after evil
-  :ensure t
-  :config
-  (evil-collection-init))
+ :after evil
+ :ensure t
+ :config
+ (evil-collection-init))
 
-;; EVIL key bindings in org mode
+; EVIL key bindings in org mode
 (use-package evil-org
-  :ensure t
-  :after org
-  :config
-  (add-hook 'org-mode-hook 'evil-org-mode)
-  (add-hook 'evil-org-mode-hook
-            (lambda ()
-              (evil-org-set-key-theme)))
-  (require 'evil-org-agenda)
+ :ensure t
+ :after org
+ :config
+ (add-hook 'org-mode-hook 'evil-org-mode)
+ (add-hook 'evil-org-mode-hook
+           (lambda ()
+             (evil-org-set-key-theme)))
+ (require 'evil-org-agenda)
   (evil-org-agenda-set-keys))
 
 (use-package evil-magit

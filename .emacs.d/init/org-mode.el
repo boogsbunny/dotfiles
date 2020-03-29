@@ -38,24 +38,25 @@
          "CANCELED(c)"
          )))
 
+(setq org-agenda-files '("~/org"))
+
 ;; capture templates
 (setq org-capture-templates
-      '(
-        ("t" "Tasks")
-        ("tt" "TODO entry" entry (file+headline "inbox.org" "Tasks")
-         "* TODO %^{DESCRIPTION}\n :PROPERTIES:\n :CREATED: %U\n :END:")
-        ("tw" "WAITING entry" entry (file+headline "inbox.org" "Tasks")
-         "* WAITING %^{DESCRIPTION}\n :PROPERTIES:\n :CREATED: %U\n :END:")
-        ("te" "DELEGATED entry" entry (file+headline "inbox.org" "Tasks")
-         "* DELEGATED %^{DESCRIPTION}\n :PROPERTIES:\n :CREATED: %U\n :END:")
-        ("th" "HABIT entry" entry (file+headline "personal.org" "Habits")
-         "* TODO %^{DESCRIPTION}\n SCHEDULED: <%<%Y-%m-%d %a %^{FREQUENCY}>>\n :PROPERTIES:\n :STYLE: habit\n :END:")
-        ("tb" "BOOK RECOMMENDATION entry" entry (file+headline "inbox.org" "Books")
-         "* SOMEDAY %^{AUTHOR} - %^{TITLE}\n :PROPERTIES:\n :CREATED: %U\n :PAGES: %^{PAGES}\n :GENRE: %^{GENRE}\n :END:\n - Recommended by: %^{recommended by}\n")
-        ("ti" "IDEA entry" entry (file "tickler.org")
-         "* SOMEDAY %^{TITLE}\n - %^{DESCRIPTION}\n :PROPERTIES:\n :CREATED: %U\n :END:")))
+     '(
+       ("t" "Tasks")
+       ("tt" "TODO entry" entry (file+headline "inbox.org" "Tasks")
+        "* TODO %^{DESCRIPTION}\n :PROPERTIES:\n :CREATED: %U\n :END:")
+       ("tw" "WAITING entry" entry (file+headline "inbox.org" "Tasks")
+        "* WAITING %^{DESCRIPTION}\n :PROPERTIES:\n :CREATED: %U\n :END:")
+       ("te" "DELEGATED entry" entry (file+headline "inbox.org" "Tasks")
+        "* DELEGATED %^{DESCRIPTION}\n :PROPERTIES:\n :CREATED: %U\n :END:")
+       ("th" "HABIT entry" entry (file+headline "personal.org" "Habits")
+        "* TODO %^{DESCRIPTION}\n SCHEDULED: <%<%Y-%m-%d %a %^{FREQUENCY}>>\n :PROPERTIES:\n :STYLE: habit\n :END:")
+       ("tb" "BOOK RECOMMENDATION entry" entry (file+headline "inbox.org" "Books")
+        "* SOMEDAY %^{AUTHOR} - %^{TITLE}\n :PROPERTIES:\n :CREATED: %U\n :PAGES: %^{PAGES}\n :GENRE: %^{GENRE}\n :END:\n - Recommended by: %^{recommended by}\n")
+       ("ti" "IDEA entry" entry (file "tickler.org")
+        "* SOMEDAY %^{TITLE}\n - %^{DESCRIPTION}\n :PROPERTIES:\n :CREATED: %U\n :END:")))
 
-(setq org-agenda-files '("~/org"))
 
 ;; Don't show trailing whitespace in calendar mode
 (add-hook 'calendar-mode-hook
@@ -64,19 +65,19 @@
 ;; enable languages for source code evaluation
 (org-babel-do-load-languages
  'org-babel-load-languages
- '((emacs-lisp .t)
-   (python .t)
-   (lisp .t)
-   (C .t)))
+ '((emacs-lisp . t)
+   (python . t)
+   (lisp . t)
+   (C . t)))
 
 ;; UTF-8 bullets
 ;; legacy package
 ;;(require 'org-bullets)
 ;;(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
 ;; unofficial successor
-(use-package org-superstar
-  :ensure t)
-(add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
+;(use-package org-superstar
+;  :ensure t)
+;(add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
 
 ;; integrate Emacs diary
 (setq org-agenda-include-diary t)
