@@ -62,22 +62,26 @@
 (add-hook 'calendar-mode-hook
 					(function (lambda () (setq show-trailing-whitespace nil))))
 
+;; scheme requirement
+(use-package geiser
+  :ensure t)
+
 ;; enable languages for source code evaluation
 (org-babel-do-load-languages
  'org-babel-load-languages
  '((emacs-lisp . t)
    (python . t)
    (lisp . t)
-   (C . t)))
+   (C . t)
+   (scheme . t)))
+
+;; edit source block in same windo;w
+(setq org-src-window-setup 'current-window)
 
 ;; UTF-8 bullets
-;; legacy package
-;;(require 'org-bullets)
-;;(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
-;; unofficial successor
-;(use-package org-superstar
-;  :ensure t)
-;(add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
+(use-package org-superstar
+ :ensure t)
+(add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
 
 ;; integrate Emacs diary
 (setq org-agenda-include-diary t)

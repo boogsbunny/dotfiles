@@ -82,10 +82,10 @@
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
 
 ;; window resizing
-(global-set-key (kbd "M-C-h") 'shrink-window-horizontally)
-(global-set-key (kbd "M-C-l") 'enlarge-window-horizontally)
-(global-set-key (kbd "M-C-j") 'shrink-window)
-(global-set-key (kbd "M-C-k") 'enlarge-window)
+;; (global-set-key (kbd "C-x l") 'shrink-window-horizontally)
+;; (global-set-key (kbd "C-x j") 'enlarge-window-horizontally)
+;; (global-set-key (kbd "C-x k") 'shrink-window)
+;; (global-set-key (kbd "C-x j") 'enlarge-window)
 
 ;; windmove mode
 (when (fboundp 'windmove-default-keybindings)

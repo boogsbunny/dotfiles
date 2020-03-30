@@ -24,7 +24,7 @@ export BROWSER="firefox"
 export STATUSBAR="dwmblocks"
 export READER="zathura"
 export FILE="ranger"
-export MANWIDTH=80
+export MANWIDTH=70
 LESSHISTFILE='-'
 
 ## SSH-Agent
