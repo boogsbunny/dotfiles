@@ -42,6 +42,7 @@
 (load-user-file "init/pdf.el")
 ;; (load-user-file "init/mu4e.el")
 (load-user-file "init/notmuch.el")
+(load-user-file "init/assembly.el")
 
 ;;------------------------------------------------------------
 (custom-set-variables
@@ -54,7 +55,7 @@
     ("d6db7498e2615025c419364764d5e9b09438dfe25b044b44e1f336501acd4f5b" default)))
  '(package-selected-packages
    (quote
-    (org-superstar lispyville mu4e pdf-tools cargo dap-mode powerline helm slime evil restclient elpy dashboard evil-magit evil-collection ledger-mode zenburn-theme yasnippet use-package solarized-theme slime-docker rust-mode paredit org-journal org-bullets magit leetcode key-chord helm-projectile flycheck evil-org dockerfile-mode docker company auto-complete airline-themes))))
+    (rmsbolt org-superstar lispyville mu4e pdf-tools cargo dap-mode powerline helm slime evil restclient elpy dashboard evil-magit evil-collection ledger-mode zenburn-theme yasnippet use-package solarized-theme slime-docker rust-mode paredit org-journal org-bullets magit leetcode key-chord helm-projectile flycheck evil-org dockerfile-mode docker company auto-complete airline-themes))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
