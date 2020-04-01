@@ -1,9 +1,12 @@
 ;;--------------------------------;
 ;; Notmuch
 ;;--------------------------------;
+
 (add-to-list 'load-path "/usr/bin/notmuch")
-;(require 'notmuch)
-(autoload 'notmuch "notmuch" "notmuch mail" t)
+(require 'notmuch)
+
+(use-package notmuch
+  :ensure t)
 
 (setq notmuch-search-oldest-first nil
       send-mail-function 'sendmail-send-it

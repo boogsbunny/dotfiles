@@ -7,6 +7,10 @@
 (setq coding-system-for-read 'utf-8)
 (setq coding-system-for-write 'utf-8)
 
+;; font
+(when (find-font (font-spec :name "-FBI -Input Mono-extralight-normal-normal-*-*-*-*-*-m-0-iso10646-1"))
+  (add-to-list 'default-frame-alist '(font . "-FBI -Input Mono-extralight-normal-normal-*-*-*-*-*-m-0-iso10646-1")))
+
 ;; avoid outdated byte-compiled elisp files
 (setq load-prefer-newer t)
 

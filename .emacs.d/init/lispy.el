@@ -6,7 +6,6 @@
   :ensure t)
 
 (add-hook 'emacs-lisp-mode-hook (lambda () (lispy-mode 1)))
-(add-hook 'prog-mode-hook (lambda () (lispy-mode 1)))
 
 (use-package lispyville
   :ensure t)
@@ -44,4 +43,4 @@
 (use-package rainbow-delimiters
   :ensure t)
 
-(add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
+(add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
