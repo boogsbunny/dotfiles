@@ -1,64 +1,80 @@
 ;;------------------------------------------------------------
-
-(defconst user-init-dir
-	(cond ((boundp 'user-emacs-directory)
-				 user-emacs-directory)
-				((boundp 'user-init-directory)
-				 user-init-directory)
-				(t "~/.emacs.d/")))
-
-(defun load-user-file (file)
-	(interactive "f")
-	"Load a file in current user's configuration directory"
-	(load-file (expand-file-name file user-init-dir)))
-
+;; INIT
 ;;------------------------------------------------------------
 
-(load-user-file "init/packages.el")
-(load-user-file "init/defuns.el")
-(load-user-file "init/defaults.el")
-(load-user-file "init/version-control.el")
-(load-user-file "init/org-mode.el")
-(load-user-file "init/evil.el")
-(load-user-file "init/docker.el")
-(load-user-file "init/rcirc.el")
-(load-user-file "init/tmp-files.el")
-(load-user-file "init/yasnippet.el")
-(load-user-file "init/autocomplete.el")
-(load-user-file "init/company.el")
-(load-user-file "init/dired.el")
-(load-user-file "init/flycheck.el")
-(load-user-file "init/lisp.el")
-(load-user-file "init/helm.el")
-(load-user-file "init/rust.el")
-(load-user-file "init/styles.el")
-(load-user-file "init/ledger.el")
-;(load-user-file "init/dashboard.el")
-(load-user-file "init/python.el")
-(load-user-file "init/projectile.el")
-(load-user-file "init/restclient.el")
-(load-user-file "init/lsp.el")
-(load-user-file "init/lispy.el")
-(load-user-file "init/pdf.el")
-;; (load-user-file "init/mu4e.el")
-(load-user-file "init/notmuch.el")
-(load-user-file "init/assembly.el")
+;; additional config in 'lisp' folder
+(add-to-list 'load-path (expand-file-name "lisp/" user-emacs-directory))
+;; site-lisp folder for local packages on MacOSX
+;; (add-to-list 'load-path (expand-file-name "site-lisp/" user-emacs-directory))
+
+;; separate user files with cache files
+(setq user-emacs-directory "~/.cache/emacs/")
+
+(require 'init-packages)
+(require 'init-defuns)
+(require 'init-defaults)
+(require 'init-styles)
+
+;; site-lisp folder for local packages on GNU/Linux
+(defun boogs/package-refresh-load-path (path)
+  "Add every non-hidden sub-folder of PATH to `load-path'."
+  (when (file-directory-p path)
+    (dolist (dir (directory-files path t "^[^\\.]"))
+      (when (file-directory-p dir)
+        (setq load-path (add-to-list 'load-path dir))
+        (dolist (subdir (directory-files dir t "^[^\\.]"))
+          (when (file-directory-p subdir)
+            (setq load-path (add-to-list 'load-path subdir))))))))
+
+(let ((site-lisp (expand-file-name "site-lisp/" "~/.local/share/emacs/")))
+  (add-to-list 'load-path site-lisp)
+  (boogs/package-refresh-load-path site-lisp))
 
 ;;------------------------------------------------------------
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   (quote
-    ("d6db7498e2615025c419364764d5e9b09438dfe25b044b44e1f336501acd4f5b" default)))
- '(package-selected-packages
-   (quote
-    (ripgrep rmsbolt org-superstar lispyville mu4e pdf-tools cargo dap-mode powerline helm slime evil restclient elpy dashboard evil-magit evil-collection ledger-mode zenburn-theme yasnippet use-package solarized-theme slime-docker rust-mode paredit org-journal org-bullets magit leetcode key-chord helm-projectile flycheck evil-org dockerfile-mode docker company auto-complete airline-themes))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+;; CONFIGS
+;;------------------------------------------------------------
+
+(with-eval-after-load 'dired (require 'init-dired))
+
+(setq evil-want-keybinding nil
+      evil-want-integration t)
+(when (require 'evil nil t) (require 'init-evil))
+
+(when (require 'company nil t)
+  (setq company-idle-delay nil))
+
+(with-eval-after-load 'org (require 'init-org))
+(autoload 'helm-org-switch "org")
+
+(with-eval-after-load 'magit (require 'init-magit))
+
+(when (require 'helm-config nil t) (require 'init-helm))
+
+(with-eval-after-load 'notmuch (require 'init-notmuch))
+(autoload 'helm-notmuch-switch "notmuch")
+
+(with-eval-after-load 'lisp-mode (require 'init-lisp))
+(add-hook 'emacs-lisp-mode-hook 'boogs/init-lispy)
+
+(with-eval-after-load 'lsp (require 'init-lsp))
+
+(with-eval-after-load 'rust-mode (require 'init-rust))
+(with-eval-after-load 'elpy-mode (require 'init-python))
+(with-eval-after-load 'csharp-mode (require 'init-csharp))
+
+(with-eval-after-load 'docker (require 'init-docker))
+(with-eval-after-load 'ledger-mode (require 'init-ledger))
+
+(when (require 'slack nil t) (require 'init-slack))
+(require 'init-jira)
+
+;;------------------------------------------------------------
+;; CLEANUP
+;;------------------------------------------------------------
+
+;; remove `customize' clutter
+(setq custom-file
+      (if (boundp 'server-socket-dir)
+          (expand-file-name "custom.el" server-socket-dir)
+        (expand-file-name (format "emacs-custom-%s.el" (user-uid)) temporary-file-directory)))
+(load custom-file t)

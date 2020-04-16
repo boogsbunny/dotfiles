@@ -2,14 +2,6 @@
 ;; Lispy
 ;;--------------------------------;
 
-(use-package lispy
-  :ensure t)
-
-(add-hook 'emacs-lisp-mode-hook (lambda () (lispy-mode 1)))
-
-(use-package lispyville
-  :ensure t)
-
 (with-eval-after-load 'lispyville
   (lispyville-set-key-theme
    '(operators
@@ -38,9 +30,21 @@
     "(" 'lispy-parens
     ")" 'lispy-right-nostring))
 
-(add-hook 'lispy-mode-hook #'lispyville-mode)
+(defun boogs/init-lispy ()
+  (when (require 'lispy nil t)
+    (if (require 'slime nil 'noerror)
+        (progn
+          (add-to-list 'lispy-goto-symbol-alist
+                       '(slime-repl-mode lispy-goto-symbol-lisp le-lisp))
+          (add-to-list 'lispy-goto-symbol-alist
+                       '(slime-mrepl-mode lispy-goto-symbol-lisp le-lisp)))
+      (progn
+        (add-to-list 'lispy-goto-symbol-alist
+                     '(sly-mrepl-mode lispy-goto-symbol-lisp le-lisp))
+        (setq lispy-use-sly t)))
+    (set-face-foreground 'lispy-face-hint "#FF00FF")
+    (when (require 'lispyville nil t)
+      (add-hook 'lispy-mode-hook 'lispyville-mode))
+    (lispyville-mode)))
 
-(use-package rainbow-delimiters
-  :ensure t)
-
-(add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
+(provide 'init-lispy)

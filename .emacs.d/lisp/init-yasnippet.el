@@ -2,5 +2,7 @@
 ;; yasnippet
 ;;--------------------------------;
 
-(use-package yasnippet
-  :ensure t)
+;; (use-package yasnippet
+;;   :ensure t)
+
+(provide 'init-yasnippet)

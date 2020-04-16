@@ -2,5 +2,4 @@
 ;; RMSbolt (compiler-explorer)
 ;;------------------------------------;
 
-(use-package rmsbolt
-  :ensure t)
+(provide 'init-assembly)

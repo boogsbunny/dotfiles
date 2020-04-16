@@ -2,24 +2,49 @@
 ;; Default settings
 ;;--------------------------------;
 
+;; minimum version needed
+(let ((minver "26.1"))
+  (when (version< emacs-version minver)
+    (error "Your Emacs is too old -- this config requires v%s or higher" minver)))
+
+;; install notmuch
+;; build slack properly
+;; install ejira properly
+
+;; system config
+(defconst *sys/linux*
+  (eq system-type 'gnu/linux)
+  "Are we running on a GNU/Linux system?")
+
+(defconst *sys/mac*
+  (eq system-type 'darwin)
+  "Are we running on a Mac system?")
+
+(if *sys/mac*
+    (progn
+      (setq mac-command-modifier 'meta) ; command = Meta
+      (setq mac-option-modifier 'super) ; (left) option = Super
+      (setq x-select-enable-clipboard 't)
+      (toggle-frame-fullscreen)
+      ))
+
+;; setup authinfo
+
 ;; encoding
 (prefer-coding-system 'utf-8)
 (setq coding-system-for-read 'utf-8)
 (setq coding-system-for-write 'utf-8)
 
-;; font
-(when (find-font (font-spec :name "-FBI -Input Mono-extralight-normal-normal-*-*-*-*-*-m-0-iso10646-1"))
-  (add-to-list 'default-frame-alist '(font . "-FBI -Input Mono-extralight-normal-normal-*-*-*-*-*-m-0-iso10646-1")))
 
 ;; avoid outdated byte-compiled elisp files
 (setq load-prefer-newer t)
 
 ;; support for emacs pinentry
-(use-package pinentry
-  :ensure t)
-(setq epa-pinentry-mode 'loopback)
-(when (require 'pinentry nil t)
-  (pinentry-start))
+;; (use-package pinentry
+;;   :ensure t)
+;; (setq epa-pinentry-mode 'loopback)
+;; (when (require 'pinentry nil t)
+;;   (pinentry-start))
 
 ;; ignore bell
 (setq ring-bell-function #'ignore)
@@ -49,6 +74,9 @@
 
 ;; highlight matching parenthesis
 (show-paren-mode 1)
+;; remove delay
+(setq show-paren-delay 0
+      show-paren-when-point-inside-paren t)
 
 ;; show cursor position within line
 (column-number-mode 1)
@@ -56,19 +84,44 @@
 ;; prettify symbols
 (global-prettify-symbols-mode +1)
 
-;; show trailing whitespace
-;;(setq-default show-trailing-whitespace t)
-
 ;; delete trailing whitespace on save
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 ;; remove the GUI Emacs clutter
-;; (tool-bar-mode 0)
-(menu-bar-mode 0)
-;; (scroll-bar-mode 0)
-(when (fboundp 'tool-bar-mode) (tool-bar-mode 0))
-(when (fboundp 'scroll-bar-mode) (scroll-bar-mode 0))
 (setq inhibit-startup-message t)
+(menu-bar-mode -1)
+(when (fboundp 'tool-bar-mode) (tool-bar-mode -1))
+(when (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
+(setq use-dialog-box nil)
+
+(setq
+ recentf-max-saved-items 100
+ ;; line by line scrolling
+ scroll-step 1
+ calendar-week-start-day 1
+ calendar-date-style 'iso
+ delete-by-moving-to-trash t
+ uniquify-buffer-name-style 'forward
+
+ backup-directory-alist
+ `(("." . ,(expand-file-name "backups" user-emacs-directory)))
+
+ ;; disable auto save
+ auto-save-default nil
+ auto-save-list-file-prefix nil
+
+ split-height-threshold nil
+ split-width-threshold 140)
+
+;; remember last cursor position
+(save-place-mode)
+;; save if daemon is killed unexpectedly
+(add-hook 'before-save-hook 'save-place-kill-emacs-hook)
+;;  save M-: history
+(savehist-mode)
+
+;; default mode
+(setq-default major-mode 'text-mode)
 
 ;; disable lockfiles
 (setq create-lockfiles nil)
@@ -101,6 +154,9 @@
    "C-M-o" 'delete-other-windows
    "C-M-c" 'delete-window))
 
+;; kill this buffer
+(global-set-key (kbd "C-x k") 'kill-this-buffer)
+
 ;; disable some features and settings
 (put 'narrow-to-region 'disabled nil)
 (put 'narrow-to-page 'disabled nil)
@@ -108,3 +164,5 @@
 (put 'downcase-region 'disabled nil)
 (put 'erase-buffer 'disabled nil)
 (put 'set-goal-column 'disabled nil)
+
+(provide 'init-defaults)

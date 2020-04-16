@@ -138,3 +138,5 @@
     (global-set-key (kbd key) def)
     (setq key (pop bindings)
           def (pop bindings))))
+
+(provide 'init-defuns)
