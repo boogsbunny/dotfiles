@@ -9,55 +9,83 @@
   (package-initialize))
 
 (setq package-selected-packages
-      '(rmsbolt
+      '(
+
+        airline-themes
+        alert
+        apropospriate-theme
+        auth-source-pass
         auto-complete
+        cargo
+        circe
         company
+        company-lsp
+        company-restclient
         csharp-mode
         docker
         elfeed
+        elpy
+        emojify
         evil
+        evil-collection
+        evil-commentary
+        evil-ledger
+        evil-magit
+        evil-multiedit
+        evil-org
         flycheck
+        forge
+        geiser
+        hackernews
         helm
+        helm-company
+        helm-descbinds
+        helm-flycheck
+        helm-ls-git
+        helm-lsp
+        helm-notmuch
+        helm-org
+        helm-org-contacts
+        helm-pass
+        jiralib2
+        language-detection
         ledger-mode
-        slime
-        sly
         lispy
         lispyville
-        rainbow-delimiters
         lsp-mode
         lsp-ui
-        company-lsp
-        helm-lsp
-        which-key
-        org
-        geiser
-        org-superstar
-        elpy
-        restclient
-        rut-mode
-        cargo
-        powerline
-        airline-themes
         magit
-        yasnippet
-        orgit
-        forge
-        evil-collection
-        evil-magit
-        evil-org
-        evil-ledger
-        org-journal
-        apropospriate-theme
-        websocket
-        alert
-        circe
-        emojify
-        request
-        oauth2
-        jiralib2
+        magit-todos
         markdown-mode+
+        notmuch
+        oauth2
+        org
+        org-bullets
+        org-journal
+        org-superstar
+        org-trello
+        orgit
         ox-jira
-        language-detection
+        powerline
+        rainbow-delimiters
+        rainbow-mode
+        request
+        restclient
+        rmsbolt
+        rust-mode
+        slime
+        sly
+        sly
+        sly-asdf
+        sly-macrostep
+        sly-quicklisp
+        solarized-theme
+        transmission
+        websocket
+        which-key
+        yasnippet
+        youtube-dl
+
         ))
 
 (provide 'init-packages)

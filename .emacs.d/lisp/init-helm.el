@@ -28,7 +28,7 @@
  helm-buffer-max-length 22
 
  helm-window-show-buffers-function 'helm-window-mosaic-fn
- ;; helm-window-prefer-horizontal-split t
+ helm-window-prefer-horizontal-split t
  )
 
 (global-set-key [remap execute-extended-command] 'helm-M-x)

@@ -7,7 +7,7 @@
 (setq git-commit-summary-max-length fill-column)
 (define-key magit-mode-map (kbd "s-<tab>") nil)
 (setq magit-diff-refine-hunk 'all)
-(setq magit-repository-directories '(("~/Repos" . 1)))
+(setq magit-repository-directories '(("~/Repos" . 3)))
 
 (when (require 'magit-todos nil 'noerror)
   (magit-todos-mode))

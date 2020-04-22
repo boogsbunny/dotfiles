@@ -26,6 +26,7 @@
       (setq mac-option-modifier 'super) ; (left) option = Super
       (setq x-select-enable-clipboard 't)
       (toggle-frame-fullscreen)
+      (setq exec-path (append exec-path '("/usr/local/bin")))
       ))
 
 ;; setup authinfo

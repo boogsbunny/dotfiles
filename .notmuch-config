@@ -1,10 +1,10 @@
 [database]
-path=/home/bugi/.cache/mail
+path=/Users/babdulkarim/.cache/mail
 
 [user]
 name=Bugi Abdulkarim
 primary_email=boogs@venatores.group
-other_email=bugrahanabdulkarim@gmail.com;ba2ra@virginia.edu;
+other_email=bugrahanabdulkarim@gmail.com;ba2ra@virginia.edu;babdulkarim@alarm.com;
 
 [new]
 tags=unread;inbox;

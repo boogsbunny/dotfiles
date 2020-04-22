@@ -53,6 +53,8 @@
 (with-eval-after-load 'notmuch (require 'init-notmuch))
 (autoload 'helm-notmuch-switch "notmuch")
 
+(when (require 'pdf-tools nil t) (require 'init-pdf))
+
 (with-eval-after-load 'lisp-mode (require 'init-lisp))
 (add-hook 'emacs-lisp-mode-hook 'boogs/init-lispy)
 

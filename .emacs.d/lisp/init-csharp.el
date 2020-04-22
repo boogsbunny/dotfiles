@@ -18,3 +18,5 @@
   (eletric-pair-local-mode 1))
 
 (add-hook 'csharp-mode-hook 'boogs/csharp-mode t)
+
+(provide 'init-csharp)
