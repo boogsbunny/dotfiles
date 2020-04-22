@@ -11,6 +11,7 @@
 (setq package-selected-packages
       '(
 
+
         airline-themes
         alert
         apropospriate-theme
@@ -18,6 +19,7 @@
         auto-complete
         cargo
         circe
+        color-theme-sanityinc-tomorrow
         company
         company-lsp
         company-restclient
@@ -29,6 +31,7 @@
         evil
         evil-collection
         evil-commentary
+        evil-escape
         evil-ledger
         evil-magit
         evil-multiedit
@@ -85,7 +88,6 @@
         which-key
         yasnippet
         youtube-dl
-
         ))
 
 (provide 'init-packages)
