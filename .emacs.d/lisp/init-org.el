@@ -10,8 +10,8 @@
 
 ;; (org-indent-mode 1)
 
-(add-hook 'org-mode-hook 'org-indent-mode)
-(add-hook 'org-journal-mode-hook 'org-indent-mode)
+;; (add-hook 'org-mode-hook 'org-indent-mode)
+;; (add-hook 'org-journal-mode-hook 'org-indent-mode)
 
 (setq org-log-into-drawer t)
 (setq org-log-reschedule (quote time))
