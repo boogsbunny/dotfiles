@@ -7,9 +7,11 @@
   (when (version< emacs-version minver)
     (error "Your Emacs is too old -- this config requires v%s or higher" minver)))
 
+;; :TODOs
 ;; install notmuch
 ;; build slack properly
 ;; install ejira properly
+;; setup authinfo
 
 ;; system config
 (defconst *sys/linux*
@@ -26,10 +28,11 @@
       (setq mac-option-modifier 'super) ; (left) option = Super
       (setq x-select-enable-clipboard 't)
       (toggle-frame-fullscreen)
-      (setq exec-path (append exec-path '("/usr/local/bin")))
+      (setq exec-path (append '("/usr/local/bin") exec-path))
+      (setenv "PATH" (concat "/usr/local/bin:" (getenv "PATH")))
+      (setenv "PATH" (concat "/opt/local/bin:" (getenv "PATH")))
+      (setq dired-use-ls-dired nil)
       ))
-
-;; setup authinfo
 
 ;; encoding
 (prefer-coding-system 'utf-8)
@@ -59,8 +62,11 @@
 ;; Make cursor width of the character it is under
 (setq x-stretch-cursor t)
 
-;; set tabs to 4 spaces
-(setq-default tab-width 4)
+;; completion cycling
+(setq completion-cycle-threshold t)
+
+;; set tabs to 2 spaces
+(setq-default tab-width 2)
 (setq-default indent-tabs-mode nil)
 
 ;; disable cursor blinking
@@ -135,8 +141,11 @@
 (setq display-line-numbers 'relative)
 
 ;; autofill
-(when (getenv "MANWIDTH")
-  (setq-default fill-column (string-to-number (getenv "MANWIDTH"))))
+;; (when (getenv "MANWIDTH")
+;;   (setq-default fill-column (string-to-number (getenv "MANWIDTH"))))
+
+(setq-default fill-column (string-to-number "70"))
+
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
 
 ;; window resizing

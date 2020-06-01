@@ -12,4 +12,6 @@
 
 (add-hook 'rust-mode-hook 'cargo-minor-mode)
 
+(require 'init-lsp)
+
 (provide 'init-rust)

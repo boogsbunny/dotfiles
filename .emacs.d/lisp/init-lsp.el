@@ -2,30 +2,23 @@
 ;; LSP mode (Language Server Protocol)
 ;;------------------------------------;
 
-;; (use-package lsp-mode
-;;   ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
-;;   :ensure t
-;;   :init (setq lsp-keymap-prefix "s-l")
-;;   :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
-;;          (rust-mode . lsp)
-;;          ;; if you want which-key integration
-;;          ;;(lsp-mode . lsp-enable-which-key-integration)
-;;          )
-;;   :commands lsp)
+(setq lsp-keymap-prefix "C-c l")
 
-;; ;; optionally
-;; (use-package lsp-ui
-;;   :ensure t
-;;   :commands lsp-ui-mode)
+(require 'lsp-mode)
+(require 'lsp-ui)
+(require 'helm-lsp)
+(require 'company-lsp)
 
-;; (use-package company-lsp
-;;   :ensure t
-;;   :commands company-lsp)
+(add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration)
+(add-hook 'lsp-managed-mode-hook 'lsp-diagnostics-modeline-mode)
 
-;; (push 'company-lsp company-backends)
+(add-hook 'rust-mode-hook #'lsp-deferred)
+(add-hook 'csharp-mode-hook #'lsp-deferred)
+(add-hook 'js2-mode-hook #'lsp-deferred)
+(add-hook 'typescript-mode-hook #'lsp-deferred)
+(add-hook 'elpy-mode-hook #'lsp-deferred)
 
-;; (use-package helm-lsp
-;;   :ensure t
-;;   :commands helm-lsp-workspace-symbol)
+(setq lsp-prefer-capf t
+			lsp-idle-delay 0.500)
 
 (provide 'init-lsp)

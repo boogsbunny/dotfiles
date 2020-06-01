@@ -72,11 +72,11 @@
       "s" 'helm-notmuch)))
 (add-hook 'evil-collection-setup-hook 'boogs/evil-notmuch)
 
-;; (with-eval-after-load 'magit
-;;   (when (require 'evil-magit nil t)
-;;     (evil-magit-define-key evil-magit-state 'magit-mode-map "<" 'magit-section-up)
-;;     (evil-magit-define-key evil-magit-state 'magit-mode-map "M-j" 'magit-section-forward)
-;;     (evil-magit-define-key evil-magit-state 'magit-mode-map "M-k" 'magit-section-backward)))
+(with-eval-after-load 'magit
+  (when (require 'evil-magit nil t)
+    (evil-magit-define-key evil-magit-state 'magit-mode-map "<" 'magit-section-up)
+    (evil-magit-define-key evil-magit-state 'magit-mode-map "M-j" 'magit-section-forward)
+    (evil-magit-define-key evil-magit-state 'magit-mode-map "M-k" 'magit-section-backward)))
 
 (with-eval-after-load 'org
   (when (require 'evil-org nil t)

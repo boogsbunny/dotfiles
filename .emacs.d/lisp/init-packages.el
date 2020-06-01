@@ -10,8 +10,6 @@
 
 (setq package-selected-packages
       '(
-
-
         airline-themes
         alert
         apropospriate-theme
@@ -36,6 +34,7 @@
         evil-magit
         evil-multiedit
         evil-org
+        exwm
         flycheck
         forge
         geiser
@@ -51,6 +50,11 @@
         helm-org-contacts
         helm-pass
         jiralib2
+        js2-mode
+        kubernetes
+        kubernetes-evil
+        kubernetes-helm
+        kubernetes-tramp
         language-detection
         ledger-mode
         lispy
@@ -74,6 +78,7 @@
         rainbow-mode
         request
         restclient
+        rjsx-mode
         rmsbolt
         rust-mode
         slime
@@ -84,8 +89,10 @@
         sly-quicklisp
         solarized-theme
         transmission
+        typescript-mode
         websocket
         which-key
+	      xelb
         yasnippet
         youtube-dl
         ))
