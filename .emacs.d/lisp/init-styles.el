@@ -30,5 +30,4 @@
          '(85 . 50) '(100 . 100)))))
 (global-set-key (kbd "C-c t") 'toggle-transparency)
 
-
 (provide 'init-styles)

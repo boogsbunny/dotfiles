@@ -67,8 +67,8 @@
 (with-eval-after-load 'docker (require 'init-docker))
 (with-eval-after-load 'ledger-mode (require 'init-ledger))
 
-(when (require 'slack nil t) (require 'init-slack))
-(require 'init-jira)
+;(when (require 'slack nil t) (require 'init-slack))
+;(require 'init-jira)
 
 ;;------------------------------------------------------------
 ;; CLEANUP
