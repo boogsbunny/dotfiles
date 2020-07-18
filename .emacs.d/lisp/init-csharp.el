@@ -19,4 +19,6 @@
 
 (add-hook 'csharp-mode-hook 'boogs/csharp-mode t)
 
+(require 'init-lsp)
+
 (provide 'init-csharp)

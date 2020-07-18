@@ -7,10 +7,13 @@
 (setq git-commit-summary-max-length fill-column)
 (define-key magit-mode-map (kbd "s-<tab>") nil)
 (setq magit-diff-refine-hunk 'all)
-(setq magit-repository-directories '(("~/Repos" . 3)))
+(setq magit-repository-directories '(("~/Repos" . 1)
+                                     ("~/Documents/Repos/alarm" . 3)))
 
 (when (require 'magit-todos nil 'noerror)
   (magit-todos-mode))
+
+(setq magit-todos-exclude-globs '("*.map" "*.html"))
 
 (require 'forge nil 'noerror)
 (when (fboundp 'magit-status)

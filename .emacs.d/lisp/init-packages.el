@@ -34,6 +34,7 @@
         evil-magit
         evil-multiedit
         evil-org
+        exwm
         flycheck
         forge
         geiser
@@ -50,6 +51,13 @@
         helm-pass
         jiralib2
         js2-mode
+<<<<<<< HEAD
+=======
+        kubernetes
+        kubernetes-evil
+        kubernetes-helm
+        kubernetes-tramp
+>>>>>>> d2eb01d573c15f01168df47e7d29ee469986ca09
         language-detection
         ledger-mode
         lispy
@@ -71,6 +79,7 @@
         rainbow-mode
         request
         restclient
+        rjsx-mode
         rmsbolt
         rust-mode
         slime
@@ -83,6 +92,7 @@
         typescript-mode
         websocket
         which-key
+	      xelb
         yasnippet
         youtube-dl
         ))
