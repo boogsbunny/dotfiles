@@ -40,6 +40,21 @@
       evil-want-integration t)
 (when (require 'evil nil t) (require 'init-evil))
 
+(when (fboundp 'rainbow-delimiters-mode)
+  (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode))
+
+(when (require 'rainbow-mode nil t)
+  (dolist (hook '(css-mode-hook html-mode-hook sass-mode-hook))
+    (add-hook hook 'rainbow-mode)))
+
+(add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
+(add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-mode))
+(add-to-list 'auto-mode-alist '("\\.tsx\\'" . typescript-mode))
+
+(add-hook 'js-mode-hook (lambda () (defvaralias 'js-indent-level 'tab-width)))
+(add-hook 'js2-mode-hook (lambda () (defvaralias 'js-indent-level 'tab-width)))
+(add-hook 'typescript-mode-hook (lambda () (defvaralias 'js-indent-level 'tab-width)))
+
 (when (require 'company nil t)
   (setq company-idle-delay nil))
 

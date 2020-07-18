@@ -5,6 +5,8 @@
 (require 'init-lispy)
 
 (add-hook 'lisp-mode-hook 'boogs/init-lispy)
+(load (expand-file-name "~/.quicklisp/slime-helper.el"))
+(setq inferior-lisp-program "sbcl")
 
 ;; slime setup
 ;; (when (file-exists-p (expand-file-name "~/quicklisp.lisp"))

@@ -4,7 +4,7 @@
 
 ;; (load-theme 'solarized-dark t)
 ;; (load-theme 'apropospriate-dark t)
-(load-theme 'sanityinc-tomorrow-night)
+(load-theme 'sanityinc-tomorrow-night t)
 
 ;; (require 'powerline)
 ;; (powerline-default-theme)

@@ -59,8 +59,8 @@
 ;; Make cursor width of the character it is under
 (setq x-stretch-cursor t)
 
-;; set tabs to 4 spaces
-(setq-default tab-width 4)
+;; set tabs to 2 spaces
+(setq-default tab-width 2)
 (setq-default indent-tabs-mode nil)
 
 ;; disable cursor blinking

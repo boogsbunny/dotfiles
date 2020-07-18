@@ -10,8 +10,6 @@
 
 (setq package-selected-packages
       '(
-
-
         airline-themes
         alert
         apropospriate-theme
@@ -51,6 +49,7 @@
         helm-org-contacts
         helm-pass
         jiralib2
+        js2-mode
         language-detection
         ledger-mode
         lispy
@@ -68,8 +67,6 @@
         org-superstar
         org-trello
         orgit
-        ox-jira
-        powerline
         rainbow-delimiters
         rainbow-mode
         request
@@ -78,12 +75,12 @@
         rust-mode
         slime
         sly
-        sly
         sly-asdf
         sly-macrostep
         sly-quicklisp
         solarized-theme
         transmission
+        typescript-mode
         websocket
         which-key
         yasnippet
