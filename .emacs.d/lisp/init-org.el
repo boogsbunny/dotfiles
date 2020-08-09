@@ -8,10 +8,9 @@
 
 (add-to-list 'org-modules 'org-habit t)
 
-;; (org-indent-mode 1)
-
-;; (add-hook 'org-mode-hook 'org-indent-mode)
-;; (add-hook 'org-journal-mode-hook 'org-indent-mode)
+;; sane indentation
+(setq org-indent-indentation-per-level 1)
+(setq org-adapt-indentation nil)
 
 (setq org-log-into-drawer t)
 (setq org-log-reschedule (quote time))
@@ -50,13 +49,13 @@
         "* SOMEDAY %^{TITLE}\n - %^{DESCRIPTION}\n :PROPERTIES:\n :CREATED: %U\n :END:")))
 
 
-;; ;; Don't show trailing whitespace in calendar mode
-;; (add-hook 'calendar-mode-hook
-;; 					(function (lambda () (setq show-trailing-whitespace nil))))
+;; Don't show trailing whitespace in calendar mode
+(add-hook 'calendar-mode-hook
+					(function (lambda () (setq show-trailing-whitespace nil))))
 
-;; ;; scheme requirement
-;; (use-package geiser
-;;   :ensure t)
+;; scheme requirement
+(use-package geiser
+  :ensure t)
 
 ;; enable languages for source code evaluation
 (org-babel-do-load-languages
@@ -67,16 +66,33 @@
    (C . t)
    (scheme . t)))
 
-;; edit source block in same windo;w
-(setq org-src-window-setup 'current-window)
+;; prevent confirmation
+(setq org-confirm-babel-evaluate nil)
 
-;; UTF-8 bullets
-(add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
+;; edit source block in other window
+(setq org-src-window-setup 'other-window)
+
+;; highlight and indent source code blocks
+(setq org-src-fontify-natively t)
+(setq org-src-tab-acts-natively t)
+(setq org-edit-src-content-indentation 0)
+
+;; highlight quotes
+(setq org-fontify-quote-and-verse-blocks t)
+
+;; hide leading bullets
+(setq org-hide-leading-stars 't)
 
 ;; integrate Emacs diary
 (setq org-agenda-include-diary t)
 
 ;; hide markup markers e.g. *bold* -> bold
 (setq org-hide-emphasis-markers t)
+
+;; maintain visible empty lines while toggling heading contents
+(customize-set-variable 'org-blank-before-new-entry
+                        '((heading . nil)
+                          (plain-list-item . nil)))
+(setq org-cycle-separator-lines 1)
 
 (provide 'init-org)

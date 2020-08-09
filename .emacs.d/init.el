@@ -44,7 +44,7 @@
   (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode))
 
 (when (require 'rainbow-mode nil t)
-  (dolist (hook '(css-mode-hook html-mode-hook sass-mode-hook))
+  (dolist (hook '(css-mode-hook html-mode-hook sass-mode-hook js-mode-hook js2-mode-hook typescript-mode))
     (add-hook hook 'rainbow-mode)))
 
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))

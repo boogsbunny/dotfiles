@@ -7,12 +7,6 @@
   (when (version< emacs-version minver)
     (error "Your Emacs is too old -- this config requires v%s or higher" minver)))
 
-;; :TODOs
-;; install notmuch
-;; build slack properly
-;; install ejira properly
-;; setup authinfo
-
 ;; system config
 (defconst *sys/linux*
   (eq system-type 'gnu/linux)
@@ -62,12 +56,16 @@
 ;; Make cursor width of the character it is under
 (setq x-stretch-cursor t)
 
+;; follow symlinks
+(setq vc-follow-symlinks t)
+
 ;; completion cycling
 (setq completion-cycle-threshold t)
 
 ;; set tabs to 2 spaces
 (setq-default tab-width 2)
-(setq-default indent-tabs-mode nil)
+;; (defvaralias 'standard-indent 'tab-width)
+(setq-default indent-tabs-mode t)
 
 ;; disable cursor blinking
 (blink-cursor-mode 0)
@@ -129,6 +127,14 @@
 
 ;; default mode
 (setq-default major-mode 'text-mode)
+(add-hook 'text-mode-hook 'auto-fill-mode)
+(add-hook 'text-mode-hook 'olivetti-mode)
+;; 80 character limit
+(setq fci-rule-column 80)
+;; spell check
+(customize-set-variable 'ispell-program-name "aspell")
+(customize-set-variable 'ispell-extra-args '("--sug-mode=ultra"))
+(add-hook 'text-mode-hook 'flyspell-mode)
 
 ;; disable lockfiles
 (setq create-lockfiles nil)
@@ -146,7 +152,15 @@
 
 (setq-default fill-column (string-to-number "70"))
 
-(add-hook 'text-mode-hook 'turn-on-auto-fill)
+;; (add-hook 'text-mode-hook 'turn-on-auto-fill)
+
+;; display images
+(setq org-startup-with-inline-images t)
+(add-hook
+ 'org-babel-after-execute-hook
+ (lambda ()
+   (when org-inline-image-overlays
+     (org-redisplay-inline-images))))
 
 ;; window resizing
 ;; (global-set-key (kbd "C-x l") 'shrink-window-horizontally)

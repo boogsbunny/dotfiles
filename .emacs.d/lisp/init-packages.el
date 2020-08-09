@@ -10,7 +10,6 @@
 
 (setq package-selected-packages
       '(
-        airline-themes
         alert
         apropospriate-theme
         auth-source-pass
@@ -51,13 +50,10 @@
         helm-pass
         jiralib2
         js2-mode
-<<<<<<< HEAD
-=======
         kubernetes
         kubernetes-evil
         kubernetes-helm
         kubernetes-tramp
->>>>>>> d2eb01d573c15f01168df47e7d29ee469986ca09
         language-detection
         ledger-mode
         lispy
@@ -69,12 +65,11 @@
         markdown-mode+
         notmuch
         oauth2
+				olivetti
         org
-        org-bullets
         org-journal
-        org-superstar
-        org-trello
         orgit
+				poet-theme
         rainbow-delimiters
         rainbow-mode
         request
