@@ -1,11 +1,7 @@
 "================================================"
 "                  Vim Config                    "
-"
 "              Author: Bugi Abdulkarim           "
-"           Last Modified: 03/14/2018            "
-"                 Dependencies                   "
-"      silverserver-ag: for the ack plugin       "
-"      exuberant-ctags: for easytags plugin      "
+"           Last Modified: 09/28/2020            "
 "================================================"
 "
 if empty(glob('~/.vim/autoload/plug.vim'))
@@ -19,36 +15,38 @@ endif
 "---------------------------------"
 call plug#begin('~/.vim/plugged')
 
-Plug 'mhinz/vim-startify' " fancy start page
-Plug 'scrooloose/nerdtree' " filetree
-Plug 'tomtom/tcomment_vim' " comment toggler
-Plug 'easymotion/vim-easymotion' " jump to any word with ease
-Plug 'ctrlpvim/ctrlp.vim' " fuzzyfinder
-Plug 'mileszs/ack.vim' " search files for a pattern recursively
-Plug 'vim-airline/vim-airline' "status line and tab bar
-Plug 'vim-airline/vim-airline-themes'
-Plug 'flazz/vim-colorschemes' " a bunch of colorschemes
+" Language Server Protocol (MSFT) for Neovim
+Plug 'neovim/nvim-lspconfig'
+Plug 'nvim-lua/completion-nvim'
+Plug 'tjdevries/lsp_extensions.nvim'
 
-" build and install autocompleter
-Plug 'ervandew/supertab' " tab for omnicompletion
-" Plug 'w0rp/ale' " linting
-Plug 'xolox/vim-misc' " dependency for vim-easytags
-" Plug 'xolox/vim-easytags' " easy tag generation for jumping to definitions
+" VCS related (version control system)
+Plug 'tpope/vim-fugitive' " Git wrapper
+Plug 'vim-utils/vim-man' " Vim manual
+Plug 'mbbill/undotree' " vcs visualizer
+Plug 'sheerun/vim-polyglot' " collection of language packs
+Plug 'airblade/vim-gitgutter' "show added/deleted lines in gutter
+
+" FZF wrapper
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
+Plug 'stsewd/fzf-checkout.vim'
+
+" Simplify things
+Plug 'mhinz/vim-startify' " fancy start page
+Plug 'tomtom/tcomment_vim' " comment toggler
 Plug 'tpope/vim-surround' " easily change surrounding brackets, quotes, etc.
 Plug 'terryma/vim-expand-region' " highlight increasingly larger regions of text
-Plug 'octol/vim-cpp-enhanced-highlight' "additional cpp syntax support
-Plug 'pangloss/vim-javascript' " javascript syntax support
-Plug 'mxw/vim-jsx' " jsx syntax support for react
-Plug 'rstacruz/sparkup' "html expander
-Plug 'airblade/vim-gitgutter' "show added/deleted lines in gutter
 Plug 'bronson/vim-trailing-whitespace' "show trailing whitespace as red bg
-Plug 'jparise/vim-graphql' " graphql for vim
 Plug 'Yggdroot/indentLine' " displays thin vertical lines at each indentation
-Plug 'tpope/vim-fugitive' " Git wrapper
-Plug 'vim-scripts/indentpython.vim' " alternative indentation script for python
-Plug 'vim-latex/vim-latex'
-Plug 'xuhdev/vim-latex-live-preview' " lively previewing LaTeX PDF output
-" Plug 'davidhalter/jedi-vim' " code completion python
+
+" Style related
+Plug 'gruvbox-community/gruvbox'
+Plug 'colepeters/spacemacs-theme.vim'
+Plug 'sainnhe/gruvbox-material'
+Plug 'phanviet/vim-monokai-pro'
+Plug 'flazz/vim-colorschemes'
+Plug 'chriskempson/base16-vim'
 
 call plug#end()
 
@@ -83,7 +81,6 @@ set smartcase             " override ignore case if uppercase letters in pattern
 set tabstop=4 " show existing tab with 4 spaces width
 set shiftwidth=4 " when indenting with '>', use 4 spaces width
 set expandtab " On pressing tab, insert 4 spaces
-" set autoindent " copy indentation from current line to new line
 
 set foldmethod=indent
 set foldminlines=5        " min num of lines before a block is foldable
@@ -91,17 +88,23 @@ set foldlevelstart=12     " don't autofold unless there are 12 indents
 
 set undodir=~/.vim/undodir
 set undofile              " persistent undo
-
+let loaded_matchparen = 1
 set pastetoggle=<F2>      " switch to paste mode to paste easily
-"set clipboard=unnamedplus " use system clipboard
-
-set shellpipe=>           " hide ack searches from stdout
-
 set visualbell            " visual bell
-colorscheme 0x7A69_dark 		" sourcerer, oceandeep
-" let g:livepreview_previewer = 'okular'
-let g:livepreview_previewer = 'mupdf-gl'
-"let g:livepreview_previewer = 'open -a Preview'
+let g:fzf_layout = { 'window': { 'width': 0.8, 'height': 0.8 } }
+let $FZF_DEFAULT_OPTS='--reverse'
+
+"--------------------------------"
+"            Color Theme         "
+"--------------------------------"
+let g:gruvbox_contrast_dark = 'hard'
+if exists('+termguicolors')
+    let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+    let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+endif
+let g:gruvbox_invert_selection='0'
+colorscheme gruvbox
+set background=dark
 
 "--------------------------------"
 "            Style Guide         "
@@ -130,6 +133,10 @@ imap jk <Esc>
 imap kj <Esc>
 " easy command input
 nnoremap ; :
+
+" Git
+nnoremap <leader>gc :GBranches<CR>
+nnoremap <leader>ga :Git fetch --all<CR>
 
 " Cursor will always be in middle of window
 " set scrolloff=9999
@@ -183,7 +190,6 @@ nnoremap <silent> <S-j> :m+<cr>
 inoremap <silent> <S-k> <Esc>:m-2<cr>i
 inoremap <silent> <S-j> <Esc>:m+<cr>i
 
-
 " toggle line number type
 nnoremap <silent> <F3> :call ToggleNumber()<cr>
 
@@ -202,7 +208,6 @@ nnoremap <silent> <leader>rnc :read ~/dotfiles/templates/component.js<cr>
 
 " Plugin Mappings
 noremap <silent> <leader>cc :TComment<cr>
-map <leader>g :Ack!
 
 " close quickfix window
 map <silent> <leader>gq :ccl<cr>
@@ -213,120 +218,19 @@ map <silent> <leader>gq :ccl<cr>
 autocmd FileType javascript inoremap <leader>tx <Text></Text><Space><++>
 
 "--------------------------------"
-"             Colors             "
-"--------------------------------"
-"syntax on
-let python_highlight_all=1
-"colorscheme Dark
-hi Visual ctermfg=NONE ctermbg=241 cterm=NONE guifg=NONE guibg=#44475a gui=NONE
-hi Folded ctermbg=0
-hi Search ctermfg=NONE ctermbg=241 cterm=NONE guibg=#44475a gui=NONE
-
-"--------------------------------"
 "      Compilation/Execution     "
 "--------------------------------"
 " C++
 autocmd filetype cpp nnoremap <F4> :w<cr> :!clang++-5.0 -std=c++11 -Wall -g *.cpp && ./a.out<cr>
-" Java
-autocmd filetype java nnoremap <F4> :w<cr> :!javac %<cr>
 " Rust
 autocmd filetype rust nnoremap <F4> :w<cr> :!rustc % && ./%:r
 " Python
 autocmd filetype python nnoremap <F4> :w<cr> :!python %<cr>
-" Ruby
-autocmd filetype ruby nnoremap <F4> :w<cr> :!ruby %<cr>
 
 "================================================"
 "                 Plugin Config                  "
 "================================================"
 
-"--------------------------------"
-"              ack               "
-"--------------------------------"
-if executable('ag')
-	let g:ackprg = 'ag --vimgrep -U'
-endif
-
-"--------------------------------"
-"            Airline             "
-"--------------------------------"
-let g:airline_theme='deus'
-let g:airline_powerline_fonts = 1
-let g:airline#extensions#tabline#enabled = 1
-set t_RV= " fixes broken first line in rendering
-" unicode symbols
-" let g:airline_left_sep = '»'
-" let g:airline_left_sep = '▶'
-" let g:airline_right_sep = '«'
-" let g:airline_right_sep = '◀'
-" let g:airline_symbols.linenr = '␊'
-" let g:airline_symbols.linenr = '␤'
-" let g:airline_symbols.linenr = '¶'
-" let g:airline_symbols.branch = '⎇'
-" let g:airline_symbols.paste = 'ρ'
-" let g:airline_symbols.paste = 'Þ'
-" let g:airline_symbols.paste = '∥'
-" let g:airline_symbols.whitespace = 'Ξ'
-"
-" " airline symbols
-" let g:airline_left_sep = ''
-" let g:airline_left_alt_sep = ''
-" let g:airline_right_sep = ''
-" let g:airline_right_alt_sep = ''
-" let g:airline_symbols.branch = ''
-" let g:airline_symbols.readonly = ''
-" let g:airline_symbols.linenr = ''
-" set ambiwidth=double
-" let g:airline_left_sep = '⮀'
-" let g:airline_left_alt_sep = '⮁'
-" let g:airline_right_sep = '⮂'
-" let g:airline_right_alt_sep = '⮃'
-
-"--------------------------------"
-"              ale               "
-"--------------------------------"
-" let g:ale_fixers = {'javascript': ['prettier', 'eslint'], 'python': ['autopep8']}
-" let g:ale_fix_on_save = 1
-" let g:ale_lint_on_text_changed = 'never'
-" let g:ale_lint_on_enter = 0
-" let g:ale_completion_enabled = 1
-"
-"--------------------------------"
-"             CtrlP              "
-"--------------------------------"
-let g:ctrlp_show_hidden = 1
-" use ag
-let g:ctrlp_user_command = 'ag %s -l --nocolor --hidden -g ""'
-" ignore node_modules et al
-let g:ctrlp_custom_ignore = '\v[\/](node_modules|target|dist)|(\.(swp|ico|git|svn))$'
-
-"--------------------------------"
-"            easytags            "
-"--------------------------------"
-" store tags per project, do not use global
-set tags=./.tags;
-let g:easytags_dynamic_files = 2
-let g:easytags_async = 1
-let g:easytags_auto_highlight = 0
-let g:easytags_include_members = 1
-let g:easytags_events = ['BufWritePost']
-
-"--------------------------------"
-"            NERDTree            "
-"--------------------------------"
-"autocmd vimenter * NERDTree
-" open a NERDTree automatically when vim starts up
-let g:NERDTreeDirArrowExpandable = '▸'
-let g:NERDTreeDirArrowCollapsible = '▾'
-" default arrow symbols
-"let NERDTreeShowHidden=0
-autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
-map <C-n> :NERDTreeToggle<CR>
-let NERDTreeShowHidden=1
-let g:NERDTreeHijackNetrw=0
-
-" shows hidden files automatically
 "--------------------------------"
 "           Startify             "
 "--------------------------------"
@@ -341,23 +245,14 @@ let g:startify_custom_header = [
 \ ]
 
 "--------------------------------"
-"          YouCompleteMe         "
-"--------------------------------"
-" let g:ycm_server_python_interpreter = '/usr/bin/python'
-" let g:ycm_python_binary_path = '/usr/bin/python3'
-" let g:ycm_global_ycm_extra_conf = "~/.vim/.ycm_extra_conf.py"
-" set completeopt-=preview
-" highlight Pmenu ctermbg=0 ctermfg=5
-
-"--------------------------------"
 "          Dasht                 "
 "--------------------------------"
 " search related docsets
-nnoremap <Leader>k :Dasht<Space>
+" nnoremap <Leader>k :Dasht<Space>
 " search ALL the docsets
-nnoremap <Leader><Leader>k :Dasht!<Space>
+" nnoremap <Leader><Leader>k :Dasht!<Space>
 " use current window to show results
-let g:dasht_results_window = 'enew'
+" let g:dasht_results_window = 'enew'
 
 "--------------------------------"
 "           Functions            "
@@ -398,55 +293,3 @@ let g:dasht_results_window = 'enew'
  	catch /^Vim\%((\a\+)\)\=:E42/
  	endtry
  endfunction
-
-" Spell checker
-map<F6> :setlocal spell! spellang=en_us<CR>
-
-" If powerline fonts partially messed up
-if !exists('g:airline_symbols')
-  let g:airline_symbols = {}
-endif
-let g:airline_symbols.space = "\ua0"
-
-
-
-" Compatible with ranger 1.4.2 through 1.7.*
-"
-" Add ranger as a file chooser in vim
-"
-" If you add this code to the .vimrc, ranger can be started using the command
-" ":RangerChooser" or the keybinding "<leader>r".  Once you select one or more
-" files, press enter and ranger will quit again and vim will open the selected
-" files.
-
-function! RangeChooser()
-    let temp = tempname()
-    " The option "--choosefiles" was added in ranger 1.5.1. Use the next line
-    " with ranger 1.4.2 through 1.5.0 instead.
-    "exec 'silent !ranger --choosefile=' . shellescape(temp)
-    if has("gui_running")
-        exec 'silent !xterm -e ranger --choosefiles=' . shellescape(temp)
-    else
-        exec 'silent !ranger --choosefiles=' . shellescape(temp)
-    endif
-    if !filereadable(temp)
-        redraw!
-        " Nothing to read.
-        return
-    endif
-    let names = readfile(temp)
-    if empty(names)
-        redraw!
-        " Nothing to open.
-        return
-    endif
-    " Edit the first item.
-    exec 'edit ' . fnameescape(names[0])
-    " Add any remaning items to the arg list/buffer list.
-    for name in names[1:]
-        exec 'argadd ' . fnameescape(name)
-    endfor
-    redraw!
-endfunction
-command! -bar RangerChooser call RangeChooser()
-nnoremap <leader>r :<C-U>RangerChooser<CR>
