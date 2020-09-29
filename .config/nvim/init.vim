@@ -18,7 +18,13 @@ call plug#begin('~/.vim/plugged')
 " Language Server Protocol (MSFT) for Neovim
 Plug 'neovim/nvim-lspconfig'
 Plug 'nvim-lua/completion-nvim'
+Plug 'tjdevries/nlua.nvim'
 Plug 'tjdevries/lsp_extensions.nvim'
+
+" Telescope fuzzy finder
+Plug 'nvim-lua/telescope.nvim'
+Plug 'nvim-lua/popup.nvim'
+Plug 'nvim-lua/plenary.nvim'
 
 " VCS related (version control system)
 Plug 'tpope/vim-fugitive' " Git wrapper
@@ -123,8 +129,45 @@ autocmd Filetype javascript setlocal ts=2 sw=2 sts=0 noexpandtab
 autocmd FileType cpp setlocal ts=2 sts=2 sw=2
 
 "--------------------------------"
+"    Language Server Protocol    "
+"--------------------------------"
+lua require'nvim_lsp'.bashls.setup{ on_attach=require'completion'.on_attach }
+lua require'nvim_lsp'.clangd.setup{ on_attach=require'completion'.on_attach }
+lua require'nvim_lsp'.clojure_lsp.setup{ on_attach=require'completion'.on_attach }
+lua require'nvim_lsp'.cssls.setup{ on_attach=require'completion'.on_attach }
+lua require'nvim_lsp'.dockerls.setup{ on_attach=require'completion'.on_attach }
+lua require'nvim_lsp'.gopls.setup{ on_attach=require'completion'.on_attach }
+lua require'nvim_lsp'.hie.setup{ on_attach=require'completion'.on_attach }
+lua require'nvim_lsp'.html.setup{ on_attach=require'completion'.on_attach }
+lua require'nvim_lsp'.jedi_language_server.setup{ on_attach=require'completion'.on_attach }
+lua require'nvim_lsp'.json_ls.setup{ on_attach=require'completion'.on_attach }
+lua require'nvim_lsp'.julials.setup{ on_attach=require'completion'.on_attach }
+lua require'nvim_lsp'.ocamllsp.setup{ on_attach=require'completion'.on_attach }
+lua require'nvim_lsp'.omnisharp.setup{ on_attach=require'completion'.on_attach }
+lua require'nvim_lsp'.omnisharp.setup{ on_attach=require'completion'.on_attach }
+lua require'nvim_lsp'.sqlls.setup{ on_attach=require'completion'.on_attach }
+" lua require'nvim_lsp'.tsserver.setup{ on_attach=require'completion'.on_attach }
+
+nnoremap <leader>vd :lua vim.lsp.buf.definition()<CR>
+nnoremap <leader>vi :lua vim.lsp.buf.implementation()<CR>
+nnoremap <leader>vsh :lua vim.lsp.buf.signature_help()<CR>
+nnoremap <leader>vrr :lua vim.lsp.buf.references()<CR>
+nnoremap <leader>vrn :lua vim.lsp.buf.rename()<CR>
+nnoremap <leader>vh :lua vim.lsp.buf.hover()<CR>
+nnoremap <leader>vca :lua vim.lsp.buf.code_action()<CR>
+"--------------------------------"
+"            Telescope           "
+"--------------------------------"
+let g:telescope_cache_results = 1
+let g:telescope_prime_fuzzy_find  = 1
+nnoremap <leader>pw :lua require('telescope.builtin').grep_string { search = vim.fn.expand("<cword>") }<CR>
+nnoremap <leader>ps :lua require('telescope.builtin').grep_string({ search = vim.fn.input("Grep For >")})<CR>
+nnoremap <C-p> :lua require('telescope.builtin').git_files()<CR>
+
+"--------------------------------"
 "            Mappings            "
 "--------------------------------"
+let g:completion_matching_strategy_list = ['exact', 'substring', 'fuzzy']
 let g:TerminusFocusReporting=0
 let mapleader   = "," " remap leader to ,
 let g:mapleader = ","
@@ -258,38 +301,38 @@ let g:startify_custom_header = [
 "           Functions            "
 "--------------------------------"
 " Toggles folding
- function ToggleFold()
- 	if foldlevel('.') == 0
- 		normal! 1
- 	else
- 		if foldclosed('.') < 0
- 			. foldclose
- 		else
- 			. foldopen
- 		endif
- 	endif
- 	echo
- endfunction
+"  function ToggleFold()
+"  	if foldlevel('.') == 0
+"  		normal! 1
+"  	else
+"  		if foldclosed('.') < 0
+"  			. foldclose
+"  		else
+"  			. foldopen
+"  		endif
+"  	endif
+"  	echo
+"  endfunction
 
  " Toggles hybrid numbering
- function ToggleNumber()
-     if (&relativenumber == 1)
-         set norelativenumber
-         set number
-     else
-         set relativenumber
-     endif
- endfunction
+"  function ToggleNumber()
+"      if (&relativenumber == 1)
+"          set norelativenumber
+"          set number
+"      else
+"          set relativenumber
+"      endif
+"  endfunction
 
 " Cycle through location lists
- function LNext(prev)
- 	try
- 		try
- 			if a:prev | lprev | else | lnext | endif
- 		catch /^Vim\%((a\+)\)\=:E553/
- 			if a:prev | llast | else | lfirst| endif
- 		catch /^Vim\%((\a\+)\)\=:E776/
- 		endtry
- 	catch /^Vim\%((\a\+)\)\=:E42/
- 	endtry
- endfunction
+"  function LNext(prev)
+"  	try
+"  		try
+"  			if a:prev | lprev | else | lnext | endif
+"  		catch /^Vim\%((a\+)\)\=:E553/
+"  			if a:prev | llast | else | lfirst| endif
+"  		catch /^Vim\%((\a\+)\)\=:E776/
+"  		endtry
+"  	catch /^Vim\%((\a\+)\)\=:E42/
+"  	endtry
+"  endfunction
