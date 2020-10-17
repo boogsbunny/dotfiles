@@ -54,8 +54,8 @@
 					(function (lambda () (setq show-trailing-whitespace nil))))
 
 ;; scheme requirement
-(use-package geiser
-  :ensure t)
+;; (use-package geiser
+;;   :ensure t)
 
 ;; enable languages for source code evaluation
 (org-babel-do-load-languages
