@@ -40,6 +40,7 @@
       evil-want-integration t)
 (when (require 'evil nil t) (require 'init-evil))
 
+(add-hook 'emacs-lisp-mode-hook 'boogs/init-lispy)
 (when (fboundp 'rainbow-delimiters-mode)
   (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode))
 
@@ -68,7 +69,7 @@
 (with-eval-after-load 'notmuch (require 'init-notmuch))
 (autoload 'helm-notmuch-switch "notmuch")
 
-(when (require 'pdf-tools nil t) (require 'init-pdf))
+;;(when (require 'pdf-tools nil t) (require 'init-pdf))
 
 (with-eval-after-load 'lisp-mode (require 'init-lisp))
 (add-hook 'emacs-lisp-mode-hook 'boogs/init-lispy)
@@ -81,9 +82,6 @@
 
 (with-eval-after-load 'docker (require 'init-docker))
 (with-eval-after-load 'ledger-mode (require 'init-ledger))
-
-;(when (require 'slack nil t) (require 'init-slack))
-;(require 'init-jira)
 
 ;;------------------------------------------------------------
 ;; CLEANUP
