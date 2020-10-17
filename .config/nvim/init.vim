@@ -132,21 +132,21 @@ autocmd FileType cpp setlocal ts=2 sts=2 sw=2
 "    Language Server Protocol    "
 "--------------------------------"
 lua require'nvim_lsp'.bashls.setup{ on_attach=require'completion'.on_attach }
-lua require'nvim_lsp'.clangd.setup{ on_attach=require'completion'.on_attach }
-lua require'nvim_lsp'.clojure_lsp.setup{ on_attach=require'completion'.on_attach }
+" lua require'nvim_lsp'.clangd.setup{ on_attach=require'completion'.on_attach }
+" lua require'nvim_lsp'.clojure_lsp.setup{ on_attach=require'completion'.on_attach }
 lua require'nvim_lsp'.cssls.setup{ on_attach=require'completion'.on_attach }
 lua require'nvim_lsp'.dockerls.setup{ on_attach=require'completion'.on_attach }
-lua require'nvim_lsp'.gopls.setup{ on_attach=require'completion'.on_attach }
-lua require'nvim_lsp'.hie.setup{ on_attach=require'completion'.on_attach }
+" lua require'nvim_lsp'.gopls.setup{ on_attach=require'completion'.on_attach }
+" lua require'nvim_lsp'.hie.setup{ on_attach=require'completion'.on_attach }
 lua require'nvim_lsp'.html.setup{ on_attach=require'completion'.on_attach }
-lua require'nvim_lsp'.jedi_language_server.setup{ on_attach=require'completion'.on_attach }
-lua require'nvim_lsp'.json_ls.setup{ on_attach=require'completion'.on_attach }
-lua require'nvim_lsp'.julials.setup{ on_attach=require'completion'.on_attach }
-lua require'nvim_lsp'.ocamllsp.setup{ on_attach=require'completion'.on_attach }
-lua require'nvim_lsp'.omnisharp.setup{ on_attach=require'completion'.on_attach }
-lua require'nvim_lsp'.omnisharp.setup{ on_attach=require'completion'.on_attach }
+" lua require'nvim_lsp'.jedi_language_server.setup{ on_attach=require'completion'.on_attach }
+" lua require'nvim_lsp'.json_ls.setup{ on_attach=require'completion'.on_attach }
+" lua require'nvim_lsp'.julials.setup{ on_attach=require'completion'.on_attach }
+" lua require'nvim_lsp'.ocamllsp.setup{ on_attach=require'completion'.on_attach }
+" lua require'nvim_lsp'.omnisharp.setup{ on_attach=require'completion'.on_attach }
+" lua require'nvim_lsp'.omnisharp.setup{ on_attach=require'completion'.on_attach }
 lua require'nvim_lsp'.sqlls.setup{ on_attach=require'completion'.on_attach }
-" lua require'nvim_lsp'.tsserver.setup{ on_attach=require'completion'.on_attach }
+lua require'nvim_lsp'.tsserver.setup{ on_attach=require'completion'.on_attach }
 
 nnoremap <leader>vd :lua vim.lsp.buf.definition()<CR>
 nnoremap <leader>vi :lua vim.lsp.buf.implementation()<CR>
