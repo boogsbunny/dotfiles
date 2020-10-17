@@ -7,8 +7,9 @@
 (setq git-commit-summary-max-length fill-column)
 (define-key magit-mode-map (kbd "s-<tab>") nil)
 (setq magit-diff-refine-hunk 'all)
-(setq magit-repository-directories '(("~/Repos" . 1)
-                                     ("~/Documents/Repos/alarm" . 3)))
+(setq magit-repository-directories '(("~/projects" . 1)
+                                     ("~/Repos" . 1)
+																		 ("~/.local/share/emacs/site-lisp" . 1))
 
 (when (require 'magit-todos nil 'noerror)
   (magit-todos-mode))
