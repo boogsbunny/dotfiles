@@ -22,6 +22,8 @@
         company-restclient
         csharp-mode
         docker
+		docker-compose-mode
+		dockerfile-mode
         elfeed
         elpy
         emojify
@@ -37,6 +39,7 @@
         flycheck
         forge
         geiser
+        gruvbox-theme
         hackernews
         helm
         helm-company
@@ -65,11 +68,11 @@
         markdown-mode+
         notmuch
         oauth2
-				olivetti
+		olivetti
         org
         org-journal
         orgit
-				poet-theme
+		poet-theme
         rainbow-delimiters
         rainbow-mode
         request
@@ -87,7 +90,7 @@
         typescript-mode
         websocket
         which-key
-	      xelb
+	    xelb
         yasnippet
         youtube-dl
         ))
