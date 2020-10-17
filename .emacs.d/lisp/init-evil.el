@@ -32,9 +32,9 @@
    (evil-execute-in-emacs-state)
    (call-interactively (key-binding (kbd "M-.")))))
 
-(when (require 'evil-multiedit nil t)
-  (global-set-key (kbd "C-;") 'evil-multiedit-match-all)
-  (evil-multiedit-default-keybinds))
+;;(when (require 'evil-multiedit nil t)
+;;  (global-set-key (kbd "C-;") 'evil-multiedit-match-all)
+;;  (evil-multiedit-default-keybinds))
 
 (setq evil-default-modeline-color (cons (face-background 'mode-line) (or (face-foreground 'mode-line) "black")))
 
