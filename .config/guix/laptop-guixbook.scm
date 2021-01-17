@@ -45,7 +45,7 @@
   (timezone "America/New_York")
   (keyboard-layout (keyboard-layout "us"
 				    #:options
-				    '("caps:ctrl_modifier")))
+				    '("ctrl:nocaps")))
   (kernel linux)
   (initrd microcode-initrd)
   (firmware (list linux-firmware))
@@ -88,51 +88,41 @@
 	  (xorg-configuration
 	    (keyboard-layout keyboard-layout))))
       %desktop-services))
-  (bootloader (bootloader-configuration
-		(bootloader grub-bootloader)
-		(target "/dev/nvme0n1")
-		(keyboard-layout keyboard-layout)))
+  (bootloader
+    (bootloader-configuration
+      (bootloader grub-efi-bootloader)
+      (target "/boot/efi")
+      (keyboard-layout keyboard-layout)))
   (mapped-devices
     (list (mapped-device
 	    (source
-	      ;; UUID returned by 'cryptsetup luksUUID'
-	      (uuid ""))
-	    (target "crypt")
+	      (uuid "bd375e35-0c57-45b6-9dba-a0f35cbc1987"))
+	    (target "cryptroot")
+	    (type luks-device-mapping))
+	  (mapped-device
+	    (source
+	      (uuid "4c06c72d-c6cb-4482-8ab5-0015523ca977"))
+	    (target "cryptmedia")
 	    (type luks-device-mapping))))
-  (file-systems (cons* (file-system
-			 (mount-point "/")
-			 (device "/dev/mapper/crypt")
-			 (type "btrfs")
-			 (options "subvol=root,compress=zstd")
-			 (dependencies mapped-devices))
-		       (file-system
-			 (mount-point "/boot")
-			 (device "/dev/mapper/crypt")
-			 (type "btrfs")
-			 (options "subvol=boot,compress=zstd")
-			 (dependencies mapped-devices))
-		       (file-system
-			 (mount-point "/gnu")
-			 (device "/dev/mapper/crypt")
-			 (type "btrfs")
-			 (options "subvol=gnu,compress=zstd")
-			 (dependencies mapped-devices))
-		       (file-system
-			 (mount-point "/home")
-			 (device "/dev/mapper/crypt")
-			 (type "btrfs")
-			 (options "subvol=home,compress=zstd")
-			 (dependencies mapped-devices))
-		       (file-system
-			 (mount-point "/var/log")
-			 (device "/dev/mapper/crypt")
-			 (type "btrfs")
-			 (options "subvol=log,compress=zstd")
-			 (dependencies mapped-devices))
-		       (file-system
-			 (mount-point "/data")
-			 (device "/dev/mapper/crypt")
-			 (type "btrfs")
-			 (options "subvol=data,compress=zstd")
-			 (dependencies mapped-devices))
-		       %base-file-systems)))
+  (file-systems
+    (cons* (file-system
+	     (mount-point "/boot/efi")
+	     (device (uuid "0848-C99A" 'fat32))
+	     (type "vfat"))
+	   (file-system
+	     (mount-point "/")
+	     (device "/dev/mapper/cryptroot")
+	     (type "ext4")
+	     (dependencies mapped-devices))
+	   (file-system
+	     (mount-point "/media")
+	     (device "/dev/mapper/cryptmedia")
+	     (type "btrfs")
+	     (create-mount-point? #t)
+	     (dependencies mapped-devices))
+	   (file-system
+	     (mount-point "/tmp")
+	     (device "none")
+	     (type "tmpfs")
+	     (check? #f))
+	     %base-file-systems)))
