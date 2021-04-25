@@ -33,7 +33,7 @@
              (ice-9 pretty-print)
              (ice-9 match)
              (ice-9 popen))
-(use-service-modules desktop networking ssh xorg)
+(use-service-modules desktop networking ssh xorg sddm)
 
 (define this-file
   (local-file (basename (assoc-ref (current-source-location) 'filename))

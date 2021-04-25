@@ -6,6 +6,7 @@ xset r rate 300 50 &                 # speed xrate up
 unclutter &                          # remove idle mouse
 # picom &                              # transparency
 xcompmgr &
-$STATUSBAR &                         # start the status bar
 dunst &                              # notifications
-redshift -l 38.90:77.00 -t 2000:6000 & # redshift
+redshift &
+
+shepherd

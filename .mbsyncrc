@@ -6,6 +6,7 @@ Port 993
 User bugrahanabdulkarim@gmail.com
 PassCmd "pass email/bugrahanabdulkarim@gmail.com"
 SSLType IMAPS
+SSLVersions TLSv1.2
 
 IMAPStore gmail-remote
 Account gmail
@@ -14,22 +15,26 @@ MaildirStore gmail-local
 # The trailing "/" is important
 Path /media/mail/gmail/
 Inbox /media/mail/gmail/inbox
+SubFolders Verbatim
 
 Channel gmail-all
 Master :gmail-remote:
 Slave :gmail-local:
-Patterns * "!Sent"
-Create Both
+# Patterns * "!Sent"
+Patterns "*"
+Create Slave
+Sync All
+# Create Both
 Expunge Both
 SyncState *
 
-Channel gmail-sent
-Master :gmail-remote:
-Slave :gmail-local:
-Patterns !* "Sent"
-Create Both
-Expunge Both
-SyncState *
+# Channel gmail-sent
+# Master :gmail-remote:
+# Slave :gmail-local:
+# Patterns !* "Sent"
+# Create Both
+# Expunge Both
+# SyncState *
 
 ################################################################################
 
@@ -39,6 +44,7 @@ Port 993
 User ba2ra@virginia.edu
 PassCmd "pass email/ba2ra@virginia.edu"
 SSLType IMAPS
+SSLVersions TLSv1.2
 
 IMAPStore uva-remote
 Account uva
@@ -47,22 +53,26 @@ MaildirStore uva-local
 # The trailing "/" is important
 Path /media/mail/uva/
 Inbox /media/mail/uva/inbox
+SubFolders Verbatim
 
 Channel uva-all
 Master :uva-remote:
 Slave :uva-local:
-Patterns * "!Sent"
-Create Both
+# Patterns * "!Sent"
+Patterns "*"
+# Create Both
+Create Slave
+Sync All
 Expunge Both
 SyncState *
 
-Channel uva-sent
-Master :uva-remote:
-Slave :uva-local:
-Patterns !* "Sent"
-Create Both
-Expunge Both
-SyncState *
+# Channel uva-sent
+# Master :uva-remote:
+# Slave :uva-local:
+# Patterns !* "Sent"
+# Create Both
+# Expunge Both
+# SyncState *
 
 ################################################################################
 
@@ -80,22 +90,26 @@ MaildirStore vg-local
 # The trailing "/" is important
 Path /media/mail/vg/
 Inbox /media/mail/vg/inbox
+SubFolders Verbatim
 
 Channel vg-all
 Master :vg-remote:
 Slave :vg-local:
-Patterns * "!Sent"
-Create Both
+# Patterns * "!Sent"
+Patterns "*"
+# Create Both
+Create Slave
+Sync All
 Expunge Both
 SyncState *
 
-Channel vg-sent
-Master :vg-remote:
-Slave :vg-local:
-Patterns !* "Sent"
-Create Both
-Expunge Both
-SyncState *
+# Channel vg-sent
+# Master :vg-remote:
+# Slave :vg-local:
+# Patterns !* "Sent"
+# Create Both
+# Expunge Both
+# SyncState *
 
 ################################################################################
 
@@ -113,19 +127,22 @@ MaildirStore alarm-local
 # The trailing "/" is important
 Path /media/mail/alarm/
 Inbox /media/mail/alarm/inbox
+SubFolders Verbatim
 
 Channel alarm-all
 Master :alarm-remote:
 Slave :alarm-local:
-Patterns * "!Sent"
-Create Both
+# Patterns * "!Sent"
+Patterns "*"
+# Create Both
+Create Slave
 Expunge Both
 SyncState *
 
-Channel alarm-sent
-Master :alarm-remote:
-Slave :alarm-local:
-Patterns !* "Sent"
-Create Both
-Expunge Both
-SyncState *
+# Channel alarm-sent
+# Master :alarm-remote:
+# Slave :alarm-local:
+# Patterns !* "Sent"
+# Create Both
+# Expunge Both
+# SyncState *

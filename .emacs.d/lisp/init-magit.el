@@ -8,7 +8,7 @@
 (define-key magit-mode-map (kbd "s-<tab>") nil)
 (setq magit-diff-refine-hunk 'all)
 (setq magit-repository-directories '(("~/projects" . 1)
-                                     ("~/Repos" . 1)
+                                     ("~/repos" . 1)
 																		 ("~/.local/share/emacs/site-lisp" . 1)))
 
 (when (require 'magit-todos nil 'noerror)

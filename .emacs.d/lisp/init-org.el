@@ -15,6 +15,11 @@
 (setq org-log-into-drawer t)
 (setq org-log-reschedule (quote time))
 
+(setf (nth 4 org-emphasis-regexp-components) 10)
+(load-library "org")
+
+(setq org-directory "/media/org")
+
 ;; TODO states
 (setq org-todo-keywords
       '((sequence
@@ -29,7 +34,7 @@
          "CANCELED(c)"
          )))
 
-(setq org-agenda-files '("~/org"))
+(setq org-agenda-files '("/media/org"))
 
 ;; capture templates
 (setq org-capture-templates
@@ -53,9 +58,30 @@
 (add-hook 'calendar-mode-hook
 					(function (lambda () (setq show-trailing-whitespace nil))))
 
-;; scheme requirement
-;; (use-package geiser
-;;   :ensure t)
+(setq org-journal-dir "/media/personal/journal/"
+			org-journal-encrypt-journal t
+			org-journal-enable-encryption t)
+
+(require 'org-journal)
+
+(require 'org-crypt)
+(org-crypt-use-before-save-magic)
+(setq org-tags-exclude-from-inheritance '("crypt"))
+
+(setq org-crypt-key "E10450D18FFBE872")
+;; GPG key to use for encryption
+;; Either the Key ID or set to nil to use symmetric encryption.
+
+(setq auto-save-default nil)
+;; Auto-saving does not cooperate with org-crypt.el: so you need to
+;; turn it off if you plan to use org-crypt.el quite often.  Otherwise,
+;; you'll get an (annoying) message each time you start Org.
+
+;; To turn it off only locally, you can insert this:
+;;
+;; # -*- buffer-auto-save-file-name: nil; -*-
+
+(setq org-tag-alist '(("crypt" . ?C)))
 
 ;; enable languages for source code evaluation
 (org-babel-do-load-languages

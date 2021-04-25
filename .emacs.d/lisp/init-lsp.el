@@ -8,6 +8,7 @@
 (require 'lsp-ui)
 (require 'helm-lsp)
 (require 'company-lsp)
+(require 'lsp-pyright)
 
 (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration)
 (add-hook 'lsp-managed-mode-hook 'lsp-diagnostics-modeline-mode)
@@ -16,7 +17,7 @@
 (add-hook 'csharp-mode-hook #'lsp-deferred)
 (add-hook 'js2-mode-hook #'lsp-deferred)
 (add-hook 'typescript-mode-hook #'lsp-deferred)
-(add-hook 'elpy-mode-hook #'lsp-deferred)
+(add-hook 'python-mode-hook #'lsp-deferred)
 
 (setq lsp-prefer-capf t
 			lsp-idle-delay 0.500)

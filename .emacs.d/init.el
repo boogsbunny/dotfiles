@@ -34,6 +34,14 @@
 ;; CONFIGS
 ;;------------------------------------------------------------
 
+(require 'auth-source-pass)
+(add-to-list 'auth-sources 'password-store 'append)
+(auth-source-pass-enable)
+
+(setq epa-pinentry-mode 'loopback) ; This will fail if gpg>=2.1 is not available.
+(when (require 'pinentry nil t)
+  (pinentry-start))
+
 (with-eval-after-load 'dired (require 'init-dired))
 
 (setq evil-want-keybinding nil
@@ -62,14 +70,31 @@
 (with-eval-after-load 'org (require 'init-org))
 (autoload 'helm-org-switch "org")
 
+(with-eval-after-load 'exwm
+	(require 'init-exwm))
+
 (with-eval-after-load 'magit (require 'init-magit))
+(with-eval-after-load 'eww (require 'init-eww))
 
 (when (require 'helm-config nil t) (require 'init-helm))
 
 (with-eval-after-load 'notmuch (require 'init-notmuch))
 (autoload 'helm-notmuch-switch "notmuch")
 
-;;(when (require 'pdf-tools nil t) (require 'init-pdf))
+(when (require 'helm-selector nil :noerror)
+  (global-set-key (kbd "C-h i") 'helm-selector-info))
+
+(with-eval-after-load 'restclient
+  (define-key restclient-mode-map (kbd "M-s f") 'helm-restclient)
+  (add-to-list 'helm-source-names-using-follow "Sources")
+  (with-eval-after-load 'company-restclient
+    (add-to-list 'company-backends 'company-restclient)
+    (add-hook 'restclient-mode-hook 'company-mode)
+    (define-key restclient-mode-map (kbd "M-<tab>") (if (require 'helm-company nil t)
+                                                        'helm-company
+                                                      'company-complete))))
+;;; System packages
+(global-set-key (kbd "C-x c #") 'helm-system-packages)
 
 (with-eval-after-load 'lisp-mode (require 'init-lisp))
 (add-hook 'emacs-lisp-mode-hook 'boogs/init-lispy)
@@ -82,6 +107,8 @@
 
 (with-eval-after-load 'docker (require 'init-docker))
 (with-eval-after-load 'ledger-mode (require 'init-ledger))
+
+(with-eval-after-load 'emms (require 'init-emms))
 
 ;;------------------------------------------------------------
 ;; CLEANUP

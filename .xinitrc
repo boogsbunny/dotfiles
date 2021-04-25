@@ -3,4 +3,12 @@
 [ -f "$HOME/.xprofile" ] && . ~/.xprofile
 [[ -f ~/.Xmodmap ]] && xmodmap ~/.Xmodmap
 
-exec dwm
+if [ $# -eq 0 ]; then
+	## With no argument, launch custom session.
+	conky | dzen2 -h "50" -p -dock -ta l -fn "DejaVu Sans Mono" &
+	## `exwm-enable' has to be called before the frame is spawned.
+	emacs --daemon --eval "(require 'exwm)" -f exwm-enable
+	exec emacsclient -c
+fi
+
+exec "$@"

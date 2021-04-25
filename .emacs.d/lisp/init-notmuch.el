@@ -18,7 +18,7 @@
 				(:name "flagged" :query "tag:flagged" :key ,(kbd "f"))
 				(:name "sent" :query "tag:sent and date:1w.." :key ,(kbd "t"))
 				(:name "drafts" :query "tag:draft" :key ,(kbd "d"))
-				(:name "all mail" :query "date:2w.." :key ,(kbd "a"))))
+				(:name "all mail" :query "tag:inbox" :key ,(kbd "a"))))
 
 (defun boogs/notmuch-change-sender (&optional sender)
 	(interactive)

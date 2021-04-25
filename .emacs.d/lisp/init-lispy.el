@@ -32,12 +32,7 @@
 
 (defun boogs/init-lispy ()
   (when (require 'lispy nil t)
-    (if (require 'slime nil 'noerror)
-        (progn
-          (add-to-list 'lispy-goto-symbol-alist
-                       '(slime-repl-mode lispy-goto-symbol-lisp le-lisp))
-          (add-to-list 'lispy-goto-symbol-alist
-                       '(slime-mrepl-mode lispy-goto-symbol-lisp le-lisp)))
+    (if (require 'sly nil 'noerror)
       (progn
         (add-to-list 'lispy-goto-symbol-alist
                      '(sly-mrepl-mode lispy-goto-symbol-lisp le-lisp))

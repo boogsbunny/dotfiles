@@ -5,9 +5,9 @@
 "================================================"
 "
 if empty(glob('~/.vim/autoload/plug.vim'))
-  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
-    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+    silent sh -c '!curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 "
 "---------------------------------"
@@ -16,10 +16,10 @@ endif
 call plug#begin('~/.vim/plugged')
 
 " Language Server Protocol (MSFT) for Neovim
-Plug 'neovim/nvim-lspconfig'
-Plug 'nvim-lua/completion-nvim'
-Plug 'tjdevries/nlua.nvim'
-Plug 'tjdevries/lsp_extensions.nvim'
+" Plug 'neovim/nvim-lspconfig'
+" Plug 'nvim-lua/completion-nvim'
+" Plug 'tjdevries/nlua.nvim'
+" Plug 'tjdevries/lsp_extensions.nvim'
 
 " Telescope fuzzy finder
 Plug 'nvim-lua/telescope.nvim'
@@ -117,13 +117,13 @@ set background=dark
 "--------------------------------"
 " Python
 au BufNewFile, BufRead *.py:
-\ set textwidth=79           " line length doesn't exceed 80 characters
-\ set fileformat=unix        " store file in unix format
+            \ set textwidth=79           " line length doesn't exceed 80 characters
+            \ set fileformat=unix        " store file in unix format
 " Full stack development
 au BufNewFile, BufRead *.js, *.html, *.css:
-\ set tabstop=2
-\ set softtabstop=2
-\ set shiftwidth=2
+            \ set tabstop=2
+            \ set softtabstop=2
+            \ set shiftwidth=2
 autocmd Filetype javascript setlocal ts=2 sw=2 sts=0 noexpandtab
 " CPP
 autocmd FileType cpp setlocal ts=2 sts=2 sw=2
@@ -131,38 +131,38 @@ autocmd FileType cpp setlocal ts=2 sts=2 sw=2
 "--------------------------------"
 "    Language Server Protocol    "
 "--------------------------------"
-lua require'nvim_lsp'.bashls.setup{ on_attach=require'completion'.on_attach }
-" lua require'nvim_lsp'.clangd.setup{ on_attach=require'completion'.on_attach }
-" lua require'nvim_lsp'.clojure_lsp.setup{ on_attach=require'completion'.on_attach }
-lua require'nvim_lsp'.cssls.setup{ on_attach=require'completion'.on_attach }
-lua require'nvim_lsp'.dockerls.setup{ on_attach=require'completion'.on_attach }
-" lua require'nvim_lsp'.gopls.setup{ on_attach=require'completion'.on_attach }
-" lua require'nvim_lsp'.hie.setup{ on_attach=require'completion'.on_attach }
-lua require'nvim_lsp'.html.setup{ on_attach=require'completion'.on_attach }
-" lua require'nvim_lsp'.jedi_language_server.setup{ on_attach=require'completion'.on_attach }
-" lua require'nvim_lsp'.json_ls.setup{ on_attach=require'completion'.on_attach }
-" lua require'nvim_lsp'.julials.setup{ on_attach=require'completion'.on_attach }
-" lua require'nvim_lsp'.ocamllsp.setup{ on_attach=require'completion'.on_attach }
-" lua require'nvim_lsp'.omnisharp.setup{ on_attach=require'completion'.on_attach }
-" lua require'nvim_lsp'.omnisharp.setup{ on_attach=require'completion'.on_attach }
-lua require'nvim_lsp'.sqlls.setup{ on_attach=require'completion'.on_attach }
-lua require'nvim_lsp'.tsserver.setup{ on_attach=require'completion'.on_attach }
+" lua require'lspconfig'.bashls.setup{ on_attach=require'completion'.on_attach }
+" lua require'lspconfig'.clangd.setup{ on_attach=require'completion'.on_attach }
+" lua require'lspconfig'.clojure_lsp.setup{ on_attach=require'completion'.on_attach }
+" lua require'lspconfig'.cssls.setup{ on_attach=require'completion'.on_attach }
+" lua require'lspconfig'.dockerls.setup{ on_attach=require'completion'.on_attach }
+" lua require'lspconfig'.gopls.setup{ on_attach=require'completion'.on_attach }
+" lua require'lspconfig'.hie.setup{ on_attach=require'completion'.on_attach }
+" lua require'lspconfig'.html.setup{ on_attach=require'completion'.on_attach }
+" lua require'lspconfig'.jedi_language_server.setup{ on_attach=require'completion'.on_attach }
+" lua require'lspconfig'.json_ls.setup{ on_attach=require'completion'.on_attach }
+" lua require'lspconfig'.julials.setup{ on_attach=require'completion'.on_attach }
+" lua require'lspconfig'.ocamllsp.setup{ on_attach=require'completion'.on_attach }
+" lua require'lspconfig'.omnisharp.setup{ on_attach=require'completion'.on_attach }
+" lua require'lspconfig'.omnisharp.setup{ on_attach=require'completion'.on_attach }
+" lua require'lspconfig'.sqlls.setup{ on_attach=require'completion'.on_attach }
+" lua require'lspconfig'.tsserver.setup{ on_attach=require'completion'.on_attach }
 
-nnoremap <leader>vd :lua vim.lsp.buf.definition()<CR>
-nnoremap <leader>vi :lua vim.lsp.buf.implementation()<CR>
-nnoremap <leader>vsh :lua vim.lsp.buf.signature_help()<CR>
-nnoremap <leader>vrr :lua vim.lsp.buf.references()<CR>
-nnoremap <leader>vrn :lua vim.lsp.buf.rename()<CR>
-nnoremap <leader>vh :lua vim.lsp.buf.hover()<CR>
-nnoremap <leader>vca :lua vim.lsp.buf.code_action()<CR>
+" nnoremap <leader>vd :lua vim.lsp.buf.definition()<CR>
+" nnoremap <leader>vi :lua vim.lsp.buf.implementation()<CR>
+" nnoremap <leader>vsh :lua vim.lsp.buf.signature_help()<CR>
+" nnoremap <leader>vrr :lua vim.lsp.buf.references()<CR>
+" nnoremap <leader>vrn :lua vim.lsp.buf.rename()<CR>
+" nnoremap <leader>vh :lua vim.lsp.buf.hover()<CR>
+" nnoremap <leader>vca :lua vim.lsp.buf.code_action()<CR>
 "--------------------------------"
 "            Telescope           "
 "--------------------------------"
-let g:telescope_cache_results = 1
-let g:telescope_prime_fuzzy_find  = 1
-nnoremap <leader>pw :lua require('telescope.builtin').grep_string { search = vim.fn.expand("<cword>") }<CR>
-nnoremap <leader>ps :lua require('telescope.builtin').grep_string({ search = vim.fn.input("Grep For >")})<CR>
-nnoremap <C-p> :lua require('telescope.builtin').git_files()<CR>
+" let g:telescope_cache_results = 1
+" let g:telescope_prime_fuzzy_find  = 1
+" nnoremap <leader>pw :lua require('telescope.builtin').grep_string { search = vim.fn.expand("<cword>") }<CR>
+" nnoremap <leader>ps :lua require('telescope.builtin').grep_string({ search = vim.fn.input("Grep For >")})<CR>
+" nnoremap <C-p> :lua require('telescope.builtin').git_files()<CR>
 
 "--------------------------------"
 "            Mappings            "
@@ -278,14 +278,14 @@ autocmd filetype python nnoremap <F4> :w<cr> :!python %<cr>
 "           Startify             "
 "--------------------------------"
 let g:startify_custom_header = [
-\ '   ___      ___ ___  _____ ______',
-\ '  |\  \    /  /|\  \|\   _ \  _   \ ',
-\ '  \ \  \  /  / | \  \ \  \\\__\ \  \ ',
-\ '   \ \  \/  / / \ \  \ \  \\|__| \  \ ',
-\ '    \ \    / /   \ \  \ \  \    \ \  \',
-\ '     \ \__/ /     \ \__\ \__\    \ \__\',
-\ '      \|__|/       \|__|\|__|     \|__|',
-\ ]
+            \ '   ___      ___ ___  _____ ______',
+            \ '  |\  \    /  /|\  \|\   _ \  _   \ ',
+            \ '  \ \  \  /  / | \  \ \  \\\__\ \  \ ',
+            \ '   \ \  \/  / / \ \  \ \  \\|__| \  \ ',
+            \ '    \ \    / /   \ \  \ \  \    \ \  \',
+            \ '     \ \__/ /     \ \__\ \__\    \ \__\',
+            \ '      \|__|/       \|__|\|__|     \|__|',
+            \ ]
 
 "--------------------------------"
 "          Dasht                 "
@@ -314,7 +314,7 @@ let g:startify_custom_header = [
 "  	echo
 "  endfunction
 
- " Toggles hybrid numbering
+" Toggles hybrid numbering
 "  function ToggleNumber()
 "      if (&relativenumber == 1)
 "          set norelativenumber

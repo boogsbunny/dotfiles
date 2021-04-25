@@ -128,7 +128,6 @@
 ;; default mode
 (setq-default major-mode 'text-mode)
 (add-hook 'text-mode-hook 'auto-fill-mode)
-(add-hook 'text-mode-hook 'olivetti-mode)
 ;; 80 character limit
 (setq fci-rule-column 80)
 ;; spell check

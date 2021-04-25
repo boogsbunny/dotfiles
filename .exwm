@@ -1,0 +1,13 @@
+;;; -*- mode: emacs-lisp; -*-
+
+(require 'exwm)
+(let ((win (shell-command "conky 2>/dev/null | dzen2 -h \"50\" -p -dock -ta l -fn \"DejaVu Sans Mono\" &")))
+  ;; Don't pop the output buffer.
+  (with-current-buffer (window-buffer win)
+    ;; TODO: Calling fundmental-mode triggers the following error:
+    ;;   error in process filter: Wrong type argument: markerp, nil [2 times]
+    (fundamental-mode)                  ; So that we don't display it in the shell lister.
+    (rename-buffer " *Async conky|dzen*"))
+  (delete-window win))
+(exwm-enable)
+(server-start)
