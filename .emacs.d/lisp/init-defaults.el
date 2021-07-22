@@ -66,6 +66,9 @@
 (setq-default tab-width 2)
 ;; (defvaralias 'standard-indent 'tab-width)
 (setq-default indent-tabs-mode nil)
+(add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
+(setq highlight-indent-guides-method 'character)
+
 
 ;; disable cursor blinking
 (blink-cursor-mode 0)
