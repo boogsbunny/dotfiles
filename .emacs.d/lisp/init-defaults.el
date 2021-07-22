@@ -65,7 +65,7 @@
 ;; set tabs to 2 spaces
 (setq-default tab-width 2)
 ;; (defvaralias 'standard-indent 'tab-width)
-(setq-default indent-tabs-mode t)
+(setq-default indent-tabs-mode nil)
 
 ;; disable cursor blinking
 (blink-cursor-mode 0)
