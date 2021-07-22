@@ -3,7 +3,6 @@
 ;;--------------------------------;
 
 (defun boogs/csharp-mode ()
-  (company-mode)
   (flycheck-mode)
   (setq indent-tabs-mode nil)
   (setq c-syntactic-indentation t)
@@ -13,7 +12,5 @@
   (eletric-pair-local-mode 1))
 
 (add-hook 'csharp-mode-hook 'boogs/csharp-mode)
-
-(require 'init-lsp)
 
 (provide 'init-csharp)
