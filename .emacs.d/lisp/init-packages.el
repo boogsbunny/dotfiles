@@ -22,9 +22,11 @@
 				company-lsp
 				company-restclient
 				csharp-mode
+        diminish
 				docker
 				docker-compose-mode
 				dockerfile-mode
+        dumb-jump
 				elfeed
 				elpy
 				emojify
@@ -46,6 +48,7 @@
 				helm-company
 				helm-descbinds
 				helm-flycheck
+        helm-jira
 				helm-ls-git
 				helm-lsp
 				helm-notmuch
@@ -70,6 +73,7 @@
 				notmuch
 				oauth2
 				org
+        org-jira
 				org-journal
 				orgit
 				poet-theme
@@ -85,6 +89,7 @@
 				sly-macrostep
 				sly-quicklisp
 				solarized-theme
+        smart-mode-line
 				transmission
 				typescript-mode
 				websocket
