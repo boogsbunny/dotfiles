@@ -4,7 +4,7 @@ IMAPAccount gmail
 Host imap.gmail.com
 Port 993
 User bugrahanabdulkarim@gmail.com
-PassCmd "pass email/bugrahanabdulkarim@gmail.com"
+PassCmd "pass email/gmail/mbsync"
 SSLType IMAPS
 SSLVersions TLSv1.2
 
