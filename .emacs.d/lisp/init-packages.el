@@ -27,6 +27,7 @@
 				docker-compose-mode
 				dockerfile-mode
         dumb-jump
+				doom-themes
 				elfeed
 				elpy
 				emojify
@@ -55,6 +56,7 @@
 				helm-org
 				helm-org-contacts
 				helm-pass
+				highlight-indent-guides
 				jiralib2
 				js2-mode
 				kubernetes
@@ -63,6 +65,7 @@
 				kubernetes-tramp
 				language-detection
 				ledger-mode
+				leetcode
 				lispy
 				lispyville
 				lsp-mode
@@ -76,7 +79,6 @@
         org-jira
 				org-journal
 				orgit
-				poet-theme
 				rainbow-delimiters
 				rainbow-mode
 				request
