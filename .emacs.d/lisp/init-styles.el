@@ -2,11 +2,20 @@
 ;; Styles
 ;;--------------------------------;
 
-; (load-theme 'sanityinc-tomorrow-night t)
-(load-theme 'gruvbox t)
+;; (load-theme 'sanityinc-tomorrow-night t)
+;; (load-theme 'gruvbox t)
+(load-theme 'doom-spacegrey t)
 
-(when (find-font (font-spec :name "DejaVu Sans Mono-16"))
-	(add-to-list 'default-frame-alist '(font . "DejaVu Sans Mono-16")))
+(when (find-font (font-spec :name "Fira Mono"))
+	(add-to-list 'default-frame-alist '(font . "Fira Mono")))
+
+(when window-system
+  (if (< (x-display-pixel-width) 2000)
+      (set-face-attribute 'default nil :font "Fira Mono" :height 170)
+    (set-face-attribute 'default nil :font "Fira Mono" :height 300)))
+
+;; (when (find-font (font-spec :name "Fira Mono"))
+;; 	(add-to-list 'default-frame-alist '(font . "Fira Mono")))
 
 ;; transparency
 (defun toggle-transparency ()
