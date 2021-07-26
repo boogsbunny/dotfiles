@@ -65,7 +65,47 @@
 ;; set tabs to 2 spaces
 (setq-default tab-width 2)
 ;; (defvaralias 'standard-indent 'tab-width)
-(setq-default indent-tabs-mode t)
+(setq-default indent-tabs-mode nil)
+(add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
+(setq highlight-indent-guides-method 'character)
+
+;; mode line
+(setq display-time-format "%l:%M %p %b %y"
+      display-time-default-load-average nil)
+;; hide minor modes
+;; (require 'diminish)
+(setq sml/no-confirm-load-theme t)
+(sml/setup)
+(sml/apply-theme 'respectful)  ; Respect the theme colors
+(setq sml/mode-width 'right
+      sml/name-width 60)
+(setq-default mode-line-format
+              `("%e"
+                mode-line-front-space
+                evil-mode-line-tag
+                mode-line-mule-info
+                mode-line-client
+                mode-line-modified
+                mode-line-remote
+                mode-line-frame-identification
+                mode-line-buffer-identification
+                sml/pos-id-separator
+                (vc-mode vc-mode)
+                " "
+                                        ;mode-line-position
+                sml/pre-modes-separator
+                mode-line-modes
+                " "
+                mode-line-misc-info))
+
+(setq rm-excluded-modes
+      (mapconcat
+       'identity
+                                        ; These names must start with a space!
+       '(" GitGutter" " MRev" " company"
+         " Helm" " Undo-Tree" " Projectile.*" " Z" " Ind"
+         " Org-Agenda.*" " ElDoc" " SP/s" " cider.*")
+       "\\|"))
 
 ;; disable cursor blinking
 (blink-cursor-mode 0)
