@@ -19,7 +19,9 @@
              (gnu services xorg)
              (gnu services base)
              (gnu services desktop)
+             (gnu services databases)
              (gnu services desktop)
+             (gnu services docker)
              (guix gexp)
              (guix packages)
              (guix download)
@@ -61,7 +63,7 @@
                   (name "boogs")
                   (comment "Bugi Idris")
                   (group "users")
-                  (supplementary-groups '("wheel" "netdev" "audio" "lp" "video"))
+                  (supplementary-groups '("wheel" "netdev" "audio" "lp" "video" "docker" "postgres"))
                   (home-directory "/home/boogs"))
                 %base-user-accounts))
   (packages
@@ -92,6 +94,8 @@
                         `(("config.scm" ,this-file)))
         (service gnome-desktop-service-type)
         (service openssh-service-type)
+        (service docker-service-type)
+        (service postgresql-service-type)
         (set-xorg-configuration
           (xorg-configuration
             (keyboard-layout keyboard-layout))))
