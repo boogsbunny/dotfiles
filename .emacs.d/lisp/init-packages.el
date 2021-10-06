@@ -79,6 +79,7 @@
         org-jira
         org-journal
         orgit
+        org-roam
         rainbow-delimiters
         rainbow-mode
         request
