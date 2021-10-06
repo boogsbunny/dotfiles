@@ -117,6 +117,9 @@
                     'below)))))
 (setq helm-split-window-preferred-function 'boogs/helm-split-window-combined-fn)
 
+(setq enable-recursive-minibuffers t)
+(minibuffer-depth-indicate-mode 1)
+
 ;;; Add bindings to `helm-apropos`. See
 ;;; https://github.com/emacs-helm/helm/issues/1140.
 (defun boogs/helm-def-source--emacs-commands (&optional default)
