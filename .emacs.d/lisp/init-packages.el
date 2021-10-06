@@ -30,6 +30,7 @@
         doom-themes
         elfeed
         elpy
+        emms
         emojify
         evil
         evil-collection
