@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+# #!/usr/bin/env sh
 
 appendpath () {
 	[ $# -eq 2 ] && PATHVAR=$2 || PATHVAR=PATH
@@ -25,6 +25,8 @@ export STATUSBAR="dwmblocks"
 export READER="zathura"
 export FILE="ranger"
 export MANWIDTH=70
+export GDK_SCALE=2
+export GDK_DPI_SCALE=1.0
 LESSHISTFILE='-'
 
 ## SSH-Agent
@@ -41,3 +43,5 @@ gpg-connect-agent updatestartuptty /bye >/dev/null
 echo "$0" | grep "bash$" >/dev/null && [ -f ~/.bashrc ] && source "$HOME/.bashrc"
 
 [ "$(tty)" = "/dev/tty1" ] && ! pgrep -x i3 >/dev/null && exec startx
+
+shepherd
