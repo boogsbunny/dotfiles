@@ -70,10 +70,21 @@
 (setq highlight-indent-guides-method 'character)
 
 ;; mode line
-(setq display-time-format "%l:%M %p %b %y"
+(setq display-time-mode 1
+      display-time-format "%l:%M %p %b %y"
       display-time-default-load-average nil)
+
 ;; hide minor modes
-;; (require 'diminish)
+(require 'diminish)
+(diminish 'desktop-environment-mode)
+(diminish 'lispyville-mode)
+(diminish 'highlight-indent-guides-mode)
+(diminish 'evil-escape-mode)
+(diminish 'dired-async-mode)
+(diminish 'eldoc-mode)
+(diminish 'auto-fill-mode)
+(diminish 'evil-org-mode)
+
 (setq sml/no-confirm-load-theme t)
 (sml/setup)
 (sml/apply-theme 'respectful)  ; Respect the theme colors
@@ -173,7 +184,7 @@
 ;; spell check
 (customize-set-variable 'ispell-program-name "aspell")
 (customize-set-variable 'ispell-extra-args '("--sug-mode=ultra"))
-(add-hook 'text-mode-hook 'flyspell-mode)
+;; (add-hook 'text-mode-hook 'flyspell-mode)
 
 ;; disable lockfiles
 (setq create-lockfiles nil)
@@ -216,6 +227,9 @@
    "C-M-l" 'windmove-right
    "C-M-o" 'delete-other-windows
    "C-M-c" 'delete-window))
+
+;; dmenu
+;; (global-set-key (kbd "C-x SPC") 'dmenu)
 
 ;; kill this buffer
 (global-set-key (kbd "C-x k") 'kill-this-buffer)
