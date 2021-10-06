@@ -34,6 +34,19 @@
 ;; CONFIGS
 ;;------------------------------------------------------------
 
+;; Visual
+;;; Font size
+(when (fboundp 'tool-bar-mode)
+  ;; (set-face-attribute 'default nil :height 100)
+  (when (find-font (font-spec :name "Fira Mono-25"))
+    ;; Emacs raises an error if font is not found.
+    (add-to-list 'default-frame-alist '(font . "Fira Mono-25"))))
+;;; Cursor type: default (box) is visible and practical.
+;; (setq-default cursor-type 'hollow)
+(setq-default x-stretch-cursor t)
+;;; Blinking cursor is on only when Emacs is not daemonized.
+(blink-cursor-mode 0)
+
 (require 'auth-source-pass)
 (add-to-list 'auth-sources 'password-store 'append)
 (auth-source-pass-enable)
