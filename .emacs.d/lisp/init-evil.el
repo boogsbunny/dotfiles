@@ -13,7 +13,8 @@
 (setq evil-cross-lines t
       evil-move-beyond-eol t
       evil-move-cursor-back nil
-      evil-want-fine-undo t)
+      evil-want-fine-undo t
+			evil-shift-width tab-width)
 
 (setq-default evil-symbol-word-search t)
 
@@ -31,6 +32,13 @@
  (lambda () (interactive)
    (evil-execute-in-emacs-state)
    (call-interactively (key-binding (kbd "M-.")))))
+
+(define-key evil-normal-state-map (kbd "C-u") 'evil-scroll-up)
+(define-key evil-visual-state-map (kbd "C-u") 'evil-scroll-up)
+(define-key evil-insert-state-map (kbd "C-u")
+  (lambda ()
+    (interactive)
+    (evil-delete (point-at-bol) (point))))
 
 ;;(when (require 'evil-multiedit nil t)
 ;;  (global-set-key (kbd "C-;") 'evil-multiedit-match-all)
