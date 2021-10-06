@@ -120,7 +120,7 @@ au BufNewFile, BufRead *.py:
             \ set textwidth=79           " line length doesn't exceed 80 characters
             \ set fileformat=unix        " store file in unix format
 " Full stack development
-au BufNewFile, BufRead *.js, *.html, *.css:
+au BufNewFile, BufRead *.js, *.jsx, *.html, *.css:
             \ set tabstop=2
             \ set softtabstop=2
             \ set shiftwidth=2
