@@ -68,7 +68,10 @@
                 %base-user-accounts))
   (packages
     (append
-      (list (specification->package "dmenu")
+      (list (specification->package "bluez")
+            (specification->package "bluez-alsa")
+            (specification->package "pulseaudio")
+            (specification->package "dmenu")
             (specification->package "emacs")
             (specification->package "emacs-desktop-environment")
             (specification->package "emacs-exwm")
@@ -92,6 +95,7 @@
         ;; Copy current config to /etc/config.scm
         (simple-service 'config-file etc-service-type
                         `(("config.scm" ,this-file)))
+        (bluetooth-service #:auto-enable? #t)
         (service gnome-desktop-service-type)
         (service openssh-service-type)
         (service docker-service-type)
