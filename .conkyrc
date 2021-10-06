@@ -3,6 +3,7 @@
 conky.config = {
 	 out_to_x = false,
 	 background = false,
+	 border_width = 1,
 	 cpu_avg_samples = 2,
 	 net_avg_samples = 2,
 	 no_buffers = true,
@@ -18,19 +19,13 @@ conky.config = {
 
 -- Colors are in dzen2 format.
 conky.text =
-[[^fg(grey)${time %a %d %b} \
-       \
+[[^fg(grey)${time %a %d %b %H:%M:%S} \
 ^fg(grey)CPU:^fg(DeepSkyBlue)$cpu% \
 ^fg(grey)RAM:^fg(DeepSkyBlue)${if_match ${to_bytes $memeasyfree} < 536870912}^fg(Red)${endif}$memperc% \
-^fg(grey)↓^fg(DeepSkyBlue)${downspeedf ${gw_iface}} \
-^fg(grey)↑^fg(DeepSkyBlue)${upspeedf ${gw_iface}} \
+^fg(grey)↓^fg(DeepSkyBlue)${downspeedf ${gw_iface}} KiB \
+^fg(grey)↑^fg(DeepSkyBlue)${upspeedf ${gw_iface}} KiB \
 ${if_match "${exec pactl list sinks | awk '/^\tMute:/ {print $2;exit}'}" == "no"}^fg(grey)♪^fg(DeepSkyBlue)${exec pactl list sinks | awk '/^\tVolume:/ {print $5;exit}'}${endif} \
-${if_match $battery_percent != 0}^fg(grey)⚡^fg(DeepSkyBlue)${if_match ${battery_time} <= 600}^fg(Red)${endif}${battery_short}: ${format_time ${battery_time} "(\dd )(\hh )\mmin"} ${endif}\
-^fg(grey)⚡^fg(DeepSkyBlue)${exec battery ${gw_iface}} \
-^fg(grey)/:^fg(DeepSkyBlue)${if_match ${to_bytes ${fs_free /}} < 1073741824}^fg(Red)${endif}${fs_free /} \
+^fg(grey)BAT: ^fg(DeepSkyBlue)${battery_percent}% \
+^fg(grey)/home:^fg(DeepSkyBlue)${if_match ${to_bytes ${fs_free /}} < 1073741824}^fg(Red)${endif}${fs_free /} \
 ^fg(grey)/media:^fg(DeepSkyBlue)${if_match ${to_bytes ${fs_free /media}} < 1073741824}^fg(Red)${endif}${fs_free /media} \
-${if_match ${to_bytes ${diskio nvme0n1}} > 1048576}^fg(grey)nvme0n1:^fg(DeepSkyBlue)${diskio nvme0n1}${endif} \
-${if_match ${to_bytes ${diskio sda}} > 1048576}^fg(grey)sda:^fg(DeepSkyBlue)${diskio sda}/s${endif} \
-${if_match ${to_bytes ${diskio sdb}} > 1048576}^fg(grey)sdb:^fg(DeepSkyBlue)${diskio sdb}/s${endif} \
-${if_match ${to_bytes ${diskio sdc}} > 1048576}^fg(grey)sdc:^fg(DeepSkyBlue)${diskio sdc}/s${endif} \
 ]]
