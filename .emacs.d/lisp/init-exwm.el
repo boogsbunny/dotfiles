@@ -134,7 +134,7 @@
 (defun boogs/exwm-start (command)
   (interactive (list (read-shell-command "$ ")))
   (start-process-shell-command command nil command))
-(exwm-input-set-key (kbd "s-&") #'boogs/exwm-start)
+(exwm-input-set-key (kbd "C-x SPC") #'boogs/exwm-start)
 
 (when (require 'helm-exwm nil t)
   (add-to-list 'helm-source-names-using-follow "EXWM buffers")
