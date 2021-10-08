@@ -19,13 +19,21 @@ conky.config = {
 
 -- Colors are in dzen2 format.
 conky.text =
-[[^fg(grey)${time %a %d %b %H:%M:%S} \
+[[
+       \
+^fg(grey)${time %a %d %b %H:%M} \
+       \
+       \
+       \
 ^fg(grey)CPU:^fg(DeepSkyBlue)$cpu% \
 ^fg(grey)RAM:^fg(DeepSkyBlue)${if_match ${to_bytes $memeasyfree} < 536870912}^fg(Red)${endif}$memperc% \
 ^fg(grey)↓^fg(DeepSkyBlue)${downspeedf ${gw_iface}} KiB \
 ^fg(grey)↑^fg(DeepSkyBlue)${upspeedf ${gw_iface}} KiB \
-${if_match "${exec pactl list sinks | awk '/^\tMute:/ {print $2;exit}'}" == "no"}^fg(grey)♪^fg(DeepSkyBlue)${exec pactl list sinks | awk '/^\tVolume:/ {print $5;exit}'}${endif} \
-^fg(grey)BAT: ^fg(DeepSkyBlue)${battery_percent}% \
-^fg(grey)/home:^fg(DeepSkyBlue)${if_match ${to_bytes ${fs_free /}} < 1073741824}^fg(Red)${endif}${fs_free /} \
-^fg(grey)/media:^fg(DeepSkyBlue)${if_match ${to_bytes ${fs_free /media}} < 1073741824}^fg(Red)${endif}${fs_free /media} \
+^fg(grey) ^fn(FontAwesome:size=25) ^fn(FiraMono:size=25) ^fg(DeepSkyBlue)${battery_percent}% \
+${if_match "${exec pactl list sinks | awk '/^\tMute:/ {print $2;exit}'}" == "no"}^fg(grey) ^fn(FontAwesome:size=25) ^fn(FiraMono:size=25)^fg(DeepSkyBlue)${exec pactl list sinks | awk '/^\tVolume:/ {print $5;exit}'}${endif} \
+       \
+       \
+       \
+^fg(DeepSkyBlue) ^fn(FontAwesome:size=25) ^fn(FiraMono:size=25)${wireless_essid wlp2s0} ${wireless_link_qual_perc wlp2s0}% \
+       \
 ]]
