@@ -22,6 +22,7 @@
         company-lsp
         company-restclient
         csharp-mode
+        dash
         diminish
         docker
         docker-compose-mode
@@ -44,12 +45,16 @@
         flycheck
         forge
         geiser
+        geiser-guile
         gruvbox-theme
+        guix
         hackernews
         helm
         helm-company
+        helm-dash
         helm-descbinds
         helm-flycheck
+        helm-eww
         helm-jira
         helm-ls-git
         helm-lsp
@@ -57,6 +62,7 @@
         helm-org
         helm-org-contacts
         helm-pass
+        helm-selector
         highlight-indent-guides
         jiralib2
         js2-mode
@@ -81,6 +87,10 @@
         org-journal
         orgit
         org-roam
+        pdf-tools
+        prettier
+        prettier-js
+        python-black
         rainbow-delimiters
         rainbow-mode
         request
@@ -98,6 +108,7 @@
         typescript-mode
         websocket
         which-key
+        windower
         xelb
         yasnippet
         youtube-dl
