@@ -71,7 +71,7 @@ Some DM merge this automatically; we merge it for the others."
 to your surroundings.  This may help your eyes hurt less if you are working in
 front of the screen at night."
     #:start (make-forkexec-constructor
-             (list "redshift" "-l" location-munich "-t 4500:2500")
+             (list "redshift" "-l" location-munich "-t 3000:1500")
              #:log-file (string-append
                          (or (getenv "XDG_CONFIG_HOME")
                              (string-append (getenv "HOME") "/.config"))
