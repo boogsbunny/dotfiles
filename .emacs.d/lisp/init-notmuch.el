@@ -9,16 +9,16 @@
 (setq notmuch-fcc-dirs
 			'(("boogs@venatores.group" . "vg/Sent +sent -inbox -unread")
 				("bugrahanabdulkarim@gmail.com" . "gmail/Sent +sent -inbox -unread")
-				("ba2ra@virginia.edu" . "uva/Sent +sent -inbox -unread")))
+				("ba2ra@virginia.edu" . "uva/Sent +sent -inbox -unread")
+        ("babdulkarim@alarm.com" . "alarm/Sent +sent -inbox -unread")))
 
-(setq notmuch-search-oldest-first nil
-			notmuch-saved-searches
-			`((:name "inbox" :query "tag:inbox and date:1w.." :key ,(kbd "i"))
-				(:name "unread" :query "tag:unread" :key ,(kbd "u"))
-				(:name "flagged" :query "tag:flagged" :key ,(kbd "f"))
-				(:name "sent" :query "tag:sent and date:1w.." :key ,(kbd "t"))
-				(:name "drafts" :query "tag:draft" :key ,(kbd "d"))
-				(:name "all mail" :query "tag:inbox" :key ,(kbd "a"))))
+(setq notmuch-saved-searches
+      `((:name "inbox" :query "tag:inbox and date:1w.." :key ,(kbd "i") :sort-order newest-first)
+        (:name "unread" :query "tag:unread" :key ,(kbd "u") :sort-order newest-first)
+        (:name "flagged" :query "tag:flagged" :key ,(kbd "f") :sort-order newest-first)
+        (:name "sent" :query "tag:sent and date:1w.." :key ,(kbd "t") :sort-order newest-first)
+        (:name "drafts" :query "tag:draft" :key ,(kbd "d") :sort-order newest-first)
+        (:name "all mail" :query "tag:inbox" :key ,(kbd "a") :sort-order oldest-first)))
 
 (defun boogs/notmuch-change-sender (&optional sender)
 	(interactive)
@@ -44,5 +44,28 @@
   (interactive "sBounce To: ")
   (notmuch-show-view-raw-message)
   (message-resend address))
+
+;; Improve address completion with Helm.
+(setq notmuch-address-use-company nil)
+(setq notmuch-address-selection-function
+      (lambda (prompt collection initial-input)
+        (completing-read prompt (cons initial-input collection) nil t nil 'notmuch-address-history)))
+
+(defun boogs/notmuch-poll-async ()
+  "Like `notmuch-poll' but asynchronous."
+  (notmuch-start-notmuch
+   "notmuch-new"
+   nil
+   (lambda (_proc change)
+     (with-current-buffer (cl-find-if (lambda (b)
+                                        (with-current-buffer b
+                                          (eq major-mode 'notmuch-search-mode)))
+                                      (buffer-list))
+       (notmuch-refresh-this-buffer))
+     (message "notmuch-new: %s" change))
+   "new"))
+
+(advice-add 'notmuch-poll
+            :override #'boogs/notmuch-poll-async)
 
 (provide 'init-notmuch)
