@@ -2,22 +2,6 @@
 ;; Styles
 ;;--------------------------------;
 
-;; (load-theme 'sanityinc-tomorrow-night t)
-;; (load-theme 'gruvbox t)
-;; (load-theme 'doom-spacegrey t)
-
-;; (when (find-font (font-spec :name "Fira Mono"))
-;; 	(add-to-list 'default-frame-alist '(font . "Fira Mono")))
-
-;; (when window-system
-;;   (if (< (x-display-pixel-width) 2000)
-;;       (set-face-attribute 'default nil :font "Fira Mono" :height 130)
-;;     (set-face-attribute 'default nil :font "Fira Mono" :height 250)))
-
-;; (set-face-attribute 'default nil :font "Fira Mono" :height 250)
-;; (when (find-font (font-spec :name "Fira Mono"))
-;; 	(add-to-list 'default-frame-alist '(font . "Fira Mono")))
-
 ;;; General
 ;; (set-face-attribute 'default nil :foreground "white" :background "black")
 (set-face-attribute 'default nil :foreground "white smoke" :background "#101010" :font "Fira Mono" :height 250)
