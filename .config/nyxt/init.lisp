@@ -1,5 +1,10 @@
 (in-package :nyxt-user)
 
+;; Load search-engines.lisp after loading nx-search-engines.
+(load-after-system :nx-search-engines (nyxt-init-file "search-engines.lisp"))
+
+(load-after-system :demeter)
+
 (define-configuration status-buffer
   ((height 25)))
 
