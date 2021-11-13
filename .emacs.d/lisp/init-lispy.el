@@ -42,4 +42,7 @@
       (add-hook 'lispy-mode-hook 'lispyville-mode))
     (lispyville-mode)))
 
+(with-eval-after-load 'lispy
+  (require 'patch-lispy nil :noerror))
+
 (provide 'init-lispy)

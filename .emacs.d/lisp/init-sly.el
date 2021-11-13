@@ -187,6 +187,7 @@ Good substitute for `sly-mrepl-indent-and-complete-symbol'."
 (setq sly-command-switch-to-existing-lisp 'always)
 (add-hook 'sly-mrepl-hook #'boogs/init-lispy)
 (add-hook 'sly-mrepl-hook #'rainbow-delimiters-mode)
+(require 'patch-sly-rainbow)
 
 ;; #p completion.  See https://github.com/joaotavora/sly/issues/405.
 (with-eval-after-load 'company
