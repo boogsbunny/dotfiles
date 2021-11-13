@@ -17,6 +17,7 @@
 (add-hook 'csharp-mode-hook #'lsp-deferred)
 (add-hook 'js2-mode-hook #'lsp-deferred)
 (add-hook 'typescript-mode-hook #'lsp-deferred)
+(add-hook 'web-mode-hook #'lsp-deferred)
 (add-hook 'python-mode-hook #'lsp-deferred)
 
 (setq lsp-prefer-capf t
