@@ -63,6 +63,8 @@
         helm-org-contacts
         helm-pass
         helm-selector
+        helm-sly
+        helm-system-packages
         highlight-indent-guides
         jiralib2
         js2-mode
@@ -107,6 +109,7 @@
         transmission
         typescript-mode
         websocket
+        web-mode
         which-key
         windower
         xelb
