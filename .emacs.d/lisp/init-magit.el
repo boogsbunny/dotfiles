@@ -3,13 +3,11 @@
 ;;--------------------------------;
 
 (setq auto-revert-mode-text "")
-(set-face-foreground 'magit-branch-remote "orange red")
+;; (set-face-foreground 'magit-branch-remote "orange red")
 (setq git-commit-summary-max-length fill-column)
-(define-key magit-mode-map (kbd "s-<tab>") nil)
+;; (define-key magit-mode-map (kbd "s-<tab>") nil)
 (setq magit-diff-refine-hunk 'all)
-(setq magit-repository-directories '(("~/projects" . 1)
-                                     ("~/repos" . 1)
-																		 ("~/.local/share/emacs/site-lisp" . 1)))
+(setq magit-repository-directories '(("~/projects" . 1)))
 
 (when (require 'magit-todos nil 'noerror)
   (magit-todos-mode))
