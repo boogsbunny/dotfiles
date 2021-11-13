@@ -61,6 +61,8 @@
       evil-want-integration t)
 (when (require 'evil nil t) (require 'init-evil))
 
+(add-hook 'after-init-hook #'global-prettier-mode)
+
 (add-hook 'emacs-lisp-mode-hook 'boogs/init-lispy)
 (when (fboundp 'rainbow-delimiters-mode)
   (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode))
@@ -69,13 +71,7 @@
   (dolist (hook '(css-mode-hook html-mode-hook sass-mode-hook js-mode-hook js2-mode-hook typescript-mode))
     (add-hook hook 'rainbow-mode)))
 
-(add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
-(add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-mode))
-(add-to-list 'auto-mode-alist '("\\.tsx\\'" . typescript-mode))
-
-(add-hook 'js-mode-hook (lambda () (defvaralias 'js-indent-level 'tab-width)))
-(add-hook 'js2-mode-hook (lambda () (defvaralias 'js-indent-level 'tab-width)))
-(add-hook 'typescript-mode-hook (lambda () (defvaralias 'js-indent-level 'tab-width)))
+(require 'init-web)
 
 (when (require 'company nil t)
   (setq company-idle-delay nil))
@@ -122,6 +118,22 @@
 (with-eval-after-load 'ledger-mode (require 'init-ledger))
 
 (with-eval-after-load 'emms (require 'init-emms))
+
+(with-eval-after-load 'transmission
+  ;; `transmission' will fail to start and will not run any hook if the daemon
+  ;; is not up yet.
+  ;; We need to advice the function :before to guarantee it starts.
+  (defun boogs/transmission-start-daemon ()
+    (unless (member "transmission-da"
+                    (mapcar
+                     (lambda (pid) (alist-get 'comm (process-attributes pid)))
+                     (list-system-processes)))
+      (call-process "transmission-daemon")
+      (sleep-for 1)))
+  (advice-add 'transmission :before 'boogs/transmission-start-daemon)
+  (setq transmission-refresh-modes '(transmission-mode transmission-files-mode transmission-info-mode transmission-peers-mode)
+        transmission-refresh-interval 1))
+
 
 ;;------------------------------------------------------------
 ;; CLEANUP
