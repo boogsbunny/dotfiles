@@ -20,7 +20,7 @@ VISUAL="$EDITOR"
 export GIT_EDITOR
 export VISUAL
 export TERMINAL="screen-256color"
-export BROWSER="firefox"
+export BROWSER="nyxt"
 export STATUSBAR="dwmblocks"
 export READER="zathura"
 export FILE="ranger"
