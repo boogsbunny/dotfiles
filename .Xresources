@@ -1,4 +1,4 @@
-dzen2.font:     xft:Fira Mono:size=20:antialias=true
+dzen2.font:     xft:Fira Mono:size=10:antialias=true
 !! Xft options
 ! Xft.antialias: false
 ! Xft.antialias: rgba
@@ -11,7 +11,7 @@ xterm*termName: xterm-256color
 xterm*locale: true
 ! XTerm*charClass: 33:48,36-47:48,58-59:48,61:48,63-64:48,95:48,126:48
 ! xterm.font:              xft:Dina:pixelsize=18
-xterm*font       : -*-dejavu sans-medium-r-*-*-18-*-*-*-*-*-*-*
+xterm*font       : -*-dejavu sans-medium-r-*-*-12-*-*-*-*-*-*-*
 ! xterm*faceName:DejaVu Sans Mono:pixelsize=20
 ! xterm*faceName:DejaVu Sans Mono
 ! xterm*faceSize:20
