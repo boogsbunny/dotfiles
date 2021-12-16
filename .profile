@@ -25,7 +25,8 @@ export STATUSBAR="dwmblocks"
 export READER="zathura"
 export FILE="ranger"
 export MANWIDTH=70
-export GDK_SCALE=2
+#export GDK_SCALE=2
+export GDK_SCALE=1
 export GDK_DPI_SCALE=1.0
 LESSHISTFILE='-'
 
