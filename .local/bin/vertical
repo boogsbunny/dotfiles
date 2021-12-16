@@ -1,8 +1,8 @@
-xrandr --output DP1 --auto --scale 1.0x1.0 --rotate left --mode 1920x1080 -r 60 --output eDP1 --off
+#!/bin/sh
+xrandr --output DP-1 --auto --scale 1.0x1.0 --mode 1920x1080 --rotate left --output eDP-1 --off
 
-postrun() { # Stuff to run to clean up.
-    fehbg       # Fix background if screen size/arangement has changed.
-    { killall dunst ; setsid dunst & } >/dev/null 2>&1 # Restart dunst to ensure proper location on screen
-    }
+postrun() { # clean up
+  { conky | dzen2 -h "50" -p -dock -ta l -fn "Fira Mono-10" & }
+}
 
 postrun
