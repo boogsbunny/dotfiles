@@ -212,22 +212,6 @@
    (when org-inline-image-overlays
      (org-redisplay-inline-images))))
 
-;; window resizing
-;; (global-set-key (kbd "C-x l") 'shrink-window-horizontally)
-;; (global-set-key (kbd "C-x j") 'enlarge-window-horizontally)
-;; (global-set-key (kbd "C-x k") 'shrink-window)
-;; (global-set-key (kbd "C-x j") 'enlarge-window)
-
-;; windmove mode
-(when (fboundp 'windmove-default-keybindings)
-  (global-set-keys
-   "C-M-h" 'windmove-left
-   "C-M-j" 'windmove-down
-   "C-M-k" 'windmove-up
-   "C-M-l" 'windmove-right
-   "C-M-o" 'delete-other-windows
-   "C-M-c" 'delete-window))
-
 ;; dmenu
 ;; (global-set-key (kbd "C-x SPC") 'dmenu)
 
