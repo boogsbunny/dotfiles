@@ -30,17 +30,14 @@
   (add-to-list 'load-path site-lisp)
   (boogs/package-refresh-load-path site-lisp))
 
+;; Avoid the "loaded old bytecode instead of newer source" pitfall.
+(setq load-prefer-newer t)
+
 ;;------------------------------------------------------------
 ;; CONFIGS
 ;;------------------------------------------------------------
 
 ;; Visual
-;;; Font size
-(when (fboundp 'tool-bar-mode)
-  ;; (set-face-attribute 'default nil :height 100)
-  (when (find-font (font-spec :name "Fira Mono-25"))
-    ;; Emacs raises an error if font is not found.
-    (add-to-list 'default-frame-alist '(font . "Fira Mono-25"))))
 ;;; Cursor type: default (box) is visible and practical.
 ;; (setq-default cursor-type 'hollow)
 (setq-default x-stretch-cursor t)
@@ -63,7 +60,6 @@
 
 (add-hook 'after-init-hook #'global-prettier-mode)
 
-(add-hook 'emacs-lisp-mode-hook 'boogs/init-lispy)
 (when (fboundp 'rainbow-delimiters-mode)
   (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode))
 
@@ -76,6 +72,7 @@
 (when (require 'company nil t)
   (setq company-idle-delay nil))
 
+(setq org-roam-v2-ack t)
 (with-eval-after-load 'org (require 'init-org))
 (autoload 'helm-org-switch "org")
 

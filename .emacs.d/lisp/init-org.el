@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 ;;--------------------------------;
 ;; Org mode
 ;;--------------------------------;
@@ -10,13 +12,12 @@
 
 (setq org-log-reschedule (quote time))
 
-(setq org-directory "/media/org")
+(setq org-directory "/media/personal/org")
 
-;; TODO states
 (setq org-todo-keywords
       '((sequence
-         "NEXT(n/!)"
          "TODO(t@/!)"
+         "NEXT(n/!)"
          "WAITING(w@/!)"
          "DELEGATED(e@/!)"
          "SOMEDAY(s/!)"
@@ -26,43 +27,41 @@
          "CANCELED(c)"
          )))
 
+(setq org-todo-keyword-faces
+      '(("NEXT" . (:foreground "orange red" :weight bold))
+        ("WAITING" . (:foreground "HotPink2" :weight bold))
+        ))
+
 ;; Don't show trailing whitespace in calendar mode
 (add-hook 'calendar-mode-hook
-					(function (lambda () (setq show-trailing-whitespace nil))))
-
-;; (setq org-journal-dir "/media/personal/journal/"
-;; 			org-journal-encrypt-journal t
-;; 			org-journal-enable-encryption t)
-
-;; (require 'org-journal)
+          (function (lambda () (setq show-trailing-whitespace nil))))
 
 (require 'org-crypt)
 (org-crypt-use-before-save-magic)
 (setq org-tags-exclude-from-inheritance '("crypt"))
 
-(setq org-crypt-key "E10450D18FFBE872")
 ;; GPG key to use for encryption
 ;; Either the Key ID or set to nil to use symmetric encryption.
+(setq org-crypt-key "E10450D18FFBE872")
 
-(setq auto-save-default nil)
 ;; Auto-saving does not cooperate with org-crypt.el: so you need to
 ;; turn it off if you plan to use org-crypt.el quite often.  Otherwise,
 ;; you'll get an (annoying) message each time you start Org.
-
+(setq auto-save-default nil)
 ;; To turn it off only locally, you can insert this:
 ;;
 ;; # -*- buffer-auto-save-file-name: nil; -*-
 
 ;; Configure common tags
 (setq org-tag-alist
-  '((:startgroup)
-     ; Put mutually exclusive tags here
-     (:endgroup)
-     ("@home" . ?H)
-     ("@work" . ?W)
-     ("crypt" . ?C)
-     ("batch" . ?b)
-     ("followup" . ?f)))
+      '((:startgroup)
+                                        ; Put mutually exclusive tags here
+        (:endgroup)
+        ("@home" . ?H)
+        ("@work" . ?W)
+        ("crypt" . ?C)
+        ("batch" . ?b)
+        ("followup" . ?f)))
 
 ;; enable languages for source code evaluation
 (org-babel-do-load-languages
@@ -106,25 +105,17 @@
 ;; Org Roam
 ;;--------------------------------;
 
-(setq org-roam-v2-ack t)
-(require 'org-roam)
-(require 'org-roam-dailies)
-
-(setq org-roam-directory "/media/org/roam"
+(setq org-roam-directory "/media/personal/org/roam"
       org-roam-dailies-directory "journal/")
 
-(defun boogs/org-path (path)
-  (expand-file-name path org-roam-directory))
+(org-roam-db-autosync-mode)
 
-(setq org-default-notes-file (boogs/org-path "inbox.org"))
+(setq org-roam-completion-everywhere t)
 
 (global-set-key (kbd "C-c n l") 'org-roam-buffer-toggle)
 (global-set-key (kbd "C-c n f") 'org-roam-node-find)
 (global-set-key (kbd "C-c n i") 'org-roam-node-insert)
 
-(org-roam-db-autosync-mode)
-
-(setq org-roam-completion-everywhere t)
 (define-key org-mode-map (kbd "C-M-i") 'completion-at-point)
 
 (global-set-key (kbd "C-c n d n") 'org-roam-dailies-capture-today)
@@ -138,57 +129,119 @@
 (global-set-key (kbd "C-c n d b") 'org-roam-dailies-goto-previous-note)
 (global-set-key (kbd "C-c n d f") 'org-roam-dailies-goto-next-note)
 
-(defun boogs/org-roam-project-finalize-hook ()
-  "Adds the captured project file to `org-agenda-files' if the
-capture was not aborted."
-  ;; Remove the hook since it was added temporarily
-  (remove-hook 'org-capture-after-finalize-hook #'boogs/org-roam-project-finalize-hook)
+(defun boogs/org-path (path)
+  (expand-file-name path org-roam-directory))
 
-  ;; Add project file to the agenda list if the capture was confirmed
-  (unless org-note-abort
-    (with-current-buffer (org-capture-get :buffer)
-      (add-to-list 'org-agenda-files (buffer-file-name)))))
+(setq org-default-notes-file (boogs/org-path "inbox.org"))
 
-(defun boogs/org-roam-find-project ()
+(defvar boogs/org-roam-project-template
+  '("p" "project" plain "** TODO %?"
+    :if-new (file+head+olp "%<%Y%m%d%H%M%S>-${slug}.org"
+                           "#+title: ${title}\n#+category: ${title}\n#+filetags: project\n"
+                           ("Tasks"))))
+
+(defun boogs/org-roam-filter-by-tag (tag-name)
+  (lambda (node)
+    (member tag-name (org-roam-node-tags node))))
+
+(defun boogs/org-roam-list-notes-by-tag (tag-name)
+  (mapcar #'org-roam-node-file
+          (seq-filter
+           (boogs/org-roam-filter-by-tag tag-name)
+           (org-roam-node-list))))
+
+(defun org-roam-node-insert-immediate (arg &rest args)
+  (interactive "P")
+  (let ((args (push arg args))
+        (org-roam-capture-templates (list (append (car org-roam-capture-templates)
+                                                  '(:immediate-finish t)))))
+    (apply #'org-roam-node-insert args)))
+
+
+(defun boogs/org-roam-goto-month ()
+  (interactive)
+  (org-roam-capture- :goto (when (org-roam-node-from-title-or-alias (format-time-string "%Y-%B")) '(4))
+                     :node (org-roam-node-create)
+                     :templates '(("m" "month" plain "\n* Goals\n\n%?* Summary\n\n"
+                                   :if-new (file+head "%<%Y-%B>.org"
+                                                      "#+title: %<%Y-%B>\n#+filetags: project\n")
+                                   :unnarrowed t))))
+
+(defun boogs/org-roam-goto-year ()
+  (interactive)
+  (org-roam-capture- :goto (when (org-roam-node-from-title-or-alias (format-time-string "%Y")) '(4))
+                     :node (org-roam-node-create)
+                     :templates '(("y" "year" plain "\n* Goals\n\n%?* Summary\n\n"
+                                   :if-new (file+head "%<%Y>.org"
+                                                      "#+title: %<%Y>\n#+filetags: project\n")
+                                   :unnarrowed t))))
+
+(defun boogs/org-roam-capture-task ()
   (interactive)
   ;; Add the project file to the agenda after capture is finished
   (add-hook 'org-capture-after-finalize-hook #'boogs/org-roam-project-finalize-hook)
 
-  ;; Select a project file to open, creating it if necessary
-  (org-roam-node-find
-   nil
-   nil
-   (boogs/org-roam-filter-by-tag "Project")
-   :templates
-   '(("p" "project" plain "* Goals\n\n%?\n\n* Tasks\n\n** TODO Add initial tasks\n\n* Dates\n\n"
-      :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+category: ${title}\n#+filetags: Project")
-      :unnarrowed t))))
+  ;; Capture the new task, creating the project file if necessary
+  (org-roam-capture- :node (org-roam-node-read
+                            nil
+                            (boogs/org-roam-filter-by-tag "project"))
+                     :templates (list boogs/org-roam-project-template)))
 
-(defun boogs/org-roam-capture-inbox ()
+(defun boogs/org-roam-refresh-agenda-list ()
   (interactive)
-  (org-roam-capture- :node (org-roam-node-create)
-                     :templates '(("i" "inbox" plain "* %?"
-                                   :if-new (file+head "inbox.org" "#+title: inbox\n")))))
+  (setq org-agenda-files (boogs/org-roam-list-notes-by-tag "project")))
 
-(defun boogs/org-roam-copy-todo-to-today ()
-  (interactive)
-  (let ((org-refile-keep t) ;; Set this to nil to delete the original!
-        (org-roam-dailies-capture-templates
-         '(("t" "tasks" entry "%?"
-            :if-new (file+head+olp "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n" ("Tasks")))))
-        (org-after-refile-insert-hook #'save-buffer)
-        today-file
-        pos)
-    (save-window-excursion
-      (org-roam-dailies--capture (current-time) t)
-      (setq today-file (buffer-file-name))
-      (setq pos (point)))
+(with-eval-after-load 'org-roam
+  (require 'org-roam-dailies)
 
-    ;; Only refile if the target file is different than the current file
-    (unless (equal (file-truename today-file)
-                   (file-truename (buffer-file-name)))
-      (org-refile nil nil (list "Tasks" today-file nil pos)))))
+  (defun boogs/org-roam-project-finalize-hook ()
+    "Adds the captured project file to `org-agenda-files' if the capture was not aborted."
+    ;; Remove the hook since it was added temporarily
+    (remove-hook
+     'org-capture-after-finalize-hook #'boogs/org-roam-project-finalize-hook)
+    ;; Add project file to the agenda list if the capture was confirmed
+    (unless org-note-abort
+      (with-current-buffer (org-capture-get :buffer)
+        (add-to-list 'org-agenda-files (buffer-file-name)))))
 
+  (defun boogs/org-roam-find-project ()
+    (interactive)
+    ;; Add the project file to the agenda after capture is finished
+    (add-hook 'org-capture-after-finalize-hook #'boogs/org-roam-project-finalize-hook)
+    ;; Select a project file to open, creating it if necessary
+    (org-roam-node-find
+     nil
+     nil
+     (boogs/org-roam-filter-by-tag "project")
+     :templates
+     '(("p" "project" plain "* Goals\n\n%?\n\n* Tasks\n\n** TODO Add initial tasks\n\n* Dates\n\n"
+        :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+category: ${title}\n#+filetags: project")
+        :unnarrowed t))))
+
+  (defun boogs/org-roam-capture-inbox ()
+    (interactive)
+    (org-roam-capture- :node (org-roam-node-create)
+                       :templates '(("i" "inbox" plain "* %?"
+                                     :if-new (file+head "inbox.org" "#+title: inbox\n")))))
+
+  (defun boogs/org-roam-copy-todo-to-today ()
+    (interactive)
+    (let ((org-refile-keep t) ;; Set this to nil to delete the original!
+          (org-roam-dailies-capture-templates
+           '(("t" "tasks" entry "%?"
+              :if-new (file+head+olp "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n" ("Tasks")))))
+          (org-after-refile-insert-hook #'save-buffer)
+          today-file
+          pos)
+      (save-window-excursion
+        (org-roam-dailies--capture (current-time) t)
+        (setq today-file (buffer-file-name))
+        (setq pos (point)))
+      ;; Only refile if the target file is different than the current
+      (unless (equal (file-truename today-file)
+                     (file-truename (buffer-file-name)))
+        (org-refile nil nil (list "Tasks" today-file nil pos)))))
+  )
 
 (defun boogs/get-todays-journal-file-name ()
   "Gets the journal file name for today's date"
