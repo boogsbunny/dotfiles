@@ -1,4 +1,4 @@
-(require 'sly-mrepl)                    ; For `sly-mrepl--find-buffer'.
+;; (require 'sly-mrepl)                    ; For `sly-mrepl--find-buffer'.
 
 (defvar boogs/sly-connection-name "sbcl-boogs")
 
