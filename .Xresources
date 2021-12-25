@@ -11,8 +11,8 @@ xterm*termName: xterm-256color
 xterm*locale: true
 ! XTerm*charClass: 33:48,36-47:48,58-59:48,61:48,63-64:48,95:48,126:48
 ! xterm.font:              xft:Dina:pixelsize=18
-xterm*font       : -*-dejavu sans-medium-r-*-*-12-*-*-*-*-*-*-*
-! xterm*faceName:DejaVu Sans Mono:pixelsize=20
+! xterm*font       : -*-dejavu sans-medium-r-*-*-12-*-*-*-*-*-*-*
+xterm*faceName:DejaVu Sans Mono:pixelsize=$FONTSIZE
 ! xterm*faceName:DejaVu Sans Mono
 ! xterm*faceSize:20
 !! Make Meta-* bindings work.

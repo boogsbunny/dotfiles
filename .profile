@@ -28,6 +28,7 @@ export MANWIDTH=70
 #export GDK_SCALE=2
 export GDK_SCALE=1
 export GDK_DPI_SCALE=1.0
+export FONTSIZE=25
 LESSHISTFILE='-'
 
 ## SSH-Agent
