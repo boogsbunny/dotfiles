@@ -6,7 +6,7 @@
 (load-after-system :demeter)
 
 (define-configuration status-buffer
-  ((height 25)))
+  ((height 35)))
 
 (define-configuration window
   ((message-buffer-height 0)))
