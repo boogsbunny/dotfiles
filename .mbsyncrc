@@ -13,24 +13,24 @@ Account gmail
 
 MaildirStore gmail-local
 # The trailing "/" is important
-Path /media/personal/mail/gmail/
-Inbox /media/personal/mail/gmail/inbox
+Path /media/personal/mail-archive/gmail/
+Inbox /media/personal/mail-archive/gmail/inbox
 SubFolders Verbatim
 
 Channel gmail-all
-Master :gmail-remote:
-Slave :gmail-local:
+Far :gmail-remote:
+Near :gmail-local:
 # Patterns * "!Sent"
 Patterns "*"
-Create Slave
+Create Near
 Sync All
 # Create Both
 Expunge Both
 SyncState *
 
 # Channel gmail-sent
-# Master :gmail-remote:
-# Slave :gmail-local:
+# Far :gmail-remote:
+# Near :gmail-local:
 # Patterns !* "Sent"
 # Create Both
 # Expunge Both
@@ -56,19 +56,19 @@ Inbox /media/personal/mail/uva/inbox
 SubFolders Verbatim
 
 Channel uva-all
-Master :uva-remote:
-Slave :uva-local:
+Far :uva-remote:
+Near :uva-local:
 # Patterns * "!Sent"
 Patterns "*"
 # Create Both
-Create Slave
+Create Near
 Sync All
 Expunge Both
 SyncState *
 
 # Channel uva-sent
-# Master :uva-remote:
-# Slave :uva-local:
+# Far :uva-remote:
+# Near :uva-local:
 # Patterns !* "Sent"
 # Create Both
 # Expunge Both
@@ -93,19 +93,19 @@ Inbox /media/personal/mail/vg/inbox
 SubFolders Verbatim
 
 Channel vg-all
-Master :vg-remote:
-Slave :vg-local:
+Far :vg-remote:
+Near :vg-local:
 # Patterns * "!Sent"
 Patterns "*"
 # Create Both
-Create Slave
+Create Near
 Sync All
 Expunge Both
 SyncState *
 
 # Channel vg-sent
-# Master :vg-remote:
-# Slave :vg-local:
+# Far :vg-remote:
+# Near :vg-local:
 # Patterns !* "Sent"
 # Create Both
 # Expunge Both
@@ -113,35 +113,75 @@ SyncState *
 
 ################################################################################
 
-IMAPAccount alarm
-Host outlook.office365.com
+IMAPAccount livi
+Host imap.gmail.com
 Port 993
-User babdulkarim@alarm.com
-PassCmd "pass email/babdulkarim@alarm.com"
+User boogs@joinlivi.com
+PassCmd "pass email/livi/mbsync"
 SSLType IMAPS
+SSLVersions TLSv1.2
 
-IMAPStore alarm-remote
-Account alarm
+IMAPStore livi-remote
+Account livi
 
-MaildirStore alarm-local
+MaildirStore livi-local
 # The trailing "/" is important
-Path /media/personal/mail/alarm/
-Inbox /media/personal/mail/alarm/inbox
+Path /media/personal/mail/livi/
+Inbox /media/personal/mail/livi/inbox
 SubFolders Verbatim
 
-Channel alarm-all
-Master :alarm-remote:
-Slave :alarm-local:
+Channel livi-all
+Far :livi-remote:
+Near :livi-local:
 # Patterns * "!Sent"
 Patterns "*"
 # Create Both
-Create Slave
+Create Near
+Sync All
 Expunge Both
 SyncState *
 
-# Channel alarm-sent
-# Master :alarm-remote:
-# Slave :alarm-local:
+# Channel livi-sent
+# Far :livi-remote:
+# Near :livi-local:
+# Patterns !* "Sent"
+# Create Both
+# Expunge Both
+# SyncState *
+
+################################################################################
+
+IMAPAccount nourish
+Host imap.gmail.com
+Port 993
+User boogs@usenourish.com
+PassCmd "pass email/nourish/mbsync"
+SSLType IMAPS
+SSLVersions TLSv1.2
+
+IMAPStore nourish-remote
+Account nourish
+
+MaildirStore nourish-local
+# The trailing "/" is important
+Path /media/personal/mail/nourish/
+Inbox /media/personal/mail/nourish/inbox
+SubFolders Verbatim
+
+Channel nourish-all
+Far :nourish-remote:
+Near :nourish-local:
+# Patterns * "!Sent"
+Patterns "*"
+# Create Both
+Create Near
+Sync All
+Expunge Both
+SyncState *
+
+# Channel nourish-sent
+# Far :nourish-remote:
+# Near :nourish-local:
 # Patterns !* "Sent"
 # Create Both
 # Expunge Both
