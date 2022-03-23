@@ -7,12 +7,14 @@
 (setq git-commit-summary-max-length fill-column)
 ;; (define-key magit-mode-map (kbd "s-<tab>") nil)
 (setq magit-diff-refine-hunk 'all)
-(setq magit-repository-directories '(("~/projects" . 1)))
+(setq magit-repository-directories '(("~/projects" . 5)))
 
 (when (require 'magit-todos nil 'noerror)
   (magit-todos-mode))
 
 (setq magit-todos-exclude-globs '("*.map" "*.html"))
+
+(setq magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1)
 
 (require 'forge nil 'noerror)
 (when (fboundp 'magit-status)
