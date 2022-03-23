@@ -63,7 +63,9 @@ Some DM merge this automatically; we merge it for the others."
 ;;     #:stop (make-system-destructor "pkill mcron")
 ;;    #:respawn? #t))
 
-(define location-munich "48.13:11.58")
+;; (define location-munich "48.13:11.58")
+(define location-nova "38.87:-77.42")
+
 (define redshift
   (make <service>
     #:provides '(redshift)
@@ -71,7 +73,7 @@ Some DM merge this automatically; we merge it for the others."
 to your surroundings.  This may help your eyes hurt less if you are working in
 front of the screen at night."
     #:start (make-forkexec-constructor
-             (list "redshift" "-l" location-munich "-t 3000:1500")
+             (list "redshift" "-l" location-nova "-t 3500:1500")
              #:log-file (string-append
                          (or (getenv "XDG_CONFIG_HOME")
                              (string-append (getenv "HOME") "/.config"))
