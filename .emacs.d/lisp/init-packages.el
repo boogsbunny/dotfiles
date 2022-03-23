@@ -20,6 +20,7 @@
         color-theme-sanityinc-tomorrow
         company
         company-lsp
+        company-go
         company-restclient
         csharp-mode
         dash
@@ -46,6 +47,8 @@
         forge
         geiser
         geiser-guile
+        go-eldoc
+        go-guru
         gruvbox-theme
         guix
         hackernews
@@ -54,6 +57,7 @@
         helm-dash
         helm-descbinds
         helm-flycheck
+        helm-go-package
         helm-eww
         helm-jira
         helm-ls-git
@@ -85,11 +89,14 @@
         notmuch
         oauth2
         org
+        org-caldav
+        org-gcal
         org-jira
         org-journal
         orgit
         org-roam
         pdf-tools
+        pinentry
         prettier
         prettier-js
         python-black
@@ -100,6 +107,7 @@
         rjsx-mode
         rmsbolt
         rust-mode
+        slack
         sly
         sly-asdf
         sly-macrostep
