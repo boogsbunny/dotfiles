@@ -4,8 +4,8 @@
 
 (require 'init-smtpmail)
 
-(setq user-full-name "Bugi Abdulkarim"
-			mm-default-directory "~/Downloads"
+(setq user-full-name "Boogs"
+      mm-default-directory "~/Downloads"
       mml-secure-openpgp-sign-with-sender t
       message-kill-buffer-on-exit t
       message-send-mail-function 'smtpmail-send-it
