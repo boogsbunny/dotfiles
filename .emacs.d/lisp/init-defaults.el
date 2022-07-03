@@ -212,11 +212,12 @@
    (when org-inline-image-overlays
      (org-redisplay-inline-images))))
 
-;; dmenu
-;; (global-set-key (kbd "C-x SPC") 'dmenu)
-
 ;; kill this buffer
 (global-set-key (kbd "C-x k") 'kill-this-buffer)
+;; cycle buffers
+(global-set-key (kbd "C-x n") 'previous-buffer)
+(global-set-key (kbd "C-x p") 'next-buffer)
+
 
 ;; disable some features and settings
 (put 'narrow-to-region 'disabled nil)
