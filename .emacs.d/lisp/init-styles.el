@@ -4,11 +4,15 @@
 
 ;;; General
 ;; (set-face-attribute 'default nil :foreground "white" :background "black")
-(set-face-attribute 'default nil :foreground "white smoke" :background "#101010" :font "Fira Mono" :height 250)
+(set-face-attribute 'default nil
+                    :foreground "white smoke"
+                    :background "#101010"
+                    :font "Fira Mono"
+                    :height 250)
 (set-face-background 'mouse "#777777")  ; Darker mouse, less distracting.
 
 ;;; More readable but more space consuming; try on big screens.
-; (setq-default line-spacing 1)
+                                        ; (setq-default line-spacing 1)
 
 (set-face-background 'mode-line "white")
 ;; (set-face-foreground 'link "#00ffff")
@@ -35,12 +39,36 @@
 
 ;;; Ediff
 (with-eval-after-load 'ediff-init
-  (set-face-attribute 'ediff-even-diff-A nil :inherit 'ediff-current-diff-A :foreground 'unspecified :background 'unspecified :box nil)
-  (set-face-attribute 'ediff-odd-diff-A nil :inherit 'ediff-current-diff-A :foreground 'unspecified :background 'unspecified :box nil)
-  (set-face-attribute 'ediff-even-diff-B nil :inherit 'ediff-current-diff-B :foreground 'unspecified :background 'unspecified :box nil)
-  (set-face-attribute 'ediff-odd-diff-B nil :inherit 'ediff-current-diff-B :foreground 'unspecified :background 'unspecified :box nil)
-  (set-face-attribute 'ediff-even-diff-C nil :inherit 'ediff-current-diff-C :foreground 'unspecified :background 'unspecified :box nil)
-  (set-face-attribute 'ediff-odd-diff-C nil :inherit 'ediff-current-diff-C :foreground 'unspecified :background 'unspecified :box nil)
+  (set-face-attribute 'ediff-even-diff-A nil
+                      :inherit 'ediff-current-diff-A
+                      :foreground 'unspecified
+                      :background 'unspecified
+                      :box nil)
+  (set-face-attribute 'ediff-odd-diff-A nil
+                      :inherit 'ediff-current-diff-A
+                      :foreground 'unspecified
+                      :background 'unspecified
+                      :box nil)
+  (set-face-attribute 'ediff-even-diff-B nil
+                      :inherit 'ediff-current-diff-B
+                      :foreground 'unspecified
+                      :background 'unspecified
+                      :box nil)
+  (set-face-attribute 'ediff-odd-diff-B nil
+                      :inherit 'ediff-current-diff-B
+                      :foreground 'unspecified
+                      :background 'unspecified
+                      :box nil)
+  (set-face-attribute 'ediff-even-diff-C nil
+                      :inherit 'ediff-current-diff-C
+                      :foreground 'unspecified
+                      :background 'unspecified
+                      :box nil)
+  (set-face-attribute 'ediff-odd-diff-C nil
+                      :inherit 'ediff-current-diff-C
+                      :foreground 'unspecified
+                      :background 'unspecified
+                      :box nil)
   (set-face-attribute 'ediff-current-diff-A nil :box "white")
   (set-face-attribute 'ediff-current-diff-B nil :box "white")
   (set-face-attribute 'ediff-current-diff-C nil :box "white"))
@@ -66,8 +94,12 @@
 
 ;;; Man pages
 (with-eval-after-load 'man
-  (set-face-attribute 'Man-underline nil :foreground (face-foreground 'font-lock-string-face) :underline nil)
-  (set-face-attribute 'Man-overstrike nil :foreground (face-foreground 'font-lock-comment-face) :weight 'normal))
+  (set-face-attribute 'Man-underline nil
+                      :foreground (face-foreground 'font-lock-string-face)
+                      :underline nil)
+  (set-face-attribute 'Man-overstrike nil
+                      :foreground (face-foreground 'font-lock-comment-face)
+                      :weight 'normal))
 (with-eval-after-load 'woman
   (set-face-foreground 'woman-bold (face-foreground 'font-lock-comment-face)))
 

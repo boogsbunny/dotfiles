@@ -29,11 +29,11 @@ When FILE argument is provided run EXE with FILE."
         (set-process-sentinel
          (get-process proc)
          (lambda (process event)
-             (when (and (string= event "finished\n")
-                        helm-raise-command
-                        (not (helm-get-pid-from-process-name real-com)))
-               (shell-command  (format helm-raise-command "emacs")))
-             (message "%s process...Finished." process))))
+           (when (and (string= event "finished\n")
+                      helm-raise-command
+                      (not (helm-get-pid-from-process-name real-com)))
+             (shell-command  (format helm-raise-command "emacs")))
+           (message "%s process...Finished." process))))
       (setq helm-external-commands-list
             (cons real-com
                   (delete real-com helm-external-commands-list))))))
@@ -59,8 +59,8 @@ to use."
                               :history helm-external-command-history)
                            ;; Always prompt to set this program as default.
                            (setq def-prog nil))
-                         ;; No prefix arg or default program exists.
-                         def-prog)))
+                       ;; No prefix arg or default program exists.
+                       def-prog)))
     (unless (or def-prog ; Association exists, no need to record it.
                 ;; Don't try to record non--filenames associations (e.g urls).
                 (not (file-exists-p fname)))
@@ -84,7 +84,7 @@ to use."
           (cons program
                 (delete program
                         (cl-loop for i in helm-external-command-history
-                              when (executable-find i) collect i))))))
+                                 when (executable-find i) collect i))))))
 
 (advice-add 'helm-open-file-externally :override 'boogs/helm-open-file-externally)
 

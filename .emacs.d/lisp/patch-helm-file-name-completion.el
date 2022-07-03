@@ -51,11 +51,12 @@ of the full, abbreviated or relative paths to insert."
                                                  relative-path
                                                  basename-path
                                                  full-path)))
-               (format-choice (plist-get fname-formats (cond
-                                                        ((string= abbreviated-path path-type) :abbreviated)
-                                                        ((string= relative-path path-type) :relative)
-                                                        ((string= basename-path path-type) :basename)
-                                                        ((string= full-path path-type) :full)))))
+               (format-choice (plist-get fname-formats
+                                         (cond
+                                          ((string= abbreviated-path path-type) :abbreviated)
+                                          ((string= relative-path path-type) :relative)
+                                          ((string= basename-path path-type) :basename)
+                                          ((string= full-path path-type) :full)))))
           (insert
            (funcall
             escape-fn
@@ -66,6 +67,7 @@ of the full, abbreviated or relative paths to insert."
                                collect (funcall format-fname-rest f format-choice))
                       " ")))))))
 
-(advice-add 'helm-insert-file-name-completion-at-point :override 'boogs/helm-insert-file-name-completion-at-point)
+(advice-add 'helm-insert-file-name-completion-at-point
+            :override 'boogs/helm-insert-file-name-completion-at-point)
 
 (provide 'patch-helm-file-name-completion)

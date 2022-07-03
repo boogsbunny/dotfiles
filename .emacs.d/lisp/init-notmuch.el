@@ -7,9 +7,9 @@
 (require 'init-notmuch-sync)
 
 (setq notmuch-fcc-dirs
-			'(("boogs@venatores.group" . "vg/Sent +sent -inbox -unread")
-				("bugrahanabdulkarim@gmail.com" . "gmail/Sent +sent -inbox -unread")
-				("ba2ra@virginia.edu" . "uva/Sent +sent -inbox -unread")
+      '(("boogs@venatores.group" . "vg/Sent +sent -inbox -unread")
+        ("bugrahanabdulkarim@gmail.com" . "gmail/Sent +sent -inbox -unread")
+        ("ba2ra@virginia.edu" . "uva/Sent +sent -inbox -unread")
         ("babdulkarim@alarm.com" . "alarm/Sent +sent -inbox -unread")))
 
 (setq notmuch-saved-searches
@@ -21,14 +21,14 @@
         (:name "all mail" :query "tag:inbox" :key ,(kbd "a") :sort-order oldest-first)))
 
 (defun boogs/notmuch-change-sender (&optional sender)
-	(interactive)
-	(unless (derived-mode-p 'message-mode)
-		(error "Must be in message mode"))
-	(unless sender
-		(setq sender (completing-read "Sender: " (mapcar 'car notmuch-fcc-dirs))))
-	(message-replace-header "From" sender)
-	(message-remove-header "Fcc")
-	(notmuch-fcc-header-setup))
+  (interactive)
+  (unless (derived-mode-p 'message-mode)
+    (error "Must be in message mode"))
+  (unless sender
+    (setq sender (completing-read "Sender: " (mapcar 'car notmuch-fcc-dirs))))
+  (message-replace-header "From" sender)
+  (message-remove-header "Fcc")
+  (notmuch-fcc-header-setup))
 
 (when (require 'helm-notmuch nil t)
   (setq helm-notmuch-match-incomplete-words t)

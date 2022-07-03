@@ -8,12 +8,12 @@
 ;; (define-key magit-mode-map (kbd "s-<tab>") nil)
 (setq magit-diff-refine-hunk 'all)
 (setq magit-repository-directories '(("~/.password-store")
-																		 ("~/common-lisp" . 1)
-																		 ("~/repos" . 1)
-																		 ("~/projects" . 5)))
+                                     ("~/common-lisp" . 1)
+                                     ("~/repos" . 1)
+                                     ("~/projects" . 5)))
 
 (when (require 'magit-todos nil 'noerror)
-	(magit-todos-mode))
+  (magit-todos-mode))
 
 (setq magit-todos-exclude-globs '("*.map" "*.html"))
 
@@ -21,9 +21,9 @@
 
 (require 'forge nil 'noerror)
 (when (fboundp 'magit-status)
-	(global-set-key (kbd "C-x g") 'magit-status))
+  (global-set-key (kbd "C-x g") 'magit-status))
 
 (with-eval-after-load 'orgit
-	(setq orgit-store-repository-id t))
+  (setq orgit-store-repository-id t))
 
 (provide 'init-magit)

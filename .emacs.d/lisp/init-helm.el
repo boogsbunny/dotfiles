@@ -262,9 +262,11 @@ With prefix argument, UPDATE the databases with custom uptions thanks to the
         (media-dbs (apply 'append
                           (mapcar
                            (lambda (root)
-                             (append (ignore-errors (file-expand-wildcards (concat root "/*/locate.db")))
+                             (append (ignore-errors
+                                       (file-expand-wildcards (concat root "/*/locate.db")))
                                      ;; Also lookup subfolders; useful when root has snapshots (.e.g Btrfs).
-                                     (ignore-errors (file-expand-wildcards (concat root "/*/*/locate.db")))))
+                                     (ignore-errors
+                                       (file-expand-wildcards (concat root "/*/*/locate.db")))))
                            (list (concat "/run/media/" (user-login-name))
                                  (concat "/media/" (user-login-name))
                                  "/media")))))
@@ -309,7 +311,9 @@ With prefix argument, UPDATE the databases with custom uptions thanks to the
    (lambda (candidate)
      (or (file-directory-p candidate)
          (and (file-name-extension candidate)
-              (string-match-p (concat (regexp-opt '("aac" "mp3" "mp4" "m4a" "ogg" "opus" "flac" "spx" "wma" "wv")) "$")
+              (string-match-p
+               (concat (regexp-opt '("aac" "mp3" "mp4" "m4a" "ogg" "opus" "flac" "spx" "wma" "wv"))
+                       "$")
                               (file-name-extension candidate)))))
    1))
 
