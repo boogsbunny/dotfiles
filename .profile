@@ -21,15 +21,20 @@ export GIT_EDITOR
 export VISUAL
 export TERMINAL="screen-256color"
 export BROWSER="nyxt"
-export STATUSBAR="dwmblocks"
+# export STATUSBAR="dwmblocks"
 export READER="zathura"
-export FILE="ranger"
+# export FILE="ranger"
 export MANWIDTH=70
-#export GDK_SCALE=2
-export GDK_SCALE=1
-export GDK_DPI_SCALE=1.0
-export FONTSIZE=25
+export GDK_SCALE=2.0
+export GDK_DPI_SCale=2.0
+# export GDK_SCALE=1
+# export GDK_DPI_SCALE=1.0
+export STATUSBARSIZE=18
+export FONTSIZE=30
 LESSHISTFILE='-'
+export GOPATH="/home/boogs/go"
+export PERSONAL="$HOME/projects/personal"
+export SBCL_HOME="$HOME/.guix-profile/lib/sbcl"
 
 ## SSH-Agent
 ## Set SSH to use gpg-agent
