@@ -24,13 +24,13 @@
         user-mail-address "ba2ra@virginia.edu"))
 
 (defun boogs/message-select-mail-dest ()
-	())
+  (cond ((string-match "<boogs@venatores.group>"
+                       (message-field-value "From"))
+         (boogs/send-mail-with-vg))
+        (t (boogs/send-mail-with-uva))))
 
+(boogs/send-mail-with-uva)
 (add-hook 'message-send-hook 'boogs/message-select-mail-dest)
-
-;; (setq smtpmail-smtp-server  "mail.privateemail.com"
-;;             smtpmail-stream-type 'starttls
-;; 	          smtpmail-smtp-service 587)
 
 ;; ;; REVIEW: If we don't set `user-mail-address', `mail-host-address' or
 ;; `message-user-fqdn', `message-make-fqdn' will put
