@@ -6,4 +6,9 @@ This is useful for programs like Guix that take provisions for Emacs."
 
 (add-hook 'eshell-mode-hook 'boogs/set-inside-emacs)
 
+(defun eshell-new()
+  "Open a new instance of eshell."
+  (interactive)
+  (eshell 'N))
+
 (provide 'patch-eshell-inside-emacs)
