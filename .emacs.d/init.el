@@ -10,11 +10,6 @@
 ;; separate user files with cache files
 (setq user-emacs-directory "~/.cache/emacs/")
 
-(require 'init-packages)
-(require 'init-defuns)
-(require 'init-defaults)
-(require 'init-styles)
-
 ;; site-lisp folder for local packages on GNU/Linux
 (defun boogs/package-refresh-load-path (path)
   "Add every non-hidden sub-folder of PATH to `load-path'."
@@ -33,6 +28,11 @@
 ;; Avoid the "loaded old bytecode instead of newer source" pitfall.
 (setq load-prefer-newer t)
 
+(require 'init-packages)
+(require 'init-defuns)
+(require 'init-defaults)
+(require 'init-styles)
+
 ;;------------------------------------------------------------
 ;; CONFIGS
 ;;------------------------------------------------------------
@@ -44,13 +44,7 @@
 ;;; Blinking cursor is on only when Emacs is not daemonized.
 (blink-cursor-mode 0)
 
-(require 'auth-source-pass)
-(add-to-list 'auth-sources 'password-store 'append)
-(auth-source-pass-enable)
-
-(setq epa-pinentry-mode 'loopback) ; This will fail if gpg>=2.1 is not available.
-(when (require 'pinentry nil t)
-  (pinentry-start))
+(require 'functions)
 
 (with-eval-after-load 'dired (require 'init-dired))
 (with-eval-after-load 'eshell (require 'init-eshell))
@@ -61,13 +55,12 @@
       evil-want-integration t)
 (when (require 'evil nil t) (require 'init-evil))
 
-(add-hook 'after-init-hook #'global-prettier-mode)
-
 (when (fboundp 'rainbow-delimiters-mode)
-  (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode))
+  (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
+  (add-hook 'python-mode-hook #'rainbow-delimiters-mode))
 
 (when (require 'rainbow-mode nil t)
-  (dolist (hook '(css-mode-hook html-mode-hook sass-mode-hook js-mode-hook js2-mode-hook typescript-mode))
+  (dolist (hook '(css-mode-hook html-mode-hook sass-mode-hook js-mode-hook js2-mode-hook typescript-mode python-mode))
     (add-hook hook 'rainbow-mode)))
 
 (require 'init-web)
@@ -80,7 +73,7 @@
 (autoload 'helm-org-switch "org")
 
 (with-eval-after-load 'exwm
-	(require 'init-exwm))
+  (require 'init-exwm))
 
 (with-eval-after-load 'magit (require 'init-magit))
 (with-eval-after-load 'eww (require 'init-eww))
@@ -111,13 +104,18 @@
 (with-eval-after-load 'lsp (require 'init-lsp))
 
 (with-eval-after-load 'rust-mode (require 'init-rust))
-(with-eval-after-load 'elpy-mode (require 'init-python))
-(with-eval-after-load 'csharp-mode (require 'init-csharp))
+(defvaralias 'rust-indent-offset 'tab-width)
+
+(with-eval-after-load 'python-mode (require 'init-python))
+
+(with-eval-after-load 'sql (require 'init-sql))
 
 (with-eval-after-load 'docker (require 'init-docker))
 (with-eval-after-load 'ledger-mode (require 'init-ledger))
 
 (with-eval-after-load 'emms (require 'init-emms))
+
+(with-eval-after-load 'slack (require 'init-slack))
 
 (with-eval-after-load 'transmission
   ;; `transmission' will fail to start and will not run any hook if the daemon
