@@ -28,9 +28,9 @@ conky.text =
 ^fg(grey)↓ ^fg(DeepSkyBlue)${downspeedf ${gw_iface}} KiB \
 ^fg(grey)↑ ^fg(DeepSkyBlue)${upspeedf ${gw_iface}} KiB \
        \
-^fg(grey)^fn(FontAwesome:size=$FONTSIZE)^fn(FiraMono:size=$FONTSIZE) ^fg(DeepSkyBlue)${battery_percent}% \
-${if_match "${exec pactl list sinks | awk '/^\tMute:/ {print $2;exit}'}" == "no"}^fg(grey) ^fn(FontAwesome:size=$FONTSIZE) ^fn(FiraMono:size=$FONTSIZE)^fg(DeepSkyBlue)${exec pactl list sinks | awk '/^\tVolume:/ {print $5;exit}'}${endif} \
+^fg(grey)^fn(FontAwesome:size=$STATUSBARSIZE)^fn(FiraMono:size=$STATUSBARSIZE) ^fg(DeepSkyBlue)${battery_percent}% \
+${if_match "${exec pactl list sinks | awk '/^\tMute:/ {print $2;exit}'}" == "no"}^fg(grey) ^fn(FontAwesome:size=$STATUSBARSIZE) ^fn(FiraMono:size=$STATUSBARSIZE)^fg(DeepSkyBlue)${exec pactl list sinks | awk '/^\tVolume:/ {print $5;exit}'}${endif} \
        \
-^fg(grey)^fn(FontAwesome:size=$FONTSIZE)^fg(DeepSkyBlue)^fn(FiraMono:size=$FONTSIZE)${wireless_link_qual_perc wlp2s0}% ${wireless_essid wlp2s0} ^fg(grey)${exec curl -s www.icanhazip.com} \
+^fg(grey)^fn(FontAwesome:size=$STATUSBARSIZE)^fg(DeepSkyBlue)^fn(FiraMono:size=$STATUSBARSIZE)${wireless_link_qual_perc wlp2s0}% ${wireless_essid wlp2s0} ^fg(grey)${exec curl -s www.icanhazip.com} \
        \
 ]]
