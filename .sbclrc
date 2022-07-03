@@ -1,0 +1,57 @@
+;; -*- mode: common-lisp; -*-
+(load "~/quicklisp/setup.lisp")
+;;; The following lines added by ql:add-to-init-file:
+
+#-quicklisp
+(let ((quicklisp-init (merge-pathnames ".quicklisp/setup.lisp"
+                                       (user-homedir-pathname))))
+  (when (probe-file quicklisp-init)
+    (load quicklisp-init)))
+
+;; Some OSes package Lisp compilers in a way that ASDF is not automatically loaded.
+(require "asdf")
+
+(uiop:define-package #:guix
+  (:use :common-lisp))
+(in-package #:guix)
+
+(export '*guix-profiles-dir*)
+(defvar *guix-profiles-dir* "~/.guix-extra-profiles/"
+  "Directory in which Guix profiles are stored.
+The actual profiles are in the subsubdirectories.")
+
+(export '*cffi-dirs*)
+(defvar *cffi-dirs* '("~/.guix-profile/lib")
+  "Shared library directories to be used for CFFI.")
+
+(defun find-guix-library-dirs (profiles-dir)
+  (mapcar (lambda (d)
+            (format nil "~a~a/lib/"
+                    (namestring d)
+                    (first (last (pathname-directory d)))))
+          (uiop:subdirectories profiles-dir)))
+
+(export 'set-cffi-library-dirs)
+(defun set-cffi-library-dirs (&optional (dirs (append
+                                               *cffi-dirs*
+                                               (find-guix-library-dirs *guix-profiles-dir*))))
+  "Call this to set `cffi:*foreign-library-directories*' to DIRS."
+  (when (ignore-errors (asdf:load-system "cffi"))
+    (let ((sym (read-from-string "cffi:*foreign-library-directories*")))
+      (setf (symbol-value sym)
+            (union (symbol-value sym)
+                   ;; CFFI needs a trailing "/".
+                   (delete nil (mapcar #'uiop:ensure-directory-pathname dirs))
+                   :test #'uiop:pathname-equal)))))
+
+;; Set it by default.
+(set-cffi-library-dirs)
+
+(in-package :cl-user)
+
+;; Uncomment the following to increase the debug details.
+;; It's often better to do this from the REPL.
+;; (declaim (optimize (speed 0) (space 0) (debug 3)))
+
+;; Uncomment to enable full type checks (should be the default).
+;; (declaim (optimize (or (>= safety 2) (>= safety speed 1))))
