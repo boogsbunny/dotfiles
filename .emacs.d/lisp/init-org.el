@@ -10,6 +10,12 @@
 (setq org-indent-indentation-per-level 1)
 (setq org-adapt-indentation nil)
 
+(setq org-file-apps '((auto-mode . emacs)
+                      (directory . emacs)
+                      ("\\.mm\\'" . default)
+                      ("\\.x?html?\\'" . "nyxt %s")
+                      ("\\.pdf\\'" . default)))
+
 (setq org-log-reschedule (quote time))
 
 (setq org-directory "/media/personal/org")
@@ -21,7 +27,6 @@
          "WAITING(w@/!)"
          "DELEGATED(e@/!)"
          "SOMEDAY(s/!)"
-         "PROJECT(p)"
          "|"
          "DONE(d@)"
          "CANCELED(c)"
@@ -90,7 +95,7 @@
 (setq org-hide-leading-stars 't)
 
 ;; integrate Emacs diary
-(setq org-agenda-include-diary t)
+;; (setq org-agenda-include-diary t)
 
 ;; hide markup markers e.g. *bold* -> bold
 (setq org-hide-emphasis-markers t)
@@ -107,6 +112,8 @@
 
 (setq org-roam-directory "/media/personal/org/roam"
       org-roam-dailies-directory "journal/")
+(setq boogs/daily-note-filename "%<%Y-%m-%d>.org"
+      boogs/daily-note-header "#+title: %<%Y-%m-%d %a>\n\n[[roam:%<%Y-%B>]]\n\n")
 
 (org-roam-db-autosync-mode)
 
@@ -115,6 +122,9 @@
 (global-set-key (kbd "C-c n l") 'org-roam-buffer-toggle)
 (global-set-key (kbd "C-c n f") 'org-roam-node-find)
 (global-set-key (kbd "C-c n i") 'org-roam-node-insert)
+
+(global-set-key (kbd "C-c n I") 'org-roam-node-insert-immediate)
+(global-set-key (kbd "C-c n t") 'boogs/org-roam-capture-task)
 
 (define-key org-mode-map (kbd "C-M-i") 'completion-at-point)
 
@@ -131,6 +141,8 @@
 
 (defun boogs/org-path (path)
   (expand-file-name path org-roam-directory))
+
+(setq org-agenda-files '("/media/personal/org/roam"))
 
 (setq org-default-notes-file (boogs/org-path "inbox.org"))
 
@@ -160,7 +172,8 @@
 
 (defun boogs/org-roam-goto-month ()
   (interactive)
-  (org-roam-capture- :goto (when (org-roam-node-from-title-or-alias (format-time-string "%Y-%B")) '(4))
+  (org-roam-capture- :goto (when (org-roam-node-from-title-or-alias (format-time-string "%Y-%B"))
+                             '(4))
                      :node (org-roam-node-create)
                      :templates '(("m" "month" plain "\n* Goals\n\n%?* Summary\n\n"
                                    :if-new (file+head "%<%Y-%B>.org"
@@ -267,20 +280,120 @@
 
 (add-hook 'org-capture-mode-hook 'boogs/on-org-capture)
 
-;; AGENDA
+;; agenda
 (global-set-key (kbd "C-c a") 'org-agenda)
 (global-set-key (kbd "C-c c") 'org-capture)
 
-(setq org-agenda-window-setup 'only-window
-      org-agenda-span 'day
+(setq org-agenda-window-setup 'current-window
+      org-agenda-span 'week
+      org-agenda-start-on-weekday 1     ; Monday
       org-agenda-start-with-log-mode t
-      org-log-done 'time
-      org-log-into-drawer t)
 
-(setq org-columns-default-format "%20CATEGORY(Category) %65ITEM(Task) %TODO %6Effort(Estim){:}  %6CLOCKSUM(Clock) %TAGS")
+      org-agenda-prefix-format
+      '((agenda . " %i %-12:c%?-12t% s")
+        (todo . " %i %-12:c")
+        (tags . " %i %-12:c")
+        (search . " %i %-12:c"))
+      org-agenda-breadcrumbs-separator "->"
+      org-agenda-todo-keyword-format "%-1s"
+      org-agenda-fontify-priorities 'cookies
+      org-agenda-category-icon-alist nil
+      org-agenda-remove-times-when-in-prefix nil
+      org-agenda-remove-timeranges-from-blocks nil
+      org-agenda-compact-blocks nil
+      org-agenda-block-separator ?—
+
+      org-agenda-use-time-grid t
+
+      org-agenda-time-grid
+      '((daily today require-timed)
+        (0600 0700 0800 0900 1000 1100
+              1200 1300 1400 1500 1600
+              1700 1800 1900 2000 2100)
+        " ....." "-----------------")
+
+      org-log-done 'time
+      org-log-into-drawer t
+      )
+
+(setq org-agenda-sorting-strategy
+      '(((agenda habit-down time-up priority-down category-keep)
+         (todo priority-down category-keep)
+         (tags priority-down category-keep)
+         (search category-keep))))
+
+(defvar org-priority-highest)
+
+(defvar boogs/org-custom-daily-agenda
+  ;; NOTE 2021-12-08: Specifying a match like the following does not
+  ;; work.
+  ;;
+  ;; tags-todo "+PRIORITY=\"A\""
+  ;;
+  ;; So we match everything and then skip entries with
+  ;; `org-agenda-skip-function'.
+  `((tags-todo "*"
+               ((org-agenda-skip-function '(org-agenda-skip-if nil '(timestamp)))
+                (org-agenda-skip-function
+                 `(org-agenda-skip-entry-if
+                   'notregexp ,(format "\\[#%s\\]" (char-to-string org-priority-highest))))
+                (org-agenda-block-separator nil)
+                (org-agenda-overriding-header "Important tasks without a date\n")))
+    (agenda "" ((org-agenda-time-grid nil)
+                (org-agenda-start-on-weekday nil)
+                (org-agenda-span 1)
+                (org-agenda-show-all-dates nil)
+                (org-scheduled-past-days 365)
+                ;; Excludes today's scheduled items
+                (org-scheduled-delay-days 1)
+                (org-agenda-block-separator nil)
+                (org-agenda-entry-types '(:scheduled))
+                (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
+                (org-agenda-day-face-function (lambda (date) 'org-agenda-date))
+                (org-agenda-format-date "")
+                (org-agenda-overriding-header "\nPending scheduled tasks")))
+    (agenda "" ((org-agenda-span 1)
+                (org-deadline-warning-days 0)
+                (org-agenda-block-separator nil)
+                (org-scheduled-past-days 0)
+                ;; We don't need the `org-agenda-date-today'
+                ;; highlight because that only has a practical
+                ;; utility in multi-day views.
+                (org-agenda-day-face-function (lambda (date) 'org-agenda-date))
+                (org-agenda-format-date "%A %-e %B %Y")
+                (org-agenda-overriding-header "\nToday's agenda\n")))
+    (agenda "" ((org-agenda-start-on-weekday nil)
+                (org-agenda-start-day "+1d")
+                (org-agenda-span 3)
+                (org-deadline-warning-days 0)
+                (org-agenda-block-separator nil)
+                (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
+                (org-agenda-overriding-header "\nNext three days\n")))
+    (agenda "" ((org-agenda-time-grid nil)
+                (org-agenda-start-on-weekday nil)
+                ;; We don't want to replicate the previous section's
+                ;; three days, so we start counting from the day after.
+                (org-agenda-start-day "+4d")
+                (org-agenda-span 14)
+                (org-agenda-show-all-dates nil)
+                (org-deadline-warning-days 0)
+                (org-agenda-block-separator nil)
+                (org-agenda-entry-types '(:deadline))
+                (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
+                (org-agenda-overriding-header "\nUpcoming deadlines (+14d)\n"))))
+  "Custom agenda for use in `org-agenda-custom-commands'.")
+
+(setq org-columns-default-format
+      "%20CATEGORY(Category) %65ITEM(Task) %TODO %6Effort(Estim){:}  %6CLOCKSUM(Clock) %TAGS")
 
 (setq org-agenda-custom-commands
-      `(("d" "Dashboard"
+      `(
+        ("A" "Daily agenda top priority tasks"
+         ,boogs/org-custom-daily-agenda
+         ((org-agenda-fontify-priorities nil)
+          (org-agenda-dim-blocked-tasks nil)))
+
+        ("d" "Dashboard"
          ((agenda "" ((org-deadline-warning-days 7)))
           (tags-todo "+PRIORITY=\"A\""
                      ((org-agenda-overriding-header "High Priority")))
@@ -288,9 +401,16 @@
           (todo "NEXT"
                 ((org-agenda-overriding-header "Next Actions")
                  (org-agenda-max-todos nil)))
+          (todo "WAITING"
+                ((org-agenda-overriding-header "Awaiting response")
+                 (org-agenda-max-todos nil)))
           (todo "TODO"
                 ((org-agenda-overriding-header "Unprocessed Inbox Tasks")
                  (org-agenda-files '(,(boogs/org-path "inbox.org")))
+                 (org-agenda-text-search-extra-files nil)))
+          (todo "SOMEDAY"
+                ((org-agenda-overriding-header "Ideas")
+                 (org-agenda-files '(,(boogs/org-path "tickler.org")))
                  (org-agenda-text-search-extra-files nil)))))
 
         ("n" "Next Tasks"
@@ -306,11 +426,19 @@
 
 (add-hook 'org-timer-set-hook #'org-clock-in)
 
-;; CAPTURE TEMPLATES
+;; org capture templates
 (setq org-capture-templates
       `(("t" "Tasks")
-        ("tt" "Task" entry (file ,(boogs/org-path "inbox.org"))
+        ("tt" "TODO entry" entry (file ,(boogs/org-path "inbox.org"))
          "* TODO %?\n  %U\n  %a\n  %i" :empty-lines 1)
+        ("tw" "WAITING entry" entry (file ,(boogs/org-path "inbox.org"))
+         "* WAITING %^{DESCRIPTION}\n :PROPERTIES:\n :CREATED: %U\n :END:" :empty-lines 1)
+        ("td" "DELEGATED entry" entry (file ,(boogs/org-path "inbox.org"))
+         "* DELEGATED %^{DESCRIPTION}\n :PROPERTIES:\n :CREATED: %U\n :END:" :empty-lines 1)
+        ("tb" "BOOK RECOMMENDATION entry" entry (file ,(boogs/org-path "inbox.org"))
+         "* SOMEDAY %^{AUTHOR} - %^{TITLE}\n :PROPERTIES:\n :CREATED: %U\n :PAGES: %^{PAGES}\n :GENRE: %^{GENRE}\n :END:\n - Recommended by: %^{recommended by}\n" :empty-lines 1)
+        ("ti" "IDEA entry" entry (file ,(boogs/org-path "tickler.org"))
+         "* SOMEDAY %^{TITLE}\n - %^{DESCRIPTION}\n :PROPERTIES:\n :CREATED: %U\n :END:" :empty-lines 1)
         ("ts" "Clocked Entry Subtask" entry (clock)
          "* TODO %?\n  %U\n  %a\n  %i" :empty-lines 1)
 
@@ -334,22 +462,39 @@
          :clock-in :clock-resume
          :empty-lines 1)))
 
-;; capture templates
-;; (setq org-capture-templates
-;;       '(
-;;         ("t" "Tasks")
-;;         ("tt" "TODO entry" entry (file+headline "inbox.org" "Tasks")
-;;          "* TODO %^{DESCRIPTION}\n :PROPERTIES:\n :CREATED: %U\n :END:")
-;;         ("tw" "WAITING entry" entry (file+headline "inbox.org" "Tasks")
-;;          "* WAITING %^{DESCRIPTION}\n :PROPERTIES:\n :CREATED: %U\n :END:")
-;;         ("te" "DELEGATED entry" entry (file+headline "inbox.org" "Tasks")
-;;          "* DELEGATED %^{DESCRIPTION}\n :PROPERTIES:\n :CREATED: %U\n :END:")
-;;         ("th" "HABIT entry" entry (file+headline "personal.org" "Habits")
-;;          "* TODO %^{DESCRIPTION}\n SCHEDULED: <%<%Y-%m-%d %a %^{FREQUENCY}>>\n :PROPERTIES:\n :STYLE: habit\n :END:")
-;;         ("tb" "BOOK RECOMMENDATION entry" entry (file+headline "inbox.org" "Books")
-;;          "* SOMEDAY %^{AUTHOR} - %^{TITLE}\n :PROPERTIES:\n :CREATED: %U\n :PAGES: %^{PAGES}\n :GENRE: %^{GENRE}\n :END:\n - Recommended by: %^{recommended by}\n")
-;;         ("ti" "IDEA entry" entry (file "tickler.org")
-;;          "* SOMEDAY %^{TITLE}\n - %^{DESCRIPTION}\n :PROPERTIES:\n :CREATED: %U\n :END:")))
+;; org-roam capture templates for dailies
+(setq org-roam-dailies-capture-template
+      `(("d" "default" entry
+         "* %?"
+         :if-new (file+head ,boogs/daily-note-filename
+                            ,boogs/daily-note-header))
+        ("t" "task" entry
+         "* TODO %?\n  %U\n  %a\n  %i"
+         :if-new (file+head+olp ,boogs/daily-note-filename
+                                ,boogs/daily-note-header
+                                ("Tasks"))
+         :empty-lines 1)
+        ("l" "log entry" entry
+         "* %<%I:%M %p> - %?"
+         :if-new (file+head+olp ,boogs/daily-note-filename
+                                ,boogs/daily-note-header
+                                ("Log")))
+        ("j" "journal" entry
+         "* %<%I:%M %p> - Journal  :journal:\n\n%?\n\n"
+         :if-new (file+head+olp ,boogs/daily-note-filename
+                                ,boogs/daily-note-header
+                                ("Log")))
+        ("m" "meeting" entry
+         "* %<%I:%M %p> - %^{Meeting Title}  :meetings:\n\n%?\n\n"
+         :if-new (file+head+olp ,boogs/daily-note-filename
+                                ,boogs/daily-note-header
+                                ("Log")))))
 
+;; mail server
+;; (require 'org-gcal)
+
+;; (setq org-gcal-client-id "<client_id>"
+;;       org-gcal-client-secret "<client_secret>"
+;;       org-gcal-fetch-file-alist '(("<email>" .  "<path_of_org_file>")))
 
 (provide 'init-org)
