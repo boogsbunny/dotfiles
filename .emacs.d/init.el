@@ -53,6 +53,9 @@
   (pinentry-start))
 
 (with-eval-after-load 'dired (require 'init-dired))
+(with-eval-after-load 'eshell (require 'init-eshell))
+(with-eval-after-load 'elfeed (require 'init-elfeed))
+(with-eval-after-load 'erc (require 'init-erc))
 
 (setq evil-want-keybinding nil
       evil-want-integration t)
