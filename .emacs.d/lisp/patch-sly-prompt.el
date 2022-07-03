@@ -46,8 +46,8 @@ face, which we don't want so we remove it."
                next-entry-idx
                condition)
       'sly-mrepl--prompt (downcase package)))
-      ;; `comint-output-filter' forces the `comint-highlight-prompt' face, which
-      ;; we don't want, so we remove it here.
+    ;; `comint-output-filter' forces the `comint-highlight-prompt' face, which
+    ;; we don't want, so we remove it here.
     (let ((prompt-start (save-excursion (forward-line 0) (point)))
           (inhibit-read-only t))
       (sly-mrepl--remove-comint-highlight prompt-start (point)))
