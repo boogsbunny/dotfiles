@@ -142,6 +142,8 @@
 ;; delete trailing whitespace on save
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
+(setq whitespace-style '(face empty indentation space-after-tab space-before-tab tab-mark trailing))
+
 ;; remove the GUI Emacs clutter
 (setq inhibit-startup-message t)
 (menu-bar-mode -1)
