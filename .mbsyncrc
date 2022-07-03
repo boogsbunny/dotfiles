@@ -58,21 +58,20 @@ SubFolders Verbatim
 Channel uva-all
 Far :uva-remote:
 Near :uva-local:
-# Patterns * "!Sent"
-Patterns "*"
-# Create Both
-Create Near
-Sync All
+Patterns * "!Sent"
+Create Both
+# Create Near
+# Sync All
 Expunge Both
 SyncState *
 
-# Channel uva-sent
-# Far :uva-remote:
-# Near :uva-local:
-# Patterns !* "Sent"
-# Create Both
-# Expunge Both
-# SyncState *
+Channel uva-sent
+Far :uva-remote:
+Near :uva-local:
+Patterns !* "Sent"
+Create Both
+Expunge Both
+SyncState *
 
 ################################################################################
 
@@ -95,94 +94,18 @@ SubFolders Verbatim
 Channel vg-all
 Far :vg-remote:
 Near :vg-local:
-# Patterns * "!Sent"
-Patterns "*"
-# Create Both
-Create Near
+Patterns * "!Sent"
+# Patterns "*"
+Create Both
+# Create Near
 Sync All
 Expunge Both
 SyncState *
 
-# Channel vg-sent
-# Far :vg-remote:
-# Near :vg-local:
-# Patterns !* "Sent"
-# Create Both
-# Expunge Both
-# SyncState *
-
-################################################################################
-
-IMAPAccount livi
-Host imap.gmail.com
-Port 993
-User boogs@joinlivi.com
-PassCmd "pass email/livi/mbsync"
-SSLType IMAPS
-SSLVersions TLSv1.2
-
-IMAPStore livi-remote
-Account livi
-
-MaildirStore livi-local
-# The trailing "/" is important
-Path /media/personal/mail/livi/
-Inbox /media/personal/mail/livi/inbox
-SubFolders Verbatim
-
-Channel livi-all
-Far :livi-remote:
-Near :livi-local:
-# Patterns * "!Sent"
-Patterns "*"
-# Create Both
-Create Near
-Sync All
+Channel vg-sent
+Far :vg-remote:
+Near :vg-local:
+Patterns !* "Sent"
+Create Both
 Expunge Both
 SyncState *
-
-# Channel livi-sent
-# Far :livi-remote:
-# Near :livi-local:
-# Patterns !* "Sent"
-# Create Both
-# Expunge Both
-# SyncState *
-
-################################################################################
-
-IMAPAccount nourish
-Host imap.gmail.com
-Port 993
-User boogs@usenourish.com
-PassCmd "pass email/nourish/mbsync"
-SSLType IMAPS
-SSLVersions TLSv1.2
-
-IMAPStore nourish-remote
-Account nourish
-
-MaildirStore nourish-local
-# The trailing "/" is important
-Path /media/personal/mail/nourish/
-Inbox /media/personal/mail/nourish/inbox
-SubFolders Verbatim
-
-Channel nourish-all
-Far :nourish-remote:
-Near :nourish-local:
-# Patterns * "!Sent"
-Patterns "*"
-# Create Both
-Create Near
-Sync All
-Expunge Both
-SyncState *
-
-# Channel nourish-sent
-# Far :nourish-remote:
-# Near :nourish-local:
-# Patterns !* "Sent"
-# Create Both
-# Expunge Both
-# SyncState *
