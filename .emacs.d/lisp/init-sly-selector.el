@@ -1,6 +1,8 @@
-;; (require 'sly-mrepl)                    ; For `sly-mrepl--find-buffer'.
+(with-eval-after-load 'sly
+  (require 'sly))
 
-(defvar boogs/sly-connection-name "sbcl-boogs")
+;; (defvar boogs/sly-connection-name "sbcl-boogs")
+(defvar boogs/sly-connection-name "sbcl")
 
 (defun boogs/helm-sly-buffer-p (buffer)
   "Return non-nil if BUFFER has a SLY connection matching
