@@ -38,7 +38,7 @@
 (exwm-input-set-key (kbd "s-k") #'windmove-up)
 (exwm-input-set-key (kbd "s-l") #'windmove-right)
 (exwm-input-set-key (kbd "s-D") #'kill-this-buffer)
-;
+                                        ;
 (when (require 'windower nil 'noerror)
   (exwm-input-set-key (kbd "s-<tab>") 'windower-switch-to-last-buffer)
   (exwm-input-set-key (kbd "s-o") 'windower-toggle-single)
@@ -48,7 +48,7 @@
   (exwm-input-set-key (kbd "s-K") 'windower-swap-above)
   (exwm-input-set-key (kbd "s-L") 'windower-swap-right))
 
-;(exwm-input-set-key (kbd "s-i") #'follow-delete-other-windows-and-split)
+                                        ;(exwm-input-set-key (kbd "s-i") #'follow-delete-other-windows-and-split)
 (exwm-input-set-key (kbd "s-O") #'exwm-layout-toggle-fullscreen)
 
 (with-eval-after-load 'helm
@@ -196,13 +196,15 @@
 
 ;;; Some programs escape EXWM control and need be tamed.  See
 ;; https://github.com/ch11ng/exwm/issues/287
-(add-to-list 'exwm-manage-configurations '((string= exwm-title "Kingdom Come: Deliverance") managed t))
+(add-to-list 'exwm-manage-configurations '((string= exwm-title "Kingdom Come: Deliverance")
+                                           managed t))
 
 ;; Gens
 (add-to-list 'exwm-manage-configurations '((string= exwm-class-name "Gens") floating nil))
 
 ;; Askpass.
-(add-to-list 'exwm-manage-configurations '((string= exwm-class-name "lxqt-openssh-askpass") floating t))
+(add-to-list 'exwm-manage-configurations '((string= exwm-class-name "lxqt-openssh-askpass")
+                                           floating t))
 
 (defvar boogs/exwm-change-screen-turn-off-primary nil
   "Turn off primary display when cable is plugged.")
