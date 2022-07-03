@@ -6,15 +6,22 @@
 (add-to-list 'auto-mode-alist '("\\.json\\'" . json-mode))
 (add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-mode))
 (add-to-list 'auto-mode-alist '("\\.tsx\\'" . typescript-mode))
+(add-to-list 'auto-mode-alist '("\\.html\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.css\\'" . web-mode))
 
-(add-hook 'rsjsx-mode-hook (lambda() (electric-indent-mode -1)))
+(add-hook 'rsjsx-mode-hook (lambda () (electric-indent-mode -1)))
 (add-hook 'typescript-mode-hook 'web-mode)
 
-(with-no-warnings (defvaralias 'js-indent-level 'tab-width))
-(add-hook 'rjsx-mode-hook (lambda () (defvaralias 'js-indent-level 'tab-width)))
-(add-hook 'web-mode-hook (lambda () (defvaralias 'js-indent-level 'tab-width)))
-(add-hook 'js-mode-hook (lambda () (defvaralias 'js-indent-level 'tab-width)))
-(add-hook 'js2-mode-hook (lambda () (defvaralias 'js-indent-level 'tab-width)))
-(add-hook 'typescript-mode-hook (lambda () (defvaralias 'js-indent-level 'tab-width)))
+(defun boogs/web-mode-hook ()
+  "Hooks for Web mode."
+  (setq indent-tabs-mode nil
+        tab-width 2
+        web-mode-attr-indent-offset 2
+        web-mode-code-indent-offset 2
+        web-mode-markup-indent-offset 2
+        web-mode-css-indent-offset 2))
+
+(add-hook 'web-mode-hook  'boogs/web-mode-hook)
+(add-hook 'web-mode-hook 'prettier-mode)
 
 (provide 'init-web)
