@@ -37,12 +37,11 @@
 ;; avoid outdated byte-compiled elisp files
 (setq load-prefer-newer t)
 
-;; support for emacs pinentry
-;; (use-package pinentry
-;;   :ensure t)
-;; (setq epa-pinentry-mode 'loopback)
-;; (when (require 'pinentry nil t)
-;;   (pinentry-start))
+;;; Support for Emacs pinentry.
+;;; Required for eshell/sudo and everything relying on GPG queries.
+(setq epa-pinentry-mode 'loopback) ; This will fail if gpg>=2.1 is not available.
+(when (require 'pinentry nil t)
+  (pinentry-start))
 
 ;; ignore bell
 (setq ring-bell-function #'ignore)
@@ -158,14 +157,11 @@
  calendar-date-style 'iso
  delete-by-moving-to-trash t
  uniquify-buffer-name-style 'forward
-
  backup-directory-alist
  `(("." . ,(expand-file-name "backups" user-emacs-directory)))
-
  ;; disable auto save
  auto-save-default nil
  auto-save-list-file-prefix nil
-
  split-height-threshold nil
  split-width-threshold 140)
 
