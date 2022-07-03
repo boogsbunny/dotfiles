@@ -29,9 +29,8 @@ otherwise the whole string is unquoted."
                (lispy-unstringify)
              (if (and lispy-close-quotes-at-end-p (looking-at "\""))
                  (forward-char 1)
-                 (progn (insert "\\\"\\\""))
+               (progn (insert "\\\"\\\""))
                (backward-char 2))))
-
           (arg
            (lispy-stringify))
 
