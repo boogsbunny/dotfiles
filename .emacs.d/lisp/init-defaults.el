@@ -195,14 +195,14 @@
 ;; turn on line numbers
 (global-display-line-numbers-mode 1)
 (setq display-line-numbers 'relative)
+(setq display-line-numbers-type'relative)
 
-;; autofill
-;; (when (getenv "MANWIDTH")
-;;   (setq-default fill-column (string-to-number (getenv "MANWIDTH"))))
+(setq-default fill-column (string-to-number "100"))
+(add-hook 'prog-mode-hook #'display-fill-column-indicator-mode)
 
-(setq-default fill-column (string-to-number "70"))
-
-;; (add-hook 'text-mode-hook 'turn-on-auto-fill)
+(require 'auth-source-pass)
+(setq auth-sources '("~/.authinfo.gpg" "~/.authinfo" "~/.netrc"))
+(add-to-list 'auth-sources 'password-store 'append)
 
 ;; display images
 (setq org-startup-with-inline-images t)
