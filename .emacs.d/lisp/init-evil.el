@@ -14,7 +14,7 @@
       evil-move-beyond-eol t
       evil-move-cursor-back nil
       evil-want-fine-undo t
-			evil-shift-width tab-width)
+      evil-shift-width tab-width)
 
 (setq-default evil-symbol-word-search t)
 
@@ -40,11 +40,15 @@
     (interactive)
     (evil-delete (point-at-bol) (point))))
 
+;; (define-key evil-normal-state-map (kbd "C-n") 'evil-prev-buffer)
+;; (define-key evil-normal-state-map (kbd "C-p") 'evil-next-buffer)
+
 ;;(when (require 'evil-multiedit nil t)
 ;;  (global-set-key (kbd "C-;") 'evil-multiedit-match-all)
 ;;  (evil-multiedit-default-keybinds))
 
-(setq evil-default-modeline-color (cons (face-background 'mode-line) (or (face-foreground 'mode-line) "black")))
+(setq evil-default-modeline-color (cons (face-background 'mode-line)
+                                        (or (face-foreground 'mode-line) "black")))
 
 (defun boogs/evil-color-modeline ()
   (let ((color (cond ((minibufferp) evil-default-modeline-color)
@@ -106,7 +110,7 @@
     (setq evil-collection-outline-bind-tab-p nil)
 
     (evil-define-key '(normal visual) evil-org-mode-map
-                     (kbd "<backtab>") 'org-shifttab)))
+      (kbd "<backtab>") 'org-shifttab)))
 
 (require 'evil-escape)
 (evil-escape-mode 1)
@@ -133,7 +137,7 @@
 ;; (define-key evil-insert-state-map (kbd "j") 'boogs/jk)
 
 ;; (eval-after-load 'evil-maps
-;; 	'(progn
+;;    '(progn
 ;;        (define-key evil-motion-state-map (kbd ";") 'evil-ex)))
 
 (provide 'init-evil)
