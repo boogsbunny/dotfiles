@@ -107,6 +107,7 @@
 (defvaralias 'rust-indent-offset 'tab-width)
 
 (with-eval-after-load 'python-mode (require 'init-python))
+(with-eval-after-load 'go-mode (require 'init-go))
 
 (with-eval-after-load 'sql (require 'init-sql))
 

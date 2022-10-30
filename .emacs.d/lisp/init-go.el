@@ -80,4 +80,8 @@ Note that the -cover test flag is left out since it shifts line numbers."
   > @ _ \n
   "}" > \n)
 
+(add-hook 'go-mode-hook #'tree-sitter-mode)
+(add-hook 'go-mode-hook #'tree-sitter-hl-mode)
+(add-hook 'go-mode-hook #'company-mode)
+
 (provide 'init-go)
