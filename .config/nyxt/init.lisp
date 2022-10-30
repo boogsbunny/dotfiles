@@ -23,7 +23,8 @@
        (cl-css:css
         '((body
            :background-color "black"
-           :color "white")))))))
+           :color "white"
+           :font-size "14px")))))))
 
 ;;; Color config for prompt-buffer (minibuffer in Emacs parlance).
 (define-configuration prompt-buffer
@@ -32,7 +33,8 @@
              (cl-css:css
               '((body
                  :background-color "black"
-                 :color "white")
+                 :color "white"
+                 :font-size "20px")
                 ("#prompt-area"
                  :background-color "black")
                 ;; The area you input text in.
@@ -105,7 +107,14 @@
 (define-configuration status-buffer
     ((style (str:concat %slot-default% (cl-css:css
                                         ;; Arrows on the left.
-                                        '(("#controls" :border-top "1px solid white"
+                                        `(("#body"
+                                           :background "rgb(160, 160, 160)"
+                                           :font-size "14px"
+                                           :color "rgb(32, 32, 32)"
+                                           :padding 0
+                                           :margin 0
+                                           :line-height "20px")
+                                          ("#controls" :border-top "1px solid white"
                                                        :background-color "#CD5C5C")
                                           ;; To the right of the arrows.
                                           ("#url" :background-color "black"
@@ -134,6 +143,3 @@
 
 (define-configuration prompt-buffer
     ((default-modes (append '(vi-insert-mode) %slot-default%))))
-
-(define-configuration browser
-    ((session-restore-prompt :always-restore)))
