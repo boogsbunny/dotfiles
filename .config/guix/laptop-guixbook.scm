@@ -22,6 +22,7 @@
              (gnu services databases)
              (gnu services desktop)
              (gnu services docker)
+             (gnu services virtualization)
              (guix gexp)
              (guix packages)
              (guix download)
@@ -35,7 +36,8 @@
              (ice-9 pretty-print)
              (ice-9 match)
              (ice-9 popen))
-(use-service-modules desktop networking ssh xorg sddm)
+(use-service-modules desktop networking ssh sddm virtualization xorg)
+(use-package-modules vpn virtualization)
 
 (define this-file
   (local-file (basename (assoc-ref (current-source-location) 'filename))
@@ -57,13 +59,15 @@
                                     #:options
                                     '("ctrl:nocaps")))
   (kernel linux)
+  ;; (kernel-loadable-modules (list wireguard-linux-compat))
   (initrd microcode-initrd)
   (firmware (list linux-firmware))
   (users (cons* (user-account
                   (name "boogs")
                   (comment "Bugi Idris")
                   (group "users")
-                  (supplementary-groups '("wheel" "netdev" "audio" "lp" "video" "docker" "postgres"))
+                  (supplementary-groups '("wheel" "netdev" "audio" "kvm" "libvirt" "lp" "video"
+                                          "docker" "postgres"))
                   (home-directory "/home/boogs"))
                 %base-user-accounts))
   (packages
@@ -71,22 +75,12 @@
       (list (specification->package "bluez")
             (specification->package "bluez-alsa")
             (specification->package "pulseaudio")
-            (specification->package "dmenu")
-            (specification->package "emacs")
-            (specification->package "emacs-desktop-environment")
-            (specification->package "emacs-exwm")
-            (specification->package "font-dejavu")
-            (specification->package "font-gnu-unifont")
+            (specification->package "emacs-exwm-no-x-toolkit")
             (specification->package "glibc")
             (specification->package "grub")
-            (specification->package "htop")
-            (specification->package "i3status")
-            (specification->package "i3-wm")
             (specification->package "nss-certs")
             (specification->package "st")
-            (specification->package "sway")
-            (specification->package "swaylock")
-            (specification->package "waybar")
+            (specification->package "wireguard-tools")
             (specification->package "wofi"))
       %base-packages))
   (services
@@ -100,6 +94,16 @@
         (service openssh-service-type)
         (service docker-service-type)
         (service postgresql-service-type)
+        ;; (simple-service 'wireguard-module
+        ;;                 kernel-module-loader-service-type
+        ;;                 '("wireguard"))
+        (service libvirt-service-type
+                 (libvirt-configuration
+                  (unix-sock-group "libvirt")
+                  (tls-port "16555")))
+        (service virtlog-service-type
+                 (virtlog-configuration
+                  (max-clients 1000)))
         (set-xorg-configuration
           (xorg-configuration
             (keyboard-layout keyboard-layout))))
