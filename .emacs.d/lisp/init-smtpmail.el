@@ -4,7 +4,7 @@
 
 (defun boogs/send-mail-with-vg ()
   (interactive)
-  (setq smtpmail-smtp-server "mail.privateemail.com"
+  (setq smtpmail-smtp-server "mail.venatores.group"
         smtpmail-smtp-service 587
         smtpmail-stream-type 'starttls
         user-mail-address "boogs@venatores.group"))
