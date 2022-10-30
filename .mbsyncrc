@@ -76,7 +76,7 @@ SyncState *
 ################################################################################
 
 IMAPAccount vg
-Host mail.privateemail.com
+Host mail.venatores.group
 Port 993
 User boogs@venatores.group
 PassCmd "pass email/boogs@venatores.group"
