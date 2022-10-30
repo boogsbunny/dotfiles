@@ -17,12 +17,14 @@
         cargo
         circe
         cl-generic
+        code-review
         color-theme-sanityinc-tomorrow
         company
         company-lsp
         company-go
         company-restclient
-        csharp-mode
+        company-terraform
+        dap-mode
         dash
         diminish
         dired-du
@@ -50,6 +52,7 @@
         forge
         geiser
         geiser-guile
+        go
         go-eldoc
         go-guru
         gruvbox-theme
@@ -72,6 +75,7 @@
         helm-selector
         helm-sly
         helm-system-packages
+        helm-tramp
         highlight-indent-guides
         jiralib2
         js2-mode
@@ -117,7 +121,9 @@
         sly-quicklisp
         solarized-theme
         smart-mode-line
+        terraform-mode
         transmission
+        tree-sitter
         typescript-mode
         websocket
         web-mode
