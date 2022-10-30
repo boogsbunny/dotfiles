@@ -33,6 +33,9 @@
 (setq coding-system-for-read 'utf-8)
 (setq coding-system-for-write 'utf-8)
 
+;; native comp settings
+(setq native-comp-async-report-warnings-errors nil
+      native-comp-speed 3)
 
 ;; avoid outdated byte-compiled elisp files
 (setq load-prefer-newer t)
