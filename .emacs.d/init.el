@@ -101,7 +101,6 @@
 (with-eval-after-load 'lisp-mode (require 'init-lisp))
 (add-hook 'emacs-lisp-mode-hook 'boogs/init-lispy)
 
-(with-eval-after-load 'lsp (require 'init-lsp))
 
 (with-eval-after-load 'rust-mode (require 'init-rust))
 (defvaralias 'rust-indent-offset 'tab-width)
