@@ -24,4 +24,8 @@
 (add-hook 'web-mode-hook  'boogs/web-mode-hook)
 (add-hook 'web-mode-hook 'prettier-mode)
 
+(require 'init-lass)
+(add-to-list 'auto-mode-alist '("\\.lass\\'" . lass-mode))
+(autoload 'lass-mode "lass" "Lass Support" t)
+
 (provide 'init-web)
