@@ -36,8 +36,11 @@
              (ice-9 pretty-print)
              (ice-9 match)
              (ice-9 popen))
-(use-service-modules desktop networking ssh sddm virtualization xorg)
-(use-package-modules vpn virtualization)
+(use-service-modules databases desktop networking ssh sddm virtualization xorg)
+(use-package-modules databases
+                     geo
+                     vpn
+                     virtualization)
 
 (define this-file
   (local-file (basename (assoc-ref (current-source-location) 'filename))
@@ -93,7 +96,7 @@
         (service gnome-desktop-service-type)
         (service openssh-service-type)
         (service docker-service-type)
-        (service postgresql-service-type)
+        (postgresql-service #:extension-packages (list postgis))
         ;; (simple-service 'wireguard-module
         ;;                 kernel-module-loader-service-type
         ;;                 '("wireguard"))
