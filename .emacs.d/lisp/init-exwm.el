@@ -54,6 +54,9 @@
 (with-eval-after-load 'helm
   (global-set-key (kbd "s-b") #'helm-mini)
   (global-set-key (kbd "s-f") #'helm-find-files)
+  (global-set-key (kbd "C-x r g") #'helm-ls-git)
+  (global-set-key (kbd "C-x C-d") #'helm-browse-project)
+  (global-set-key (kbd "C-x r p") #'helm-projects-history)
   ;; (push `(,(kbd "s-f") . helm-find-files) exwm-input-global-keys)
   (exwm-input-set-key (kbd "s-F") #'helm-locate)
   (when (fboundp 'boogs/helm-locate-meta)
