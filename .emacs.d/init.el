@@ -25,9 +25,6 @@
   (add-to-list 'load-path site-lisp)
   (boogs/package-refresh-load-path site-lisp))
 
-;; Avoid the "loaded old bytecode instead of newer source" pitfall.
-(setq load-prefer-newer t)
-
 (require 'init-packages)
 (require 'init-defuns)
 (require 'init-defaults)
@@ -36,13 +33,6 @@
 ;;------------------------------------------------------------
 ;; CONFIGS
 ;;------------------------------------------------------------
-
-;; Visual
-;;; Cursor type: default (box) is visible and practical.
-;; (setq-default cursor-type 'hollow)
-(setq-default x-stretch-cursor t)
-;;; Blinking cursor is on only when Emacs is not daemonized.
-(blink-cursor-mode 0)
 
 (require 'functions)
 
@@ -111,7 +101,6 @@
 
 (with-eval-after-load 'sql (require 'init-sql))
 
-(with-eval-after-load 'docker (require 'init-docker))
 (with-eval-after-load 'ledger-mode (require 'init-ledger))
 
 (with-eval-after-load 'emms (require 'init-emms))
