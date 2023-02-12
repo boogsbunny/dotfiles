@@ -12,6 +12,15 @@
 ;;; See https://github.com/ch11ng/exwm/issues/285
 ;;; and https://gitlab.com/interception/linux/plugins/caps2esc/issues/2.
 
+;; Looks like there is a bug between Helm and EXWM global keys which leads Helm
+;; to display nothing when only `exwm-input-set-key' is used.
+;; https://github.com/ch11ng/exwm/issues/816
+(defun boogs/exwm-global-set-key (keys command)
+  "Bind KEYS to COMMAND.
+KEYS is passed to `kbd'."
+  (define-key exwm-mode-map (kbd keys) command)
+  (global-set-key (kbd keys) command))
+
 ;;; Rename buffer to window title.
 (defun boogs/exwm-rename-buffer-to-title ()
   (exwm-workspace-rename-buffer exwm-title))
@@ -61,22 +70,22 @@
 (exwm-input-set-key (kbd "s-O") #'exwm-layout-toggle-fullscreen)
 
 (with-eval-after-load 'helm
-  (global-set-key (kbd "s-b") #'helm-mini)
-  (global-set-key (kbd "C-x j") #'helm-mini)
-  (global-set-key (kbd "C-x b") #'helm-mini)
-  (global-set-key (kbd "s-f") #'helm-find-files)
-  (global-set-key (kbd "C-x f") #'helm-find-files)
-  (global-set-key (kbd "C-x r g") #'helm-ls-git)
-  (global-set-key (kbd "C-x C-d") #'helm-browse-project)
-  (global-set-key (kbd "C-x r p") #'helm-projects-history)
+  (boogs/exwm-global-set-key "s-b" #'helm-mini)
+  (boogs/exwm-global-set-key "C-x j" #'helm-mini)
+  (boogs/exwm-global-set-key "C-x b" #'helm-mini)
+  (boogs/exwm-global-set-key "s-f" #'helm-find-files)
+  (boogs/exwm-global-set-key "C-x f" #'helm-find-files)
+  (boogs/exwm-global-set-key "C-x r g" #'helm-ls-git)
+  (boogs/exwm-global-set-key "C-x C-d" #'helm-browse-project)
+  (boogs/exwm-global-set-key "C-x r p" #'helm-projects-history)
   ;; (push `(,(kbd "s-f") . helm-find-files) exwm-input-global-keys)
   (exwm-input-set-key (kbd "s-F") #'helm-locate)
   (when (fboundp 'boogs/helm-locate-meta)
-    (exwm-input-set-key (kbd "s-F") #'boogs/helm-locate-meta))
-  (exwm-input-set-key (kbd "s-g") 'boogs/helm-grep-git-or-ag)
-  (exwm-input-set-key (kbd "s-G") 'boogs/helm-grep-git-all-or-ag)
+    (boogs/exwm-global-set-key "s-F" #'boogs/helm-locate-meta))
+  (boogs/exwm-global-set-key "s-g" 'boogs/helm-grep-git-or-ag)
+  (boogs/exwm-global-set-key "s-G" 'boogs/helm-grep-git-all-or-ag)
   ;; Launcher
-  (exwm-input-set-key (kbd "s-r") 'helm-run-external-command))
+  (boogs/exwm-global-set-key "s-r" 'helm-run-external-command))
 
 (when (require 'evil nil t)
   (exwm-input-set-key (kbd "s-<tab>") #'evil-switch-to-windows-last-buffer)
@@ -94,32 +103,34 @@
       (exwm-input-set-key (kbd "s-n") #'elfeed)
       (exwm-input-set-key (kbd "s-e") #'eww)
       (exwm-input-set-key (kbd "s-i") (lambda () ( call-process "nyxt"))))
-  (exwm-input-set-key (kbd "s-t") 'helm-selector-org)
-  (exwm-input-set-key (kbd "s-T") 'helm-selector-org-other-window)
-  (exwm-input-set-key (kbd "s-<return>") 'boogs/helm-selector-sly)
-  (exwm-input-set-key (kbd "S-s-<return>") 'boogs/helm-selector-sly-other-window)
-  (exwm-input-set-key (kbd "s-m") #'helm-selector-notmuch)
-  (exwm-input-set-key (kbd "s-M") #'helm-selector-notmuch-other-window)
-  (exwm-input-set-key (kbd "s-n") #'helm-selector-elfeed)
-  (exwm-input-set-key (kbd "s-N") #'helm-selector-elfeed-other-window) ; "n" for "news"
-  (exwm-input-set-key (kbd "s-e") #'helm-selector-eww)
-  (exwm-input-set-key (kbd "s-E") #'helm-selector-eww-other-window))
+  (boogs/exwm-global-set-key "s-t" 'helm-selector-org)
+  (boogs/exwm-global-set-key "s-T" 'helm-selector-org-other-window)
+  (boogs/exwm-global-set-key "s-<return>" 'boogs/helm-selector-sly)
+  (boogs/exwm-global-set-key "S-s-<return>" 'boogs/helm-selector-sly-other-window)
+  (boogs/exwm-global-set-key "s-m" #'helm-selector-notmuch)
+  (boogs/exwm-global-set-key "s-M" #'helm-selector-notmuch-other-window)
+  (boogs/exwm-global-set-key "s-n" #'helm-selector-elfeed)
+  (boogs/exwm-global-set-key "s-N" #'helm-selector-elfeed-other-window) ; "n" for "news"
+  (boogs/exwm-global-set-key "s-e" #'helm-selector-eww)
+  (boogs/exwm-global-set-key "s-E" #'helm-selector-eww-other-window))
 
 (when (fboundp 'magit-status)
   (if (require 'helm-selector-magit nil :noerror)
       (progn
-        (exwm-input-set-key (kbd "s-v") #'helm-selector-magit)
+        (boogs/exwm-global-set-key "s-v" #'helm-selector-magit)
         (exwm-input-set-key (kbd "s-V") #'magit-status))
     (exwm-input-set-key (kbd "s-v") #'magit-status)))
-(when (fboundp 'emms-all)
+
+(cond
+ ((fboundp 'emms-all)
   (exwm-input-set-key (kbd "s-a") #'emms-smart-browse)
   (exwm-input-set-key (kbd "S-s-<kp-enter>") #'emms-pause)
   (if (fboundp 'helm-emms)
-      (exwm-input-set-key (kbd "s-A") #'helm-emms)
-    (exwm-input-set-key (kbd "s-A") #'emms)))
+      (boogs/exwm-global-set-key "s-A" #'helm-emms)
+    (exwm-input-set-key (kbd "s-A") #'emms))))
 
 (when (fboundp 'helm-pass)
-  (exwm-input-set-key (kbd "s-p") #'helm-pass))
+  (boogs/exwm-global-set-key "s-p" #'helm-pass))
 
 (autoload 'boogs/slime-to-repl "lisp")
 (exwm-input-set-key (kbd "C-<backspace>") #'helm-selector-sly)
@@ -130,20 +141,20 @@
   (pcase
       (completing-read "Lisp: " '(cider geiser slime sly racket))
     ("cider"
-     (exwm-input-set-key (kbd "s-<backspace>") 'helm-selector-cider)
-     (exwm-input-set-key (kbd "M-s-<backspace>") 'helm-selector-cider-other-window))
+     (boogs/exwm-global-set-key "s-<backspace>" 'helm-selector-cider)
+     (boogs/exwm-global-set-key "M-s-<backspace>" 'helm-selector-cider-other-window))
     ("geiser"
      (autoload 'helm-geiser-repl-switch "init-scheme")
-     (exwm-input-set-key (kbd "s-<backspace>") 'helm-selector-geiser)
-     (exwm-input-set-key (kbd "M-s-<backspace>") 'helm-selector-geiser-other-window))
+     (boogs/exwm-global-set-key "s-<backspace>" 'helm-selector-geiser)
+     (boogs/exwm-global-set-key "M-s-<backspace>" 'helm-selector-geiser-other-window))
     ("slime"
-     (exwm-input-set-key (kbd "s-<backspace>") 'helm-selector-slime)
-     (exwm-input-set-key (kbd "M-s-<backspace>") 'helm-selector-slime-other-window))
+     (boogs/exwm-global-set-key "s-<backspace>" 'helm-selector-slime)
+     (boogs/exwm-global-set-key "M-s-<backspace>" 'helm-selector-slime-other-window))
     ("sly"
-     (exwm-input-set-key (kbd "s-<backspace>") 'helm-selector-sly)
-     (exwm-input-set-key (kbd "<M-s-backspace>") 'helm-selector-sly-other-window))
+     (boogs/exwm-global-set-key "s-<backspace>" 'helm-selector-sly)
+     (boogs/exwm-global-set-key "<M-s-backspace>" 'helm-selector-sly-other-window))
     ("racket"
-     (exwm-input-set-key (kbd "s-<backspace>") #'racket-repl))))
+     (boogs/exwm-global-set-key "s-<backspace>" #'racket-repl))))
 (exwm-input-set-key (kbd "s-C-<backspace>") #'boogs/repl-switcher)
 
 ;; browser
