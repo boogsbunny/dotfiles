@@ -27,18 +27,17 @@
 (when (require 'with-editor nil t)
   (add-hook 'with-editor-mode-hook 'evil-insert-state))
 
-(evil-global-set-key
- 'normal "gd"
- (lambda () (interactive)
-   (evil-execute-in-emacs-state)
-   (call-interactively (key-binding (kbd "M-.")))))
+(evil-global-set-key 'normal "gd" (lambda ()
+                                    (interactive)
+                                    (evil-execute-in-emacs-state)
+                                    (call-interactively (key-binding (kbd "M-.")))))
 
 (define-key evil-normal-state-map (kbd "C-u") 'evil-scroll-up)
 (define-key evil-visual-state-map (kbd "C-u") 'evil-scroll-up)
-(define-key evil-insert-state-map (kbd "C-u")
-  (lambda ()
-    (interactive)
-    (evil-delete (point-at-bol) (point))))
+
+(define-key evil-insert-state-map (kbd "C-u") (lambda ()
+                                                (interactive)
+                                                (evil-delete (point-at-bol) (point))))
 
 ;; (define-key evil-normal-state-map (kbd "C-n") 'evil-prev-buffer)
 ;; (define-key evil-normal-state-map (kbd "C-p") 'evil-next-buffer)
