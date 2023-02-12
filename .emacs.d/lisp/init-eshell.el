@@ -8,6 +8,9 @@
 ;; ;;; modules, runs their hooks and concludes with `eshell-first-time-mode-hook'
 ;; ;;; (for the first session only) and `eshell-mode-hook'.
 
+(add-hook 'eshell-mode-hook #'eat-eshell-mode)
+(add-hook 'eshell-mode-hook #'eat-eshell-visual-command-mode)
+
 ;; Emacs pinentry for GPG.
 (require 'init-defaults)
 
