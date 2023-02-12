@@ -9,36 +9,33 @@
   (package-initialize))
 
 (setq package-selected-packages
-      '(
-        alert
-        apropospriate-theme
+      '(alert
         auth-source-pass
         auto-complete
         cargo
         circe
         cl-generic
         code-review
-        color-theme-sanityinc-tomorrow
         company
-        company-lsp
         company-go
         company-restclient
-        company-terraform
         dap-mode
         dash
-        diminish
         dired-du
+        dmenu
         docker
         docker-compose-mode
         dockerfile-mode
         dumb-jump
-        doom-themes
+        eat
+        eglot
         elfeed
         elpy
         emms
         emojify
         erc-hl-nicks
         erc-image
+        eshell-vterm
         evil
         evil-collection
         evil-commentary
@@ -55,19 +52,18 @@
         go
         go-eldoc
         go-guru
-        gruvbox-theme
         guix
         hackernews
         helm
         helm-company
         helm-dash
         helm-descbinds
+        helm-emms
+        helm-exwm
         helm-flycheck
         helm-go-package
         helm-eww
-        helm-jira
         helm-ls-git
-        helm-lsp
         helm-notmuch
         helm-org
         helm-org-contacts
@@ -77,7 +73,7 @@
         helm-system-packages
         helm-tramp
         highlight-indent-guides
-        jiralib2
+        json-mode
         js2-mode
         kubernetes
         kubernetes-evil
@@ -88,24 +84,25 @@
         leetcode
         lispy
         lispyville
-        lsp-mode
-        lsp-ui
         magit
         magit-todos
         markdown-mode+
+        modus-themes
         notmuch
         oauth2
+        olivetti
         org
         org-caldav
         org-gcal
-        org-jira
         org-journal
+        org-modern
         orgit
         org-roam
         pdf-tools
         pinentry
         prettier
         prettier-js
+        projectile
         python-black
         rainbow-delimiters
         rainbow-mode
@@ -119,11 +116,11 @@
         sly-asdf
         sly-macrostep
         sly-quicklisp
-        solarized-theme
         smart-mode-line
-        terraform-mode
+        svg-tag-mode
         transmission
         tree-sitter
+        tree-sitter-langs
         typescript-mode
         websocket
         web-mode
@@ -131,7 +128,6 @@
         windower
         xelb
         yasnippet
-        youtube-dl
-        ))
+        youtube-dl))
 
 (provide 'init-packages)
