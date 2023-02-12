@@ -13,8 +13,14 @@
 ;;; and https://gitlab.com/interception/linux/plugins/caps2esc/issues/2.
 
 ;;; Rename buffer to window title.
-(defun boogs/exwm-rename-buffer-to-title () (exwm-workspace-rename-buffer exwm-title))
-(add-hook 'exwm-update-title-hook 'boogs/exwm-rename-buffer-to-title)
+(defun boogs/exwm-rename-buffer-to-title ()
+  (exwm-workspace-rename-buffer exwm-title))
+
+;; rename buffer to class name
+(defun boogs/exwm-rename-buffer-to-class-name ()
+  (exwm-workspace-rename-buffer exwm-class-name))
+
+(add-hook 'exwm-update-title-hook 'boogs/exwm-rename-buffer-to-class-name)
 
 (add-hook 'exwm-floating-setup-hook 'exwm-layout-hide-mode-line)
 (add-hook 'exwm-floating-exit-hook 'exwm-layout-show-mode-line)
@@ -29,6 +35,9 @@
 (exwm-systemtray-enable)
 (setq exwm-systemtray-height 16)
 
+;; dual monitor
+(setq exwm-randr-workspace-output-plist '(0 "DP-2" 1 "eDP-1"))
+
 ;;; Those cannot be set globally: if Emacs would be run in another WM, the "s-"
 ;;; prefix will conflict with the WM bindings.
 (exwm-input-set-key (kbd "s-R") #'exwm-reset)
@@ -38,7 +47,7 @@
 (exwm-input-set-key (kbd "s-k") #'windmove-up)
 (exwm-input-set-key (kbd "s-l") #'windmove-right)
 (exwm-input-set-key (kbd "s-D") #'kill-this-buffer)
-                                        ;
+
 (when (require 'windower nil 'noerror)
   (exwm-input-set-key (kbd "s-<tab>") 'windower-switch-to-last-buffer)
   (exwm-input-set-key (kbd "s-o") 'windower-toggle-single)
@@ -48,12 +57,15 @@
   (exwm-input-set-key (kbd "s-K") 'windower-swap-above)
   (exwm-input-set-key (kbd "s-L") 'windower-swap-right))
 
-                                        ;(exwm-input-set-key (kbd "s-i") #'follow-delete-other-windows-and-split)
+;(exwm-input-set-key (kbd "s-i") #'follow-delete-other-windows-and-split)
 (exwm-input-set-key (kbd "s-O") #'exwm-layout-toggle-fullscreen)
 
 (with-eval-after-load 'helm
   (global-set-key (kbd "s-b") #'helm-mini)
+  (global-set-key (kbd "C-x j") #'helm-mini)
+  (global-set-key (kbd "C-x b") #'helm-mini)
   (global-set-key (kbd "s-f") #'helm-find-files)
+  (global-set-key (kbd "C-x f") #'helm-find-files)
   (global-set-key (kbd "C-x r g") #'helm-ls-git)
   (global-set-key (kbd "C-x C-d") #'helm-browse-project)
   (global-set-key (kbd "C-x r p") #'helm-projects-history)
@@ -80,7 +92,8 @@
       (exwm-input-set-key (kbd "s-<return>") #'eshell)
       (exwm-input-set-key (kbd "s-m") #'notmuch-hello)
       (exwm-input-set-key (kbd "s-n") #'elfeed)
-      (exwm-input-set-key (kbd "s-e") #'eww))
+      (exwm-input-set-key (kbd "s-e") #'eww)
+      (exwm-input-set-key (kbd "s-i") (lambda () ( call-process "nyxt"))))
   (exwm-input-set-key (kbd "s-t") 'helm-selector-org)
   (exwm-input-set-key (kbd "s-T") 'helm-selector-org-other-window)
   (exwm-input-set-key (kbd "s-<return>") 'boogs/helm-selector-sly)
@@ -109,7 +122,7 @@
   (exwm-input-set-key (kbd "s-p") #'helm-pass))
 
 (autoload 'boogs/slime-to-repl "lisp")
-(exwm-input-set-key (kbd "s-<backspace>") #'helm-selector-sly)
+(exwm-input-set-key (kbd "C-<backspace>") #'helm-selector-sly)
 (defun boogs/repl-switcher ()
   "Switch between Geiser and SLIME REPLs."
   (interactive)
@@ -132,6 +145,12 @@
     ("racket"
      (exwm-input-set-key (kbd "s-<backspace>") #'racket-repl))))
 (exwm-input-set-key (kbd "s-C-<backspace>") #'boogs/repl-switcher)
+
+;; browser
+(defun boogs/nyxt-start ()
+  (interactive)
+  (start-process-shell-command "nyxt" nil "nyxt"))
+(exwm-input-set-key (kbd "C-x <backspace>") #'boogs/nyxt-start)
 
 ;;; External application shortcuts.
 (defun boogs/exwm-start (command)
