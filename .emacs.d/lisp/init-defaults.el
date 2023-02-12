@@ -25,8 +25,7 @@
       (setq exec-path (append '("/usr/local/bin") exec-path))
       (setenv "PATH" (concat "/usr/local/bin:" (getenv "PATH")))
       (setenv "PATH" (concat "/opt/local/bin:" (getenv "PATH")))
-      (setq dired-use-ls-dired nil)
-      ))
+      (setq dired-use-ls-dired nil)))
 
 ;; encoding
 (prefer-coding-system 'utf-8)
@@ -42,7 +41,7 @@
 
 ;;; Support for Emacs pinentry.
 ;;; Required for eshell/sudo and everything relying on GPG queries.
-(setq epa-pinentry-mode 'loopback) ; This will fail if gpg>=2.1 is not available.
+(setq epa-pinentry-mode 'loopback) ; This will fail if gpg >= 2.1 is not available.
 (when (require 'pinentry nil t)
   (pinentry-start))
 
@@ -72,49 +71,16 @@
 (setq highlight-indent-guides-method 'character)
 
 ;; mode line
+(display-time-mode)
 (setq display-time-mode 1
       display-time-format "%l:%M %p %b %y"
       display-time-default-load-average nil)
 
-;; hide minor modes
-(require 'diminish)
-(diminish 'desktop-environment-mode)
-(diminish 'lispyville-mode)
-(diminish 'highlight-indent-guides-mode)
-(diminish 'evil-escape-mode)
-(diminish 'dired-async-mode)
-(diminish 'eldoc-mode)
-(diminish 'auto-fill-mode)
-(diminish 'evil-org-mode)
-
-(setq sml/no-confirm-load-theme t)
-(sml/setup)
-(sml/apply-theme 'respectful)  ; Respect the theme colors
-(setq sml/mode-width 'right
-      sml/name-width 60)
-(setq-default mode-line-format
-              `("%e"
-                mode-line-front-space
-                evil-mode-line-tag
-                mode-line-mule-info
-                mode-line-client
-                mode-line-modified
-                mode-line-remote
-                mode-line-frame-identification
-                mode-line-buffer-identification
-                sml/pos-id-separator
-                (vc-mode vc-mode)
-                " "
-                                        ;mode-line-position
-                sml/pre-modes-separator
-                mode-line-modes
-                " "
-                mode-line-misc-info))
 
 (setq rm-excluded-modes
       (mapconcat
        'identity
-                                        ; These names must start with a space!
+       ;; These names must start with a space!
        '(" GitGutter" " MRev" " company"
          " Helm" " Undo-Tree" " Projectile.*" " Z" " Ind"
          " Org-Agenda.*" " ElDoc" " SP/s" " cider.*")
@@ -154,21 +120,17 @@
 (when (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 (setq use-dialog-box nil)
 
-(setq
- recentf-max-saved-items 100
- ;; line by line scrolling
- scroll-step 1
- calendar-week-start-day 1
- calendar-date-style 'iso
- delete-by-moving-to-trash t
- uniquify-buffer-name-style 'forward
- backup-directory-alist
- `(("." . ,(expand-file-name "backups" user-emacs-directory)))
- ;; disable auto save
- auto-save-default nil
- auto-save-list-file-prefix nil
- split-height-threshold nil
- split-width-threshold 140)
+(setq recentf-max-saved-items 100
+      scroll-step 1
+      calendar-week-start-day 1
+      calendar-date-style 'iso
+      delete-by-moving-to-trash t
+      uniquify-buffer-name-style 'forward
+      backup-directory-alist `(("." . ,(expand-file-name "backups" user-emacs-directory)))
+      auto-save-default nil
+      auto-save-list-file-prefix nil
+      split-height-threshold nil
+      split-width-threshold 160)
 
 ;; remember last cursor position
 (save-place-mode)
@@ -198,27 +160,12 @@
 (setq display-line-numbers 'relative)
 (setq display-line-numbers-type'relative)
 
-(setq-default fill-column (string-to-number "100"))
+(setq fill-column (string-to-number "140"))
 (add-hook 'prog-mode-hook #'display-fill-column-indicator-mode)
 
 (require 'auth-source-pass)
 (setq auth-sources '("~/.authinfo.gpg" "~/.authinfo" "~/.netrc"))
 (add-to-list 'auth-sources 'password-store 'append)
-
-;; display images
-(setq org-startup-with-inline-images t)
-(add-hook
- 'org-babel-after-execute-hook
- (lambda ()
-   (when org-inline-image-overlays
-     (org-redisplay-inline-images))))
-
-;; kill this buffer
-(global-set-key (kbd "C-x k") 'kill-this-buffer)
-;; cycle buffers
-(global-set-key (kbd "C-x n") 'previous-buffer)
-(global-set-key (kbd "C-x p") 'next-buffer)
-
 
 ;; disable some features and settings
 (put 'narrow-to-region 'disabled nil)
@@ -227,5 +174,49 @@
 (put 'downcase-region 'disabled nil)
 (put 'erase-buffer 'disabled nil)
 (put 'set-goal-column 'disabled nil)
+
+;; TODO
+(defcustom boogs/buffer-skip-regexp
+  (rx bos (or (or "*Backtrace*" "*Compile-Log*" "*Completions*"
+                  "*Messages*" "*package*" "*Warnings*" "*Slack*"
+                  "*Async-native-compile-log*")
+              (seq "magit-diff" (zero-or-more anything))
+              (seq "magit-process" (zero-or-more anything))
+              (seq "magit-revision" (zero-or-more anything))
+              (seq "magit-stash" (zero-or-more anything))
+              (seq "helm" (zero-or-more anything)))
+              eos)
+  "Regular expression matching buffers ignored by `next-buffer' and
+`previous-buffer'."
+  :type 'regexp)
+
+(defun boogs/buffer-skip-p (window buffer bury-or-kill)
+  "Return t if BUFFER name matches `boogs/buffer-skip-regexp'."
+  (string-match-p boogs/buffer-skip-regexp (buffer-name buffer)))
+
+(setq switch-to-prev-buffer-skip 'boogs/buffer-skip-p)
+
+(setq olivetti-body-width 140)
+(add-hook 'text-mode-hook #'olivetti-mode)
+(add-hook 'prog-mode-hook #'olivetti-mode)
+
+;; kill this buffer
+(global-set-key (kbd "C-x C-k") 'kill-this-buffer)
+;; cycle buffers
+(global-set-key (kbd "C-x C-n") 'next-buffer)
+(global-set-key (kbd "C-x C-p") 'previous-buffer)
+
+(defun guix-buffer-p (&optional buffer)
+  (let ((buf-name (buffer-name (or buffer (current-buffer)))))
+    (not (null (or (string-match "*Guix REPL" buf-name)
+		   (string-match "*Guix Internal REPL" buf-name))))))
+
+(defun guix-geiser--set-project (&optional _impl _prompt)
+  (when (and (eq 'guile geiser-impl--implementation)
+	     (null geiser-repl--project)
+	     (guix-buffer-p))
+    (geiser-repl--set-this-buffer-project 'guix)))
+
+(advice-add 'geiser-impl--set-buffer-implementation :after #'guix-geiser--set-project)
 
 (provide 'init-defaults)
