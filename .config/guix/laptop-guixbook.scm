@@ -107,6 +107,7 @@
         (service virtlog-service-type
                  (virtlog-configuration
                   (max-clients 1000)))
+        (service redis-service-type)
         (set-xorg-configuration
           (xorg-configuration
             (keyboard-layout keyboard-layout))))
