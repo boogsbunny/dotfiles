@@ -1,0 +1,132 @@
+#!/bin/sh
+
+# tag_new <tags> <search-term>
+function tag_new { notmuch tag $1 -- tag:inbox and $2; }
+
+# family <search-term>
+function family { tag_new "-inbox +family" $1; }
+
+# blacklist <search-term>
+function blacklist { tag_new "-inbox -unread +deleted" $1; }
+
+# spam <search-term>
+function spam { tag_new "-inbox -unread -mailinglist -newsletter +spam +deleted" $1; }
+
+# security <search-term>
+function security { tag_new "-inbox +security" $1; }
+
+# work <search-term>
+function work { tag_new "-inbox +work" $1; }
+
+# mailinglist <search-term>
+function mailinglist { tag_new "-inbox +mailinglist" $1; }
+
+# newsletter <search-term>
+function newsletter { tag_new "-inbox +newsletter" $1; }
+
+# region BLACKLIST
+blacklist "from:/.*@.*[.]pinterest[.]com/"
+blacklist "from:/.*@linkedin[.]com/"
+blacklist "from:/.*@quora[.]com/"
+blacklist "from:noreply@medium.com"
+blacklist "from:noreply@youtube.com"
+blacklist "from:support@wandrd.com"
+blacklist "from:instant-updates@mail.zillow.com"
+blacklist "from:abamboo@alarm.com"
+blacklist "from:info@esntls.co"
+blacklist "from:info@codingdojo.com"
+## this list continue with 100+ addresses ...
+# endregion BLACKLIST
+
+# region SPAMS
+# `+spam' can't be found at all in notmuch if `exclude_tags=deleted;spam;'
+# is set in the [search] section of `.notmuch-config'.
+spam "from:luckycreekcasino@eoiwe.handzonlearning.com"
+spam "from:smf7.53w6@y8fm.lkn0.co.uk"
+spam "from:8g7i.67jx@5y3m.vkiv.co.uk"
+spam "from:hellobody@marginalrevenue.com"
+spam "from:onlinegames@patstationstops.com"
+spam "from:fit6.3q13@z2n3.15hn.co.uk"
+spam "from:dtz6.sc1t@ggt0.7dg0.co.uk"
+spam "from:hellobody@destructionflame.com"
+spam "from:p2f4.3248@85db.n72d.co.uk"
+spam "from:casinoexclusive@mergersandacquisitions10.com"
+spam "from:nooreply@eiq.jd5af3vcpjlwb.us"
+spam "from:helloworld@mammothdisease.com"
+spam "from:ffvn.cipe@vl4e.nvvl.co.uk"
+spam "from:luckycreekcasino@delightfuloption.com"
+spam "from:casinospecial@ecepi.adventureseverywhere.com"
+spam "from:addrift@sow9xndh5i.brandawarenesss.com"
+spam "from:evgbwnccsyxtbadtfycmevllqwk@UVhWwCJnEpQm.us"
+spam "from:sdm1.8kgw@q1x5.1m0f.co.uk"
+spam "from:yti1.mikx@nag2.wl0c.co.uk"
+spam "from:info@daintyofschedule.com"
+spam "from:kdmplienaszjgckvngnxqndfdtl@lJwkahVlRcQF.us"
+spam "from:ckcjktpmahhqgjnbbglmnxfwich@RdTpwyDwVvml.us"
+spam "from:hellobody@brandawarenesss.com"
+spam "from:nooreply@89w.tzacynhn8p093.us"
+spam "from:TGV5HTU4.FMUZ25LV@syx29mw1kgs158nakaf1d0kptvvk6v.com"
+spam "from:onlinecasino@ufeqe.blackfridayspromo.com"
+spam "from:kpngwfzheyigxleijanbhzefjve@vvNtmiMFiemz.org.uk"
+spam "from:ljjziivpntxebqfanwxnwxskchj@CsPRtmxbzaCU.org.uk"
+spam "from:tq2d.b6df@d7jh.bjs9.co.uk"
+spam "from:BestBuy@email.bestbuy.com"
+spam "from:marriottbonvoy@email-marriott.com"
+spam "from:hello@beistravel.com"
+spam "from:no-reply@beistravel.com"
+spam "from:mail@upliftdesk.com"
+spam "from:handshake@mail.joinhandshake.com"
+spam "from:daily.report@mc.virginia.edu"
+spam "from:hello@impactlabs.io"
+spam "from:davidb@expensify.com"
+spam "from:support@untapped.io"
+spam "from:support@raoptics.com"
+spam "from:uvamag-web@mc.virginia.edu"
+spam "from:aig-info@mc.virginia.edu"
+# endregion SPAMS
+
+# region FAMILY
+# family "from:family@gmail.com
+# endregion FAMILY
+
+# region FRIENDS
+# ...
+# endregion FRIENDS
+
+# region CO-WORKERS
+# ...
+# endregion CO-WORKERS
+
+# region WORK
+work "from:no-reply@sns.amazonaws.com"
+work "from:noreply@md.getsentry.com"
+work "from:/.*@.*[.]linear[.]app/"
+work "from:/.*@axleapi[.]com/"
+# endregion WORK
+
+# region MAILING-LIST
+# mailinglist "from:mailing@list.com"
+mailinglist "from:sales@vanman.shop"
+mailinglist "from:info@ycombinator.com"
+mailinglist "from:workatastartup@ycombinator.com"
+mailinglist "from:roni@gethelios.dev"
+mailinglist "from:info@grecogum.com"
+# endregion MAILING-LIST
+
+# region NEWSLETTER
+# newsletter "from:news@letter.com"
+newsletter "from:sahil@sahilbloom.com"
+newsletter "from:team@totaltypescript.com"
+newsletter "from:shinmera@tymoon.eu"
+# endregion NEWSLETTER
+
+# region SECURITY (accounts/verification code/email confirmation/... etc.)
+# security "from:no-reply@accounts.google.com or accounts-noreply@google.com"
+# security "from:account-security-noreply@account.microsoft.com"
+# endregion SECURITY
+
+# and more ...
+
+# region ME
+# tag_new "-inbox -unread +boogs" "from:my-main-gmail@gmail.com or from:univ-account@my-univ.fr or from:my-second@gmail.com"
+# endregion ME
