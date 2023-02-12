@@ -1,6 +1,6 @@
-(in-package #:nyxt-user)
+(in-package :nyxt-user)
 
-;; Define buffer search-engines slot to be a list of several
+;; define buffer search-engines slot to be a list of several
 ;; nx-search-engines-provided ones.
 (define-configuration (buffer web-buffer)
   ((search-engines (list (engines:google :shortcut "gmaps"
@@ -17,4 +17,4 @@
                                              :install-reminders nil
                                              :install-duckduckgo nil)
                          (engines:searx :shortcut "sx"
-                                        :base-search-url "https://searx.be/search?q=~a" )))))
+                                        :base-search-url "https://spot.murena.io/search?q=~a" )))))
