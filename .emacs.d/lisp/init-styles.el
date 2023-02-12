@@ -3,16 +3,12 @@
 ;;--------------------------------;
 
 ;;; General
-;; (set-face-attribute 'default nil :foreground "white" :background "black")
 (set-face-attribute 'default nil
                     :foreground "white smoke"
                     :background "#101010"
                     :font "Fira Mono"
-                    :height 250)
+                    :height 120)
 (set-face-background 'mouse "#777777")  ; Darker mouse, less distracting.
-
-;;; More readable but more space consuming; try on big screens.
-                                        ; (setq-default line-spacing 1)
 
 (set-face-background 'mode-line "white")
 ;; (set-face-foreground 'link "#00ffff")
@@ -124,7 +120,11 @@
 
 ;; Helm
 ;; (with-eval-after-load 'helm
-;;   (set-face-attribute 'helm-source-header nil :inherit 'header-line :height 'unspecified :background 'unspecified :foreground 'unspecified)
+;;   (set-face-attribute 'helm-source-header nil
+;;                       :inherit 'header-line
+;;                       :height 'unspecified
+;;                       :background 'unspecified
+;;                       :foreground 'unspecified)
 ;;   (set-face-background 'helm-selection "#4f4f4f")
 ;;   (set-face-background 'helm-visible-mark "#2f2f2f")
 ;;   (set-face-foreground 'helm-visible-mark nil)
@@ -148,5 +148,9 @@
               100)
          '(85 . 50) '(100 . 100)))))
 (global-set-key (kbd "C-c t") 'toggle-transparency)
+
+(require 'modus-themes)
+
+(load-theme 'modus-vivendi-tinted :no-confirm)
 
 (provide 'init-styles)
