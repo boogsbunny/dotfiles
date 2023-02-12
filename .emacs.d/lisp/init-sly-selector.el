@@ -1,8 +1,6 @@
-(with-eval-after-load 'sly
-  (require 'sly))
+(require 'sly-mrepl)
 
-;; (defvar boogs/sly-connection-name "sbcl-boogs")
-(defvar boogs/sly-connection-name "sbcl")
+(defvar boogs/sly-connection-name "sbcl-boogs")
 
 (defun boogs/helm-sly-buffer-p (buffer)
   "Return non-nil if BUFFER has a SLY connection matching
@@ -84,15 +82,18 @@
   (helm-selector
    "SLY-REPL for all but Boogs's shells."
    :predicate #'boogs/helm-sly-buffer-non-boogs-p
-   :make-buffer-fn (lambda ()           ; Copied from helm-selector-sly.el.
+   :make-buffer-fn (lambda ()
                      (interactive)
-                     (if (and (null sly-net-processes)
-                              (< 1 (length sly-lisp-implementations)))
+                     (let ((current-connection (car (sly--purge-connections))))
+                       (if (and current-connection
+                                (sly-mrepl--find-buffer current-connection)
+                                (boogs/helm-sly-buffer-non-boogs-p
+                                 (sly-mrepl--find-buffer current-connection)))
+                           ;; Make sure to call interactively so that last
+                           ;; connection is reused.
+                           (call-interactively #'sly)
                          (let ((current-prefix-arg '-))
-                           (call-interactively #'sly))
-                       ;; Make sure to call interactively so that last
-                       ;; connection is reused.
-                       (call-interactively #'sly)))
+                           (call-interactively #'sly)))))
    :helm-sources #'boogs/helm-sly-mini-non-boogs))
 
 (defun boogs/helm-selector-sly-non-boogs-other-window ()
