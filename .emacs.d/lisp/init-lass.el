@@ -1,4 +1,7 @@
-;; (add-to-list 'load-path "[path-to-lass-source-dir]/")
-(provide 'init-lass)
+;;--------------------------------;
+;; Lass
+;;--------------------------------;
 
 (require 'patch-lass)
+
+(provide 'init-lass)
