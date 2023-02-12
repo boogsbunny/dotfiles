@@ -15,7 +15,7 @@ alias \
 
 # colorize commands
 alias \
-    ls="ls -a -hN --color=auto --group-directories-first" \
+    ls="ls -sha -hN --color=auto --group-directories-first" \
     grep="grep --color=auto" \
     diff="diff --color=auto" \
     ccat="highlight --out-format=ansi"
@@ -42,9 +42,3 @@ alias mpv="mpv --input-ipc-server=/tmp/mpvsoc$(date +%s)"
 
 # dictionary
 alias ger="sdcv -u \"English-German\""
-
-# git
-alias gpom="git push -u origin master"
-
-alias \
-    ref="shortcuts >/dev/null; source ~/.config/shortcutrc"
