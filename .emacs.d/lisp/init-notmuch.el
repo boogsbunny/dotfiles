@@ -18,6 +18,7 @@
         (:name "flagged" :query "tag:flagged" :key ,(kbd "f") :sort-order newest-first)
         (:name "sent" :query "tag:sent and date:1w.." :key ,(kbd "t") :sort-order newest-first)
         (:name "drafts" :query "tag:draft" :key ,(kbd "d") :sort-order newest-first)
+        (:name "work" :query "tag:work" :key ,(kbd "w") :sort-order newest-first)
         (:name "all mail" :query "tag:inbox" :key ,(kbd "a") :sort-order oldest-first)))
 
 (defun boogs/notmuch-change-sender (&optional sender)
