@@ -13,13 +13,24 @@
         ("babdulkarim@alarm.com" . "alarm/Sent +sent -inbox -unread")))
 
 (setq notmuch-saved-searches
-      `((:name "inbox" :query "tag:inbox and date:1w.." :key ,(kbd "i") :sort-order newest-first)
-        (:name "unread" :query "tag:unread" :key ,(kbd "u") :sort-order newest-first)
-        (:name "flagged" :query "tag:flagged" :key ,(kbd "f") :sort-order newest-first)
-        (:name "sent" :query "tag:sent and date:1w.." :key ,(kbd "t") :sort-order newest-first)
-        (:name "drafts" :query "tag:draft" :key ,(kbd "d") :sort-order newest-first)
-        (:name "work" :query "tag:work" :key ,(kbd "w") :sort-order newest-first)
-        (:name "all mail" :query "tag:inbox" :key ,(kbd "a") :sort-order oldest-first)))
+      `((:name "inbox" :query "tag:inbox and date:1w.."
+               :key ,(kbd "i") :sort-order newest-first)
+        (:name "unread" :query "tag:unread"
+               :key ,(kbd "u") :sort-order newest-first)
+        (:name "flagged" :query "tag:flagged"
+               :key ,(kbd "f") :sort-order newest-first)
+        (:name "sent" :query "tag:sent and date:1w.."
+               :key ,(kbd "t") :sort-order newest-first)
+        (:name "drafts" :query "tag:draft"
+               :key ,(kbd "d") :sort-order newest-first)
+        (:name "work" :query "tag:work"
+               :key ,(kbd "w") :sort-order newest-first)
+        (:name "lists" :query "tag:mailinglist"
+               :key ,(kbd "l") :sort-order newest-first)
+        (:name "newsletters" :query "tag:newsletter"
+               :key ,(kbd "n") :sort-order newest-first)
+        (:name "all mail" :query "tag:inbox"
+               :key ,(kbd "a") :sort-order newest-first)))
 
 (defun boogs/notmuch-change-sender (&optional sender)
   (interactive)
