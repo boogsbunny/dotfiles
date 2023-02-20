@@ -2,12 +2,32 @@
 ;; Styles
 ;;--------------------------------;
 
+(defvar face-attribute-height 120)
+
+(defun boogs/face-attribute-height-increase ()
+  (interactive)
+  (setq face-attribute-height (+ face-attribute-height 5))
+  (set-face-attribute 'default nil :height face-attribute-height))
+
+(defun boogs/face-attribute-height-decrease ()
+  (interactive)
+  (setq face-attribute-height (- face-attribute-height 5))
+  (set-face-attribute 'default nil :height face-attribute-height))
+
+(defhydra hydra-zoom (global-map "C-c")
+  "zoom"
+  ("k" boogs/face-attribute-height-increase "font in")
+  ("j" boogs/face-attribute-height-decrease "font out")
+  ("K" text-scale-increase "text in")
+  ("J" text-scale-decrease "text out")
+  ("f" nil "quit" :color blue))
+
 ;;; General
 (set-face-attribute 'default nil
-                    :foreground "white smoke"
-                    :background "#101010"
+                    ;; :foreground "white smoke"
+                    ;; :background "#101010"
                     :font "Fira Mono"
-                    :height 120)
+                    :height face-attribute-height)
 (set-face-background 'mouse "#777777")  ; Darker mouse, less distracting.
 
 (set-face-background 'mode-line "white")
@@ -29,94 +49,94 @@
   (set-face-background 'shadow "#1c1c1c"))
 
 ;;; Whitespace mode
-(with-eval-after-load 'whitespace
-  (set-face-background 'whitespace-space-after-tab "#a9a9a9")
-  (set-face-background 'whitespace-indentation "#696969"))
+;; (with-eval-after-load 'whitespace
+;;   (set-face-background 'whitespace-space-after-tab "#a9a9a9")
+;;   (set-face-background 'whitespace-indentation "#696969"))
 
 ;;; Ediff
-(with-eval-after-load 'ediff-init
-  (set-face-attribute 'ediff-even-diff-A nil
-                      :inherit 'ediff-current-diff-A
-                      :foreground 'unspecified
-                      :background 'unspecified
-                      :box nil)
-  (set-face-attribute 'ediff-odd-diff-A nil
-                      :inherit 'ediff-current-diff-A
-                      :foreground 'unspecified
-                      :background 'unspecified
-                      :box nil)
-  (set-face-attribute 'ediff-even-diff-B nil
-                      :inherit 'ediff-current-diff-B
-                      :foreground 'unspecified
-                      :background 'unspecified
-                      :box nil)
-  (set-face-attribute 'ediff-odd-diff-B nil
-                      :inherit 'ediff-current-diff-B
-                      :foreground 'unspecified
-                      :background 'unspecified
-                      :box nil)
-  (set-face-attribute 'ediff-even-diff-C nil
-                      :inherit 'ediff-current-diff-C
-                      :foreground 'unspecified
-                      :background 'unspecified
-                      :box nil)
-  (set-face-attribute 'ediff-odd-diff-C nil
-                      :inherit 'ediff-current-diff-C
-                      :foreground 'unspecified
-                      :background 'unspecified
-                      :box nil)
-  (set-face-attribute 'ediff-current-diff-A nil :box "white")
-  (set-face-attribute 'ediff-current-diff-B nil :box "white")
-  (set-face-attribute 'ediff-current-diff-C nil :box "white"))
+;; (with-eval-after-load 'ediff-init
+;;   (set-face-attribute 'ediff-even-diff-A nil
+;;                       :inherit 'ediff-current-diff-A
+;;                       :foreground 'unspecified
+;;                       :background 'unspecified
+;;                       :box nil)
+;;   (set-face-attribute 'ediff-odd-diff-A nil
+;;                       :inherit 'ediff-current-diff-A
+;;                       :foreground 'unspecified
+;;                       :background 'unspecified
+;;                       :box nil)
+;;   (set-face-attribute 'ediff-even-diff-B nil
+;;                       :inherit 'ediff-current-diff-B
+;;                       :foreground 'unspecified
+;;                       :background 'unspecified
+;;                       :box nil)
+;;   (set-face-attribute 'ediff-odd-diff-B nil
+;;                       :inherit 'ediff-current-diff-B
+;;                       :foreground 'unspecified
+;;                       :background 'unspecified
+;;                       :box nil)
+;;   (set-face-attribute 'ediff-even-diff-C nil
+;;                       :inherit 'ediff-current-diff-C
+;;                       :foreground 'unspecified
+;;                       :background 'unspecified
+;;                       :box nil)
+;;   (set-face-attribute 'ediff-odd-diff-C nil
+;;                       :inherit 'ediff-current-diff-C
+;;                       :foreground 'unspecified
+;;                       :background 'unspecified
+;;                       :box nil)
+;;   (set-face-attribute 'ediff-current-diff-A nil :box "white")
+;;   (set-face-attribute 'ediff-current-diff-B nil :box "white")
+;;   (set-face-attribute 'ediff-current-diff-C nil :box "white"))
 
 ;;; Outline mode
-(with-eval-after-load 'outline
-  ;; (set-face-attribute 'outline-1 nil :inherit 'font-lock-warning-face)
-  (set-face-attribute 'outline-1 nil :weight 'bold :foreground "#CBAC42")
-  (set-face-attribute 'outline-2 nil :weight 'bold :foreground "#7BBF11")
-  (set-face-attribute 'outline-3 nil :weight 'bold :foreground "#BC684F")
-  (set-face-attribute 'outline-4 nil :weight 'bold :foreground "#4C95BF")
-  (set-face-attribute 'outline-5 nil :weight 'bold :foreground "SeaGreen")
-  (set-face-attribute 'outline-6 nil :weight 'bold :foreground "DarkSlateGray4")
-  (set-face-attribute 'outline-7 nil :weight 'bold :foreground "DarkSlateBlue")
-  (set-face-attribute 'outline-8 nil :weight 'bold :foreground "Gold"))
+;; (with-eval-after-load 'outline
+;;   ;; (set-face-attribute 'outline-1 nil :inherit 'font-lock-warning-face)
+;;   (set-face-attribute 'outline-1 nil :weight 'bold :foreground "#CBAC42")
+;;   (set-face-attribute 'outline-2 nil :weight 'bold :foreground "#7BBF11")
+;;   (set-face-attribute 'outline-3 nil :weight 'bold :foreground "#BC684F")
+;;   (set-face-attribute 'outline-4 nil :weight 'bold :foreground "#4C95BF")
+;;   (set-face-attribute 'outline-5 nil :weight 'bold :foreground "SeaGreen")
+;;   (set-face-attribute 'outline-6 nil :weight 'bold :foreground "DarkSlateGray4")
+;;   (set-face-attribute 'outline-7 nil :weight 'bold :foreground "DarkSlateBlue")
+;;   (set-face-attribute 'outline-8 nil :weight 'bold :foreground "Gold"))
 
 ;;; show-paren
-(with-eval-after-load 'paren
-  ;; (set-face-background 'show-paren-match-face (face-background 'default)) ; Disable background color.
-  (set-face-background 'show-paren-match "#555555")
-  (set-face-foreground 'show-paren-match "#def")
-  (set-face-attribute 'show-paren-match nil :weight 'extra-bold))
+;; (with-eval-after-load 'paren
+;;   ;; (set-face-background 'show-paren-match-face (face-background 'default)) ; Disable background color.
+;;   (set-face-background 'show-paren-match "#555555")
+;;   (set-face-foreground 'show-paren-match "#def")
+;;   (set-face-attribute 'show-paren-match nil :weight 'extra-bold))
 
 ;;; Man pages
-(with-eval-after-load 'man
-  (set-face-attribute 'Man-underline nil
-                      :foreground (face-foreground 'font-lock-string-face)
-                      :underline nil)
-  (set-face-attribute 'Man-overstrike nil
-                      :foreground (face-foreground 'font-lock-comment-face)
-                      :weight 'normal))
-(with-eval-after-load 'woman
-  (set-face-foreground 'woman-bold (face-foreground 'font-lock-comment-face)))
+;; (with-eval-after-load 'man
+;;   (set-face-attribute 'Man-underline nil
+;;                       :foreground (face-foreground 'font-lock-string-face)
+;;                       :underline nil)
+;;   (set-face-attribute 'Man-overstrike nil
+;;                       :foreground (face-foreground 'font-lock-comment-face)
+;;                       :weight 'normal))
+;; (with-eval-after-load 'woman
+;;   (set-face-foreground 'woman-bold (face-foreground 'font-lock-comment-face)))
 
 ;; Rainbow delimiters
-(with-eval-after-load 'rainbow-delimiters
-  ;; See https://yoo2080.wordpress.com/2013/09/08/living-with-rainbow-delimiters-mode/.
-  ;; TODO: The color saturation metioned in the URL fails when running in daemon mode.
-  ;; https://github.com/Fanael/rainbow-delimiters/issues/36
-  (set-face-foreground 'rainbow-delimiters-depth-1-face "#fe1717")
-  (set-face-foreground 'rainbow-delimiters-depth-2-face "#589cff")
-  (set-face-foreground 'rainbow-delimiters-depth-3-face "#f1fe52")
-  (set-face-foreground 'rainbow-delimiters-depth-4-face "#44ff4c")
-  (set-face-foreground 'rainbow-delimiters-depth-5-face "#83b2ff")
-  (set-face-foreground 'rainbow-delimiters-depth-6-face "#6161ff")
-  (set-face-foreground 'rainbow-delimiters-depth-7-face "#35ff35")
-  (set-face-foreground 'rainbow-delimiters-depth-8-face "#7ca8ff")
-  (set-face-foreground 'rainbow-delimiters-depth-9-face "#50fec1")
-  (set-face-attribute 'rainbow-delimiters-unmatched-face nil
-                      :foreground 'unspecified
-                      :inherit 'error
-                      :strike-through t))
+;; (with-eval-after-load 'rainbow-delimiters
+;;   ;; See https://yoo2080.wordpress.com/2013/09/08/living-with-rainbow-delimiters-mode/.
+;;   ;; TODO: The color saturation metioned in the URL fails when running in daemon mode.
+;;   ;; https://github.com/Fanael/rainbow-delimiters/issues/36
+;;   (set-face-foreground 'rainbow-delimiters-depth-1-face "#fe1717")
+;;   (set-face-foreground 'rainbow-delimiters-depth-2-face "#589cff")
+;;   (set-face-foreground 'rainbow-delimiters-depth-3-face "#f1fe52")
+;;   (set-face-foreground 'rainbow-delimiters-depth-4-face "#44ff4c")
+;;   (set-face-foreground 'rainbow-delimiters-depth-5-face "#83b2ff")
+;;   (set-face-foreground 'rainbow-delimiters-depth-6-face "#6161ff")
+;;   (set-face-foreground 'rainbow-delimiters-depth-7-face "#35ff35")
+;;   (set-face-foreground 'rainbow-delimiters-depth-8-face "#7ca8ff")
+;;   (set-face-foreground 'rainbow-delimiters-depth-9-face "#50fec1")
+;;   (set-face-attribute 'rainbow-delimiters-unmatched-face nil
+;;                       :foreground 'unspecified
+;;                       :inherit 'error
+;;                       :strike-through t))
 
 ;; Helm
 ;; (with-eval-after-load 'helm
@@ -147,10 +167,12 @@
                     ((numberp (cadr alpha)) (cadr alpha)))
               100)
          '(85 . 50) '(100 . 100)))))
-(global-set-key (kbd "C-c t") 'toggle-transparency)
 
-(require 'modus-themes)
+;; (global-set-key (kbd "C-c t") 'toggle-transparency)
 
-(load-theme 'modus-vivendi-tinted :no-confirm)
+;; (require 'modus-themes)
+;; (load-theme 'modus-vivendi-tinted :no-confirm)
+(require 'ef-themes)
+(load-theme 'ef-cherie :no-confirm)
 
 (provide 'init-styles)
