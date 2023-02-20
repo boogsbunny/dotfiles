@@ -1,4 +1,4 @@
-(require 'sly-mrepl)
+(require 'patch-sly-mrepl)
 
 (defvar boogs/sly-connection-name "sbcl-boogs")
 
