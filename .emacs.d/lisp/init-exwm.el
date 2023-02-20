@@ -4,11 +4,6 @@
 ;;; force-kill Emacs before it can run through `kill-emacs-hook'.
 (global-set-key (kbd "C-x C-c") 'save-buffers-kill-emacs)
 
-;;; Athena+Xaw3d confuses xcape when binding Caps-lock to both L_Ctrl
-;;; escape, in which case it will procude <C-escape> in Emacs. In practice, it
-;;; means that `C-` keys will works but `<escape>` will need a fast double tap
-;;; on Caps Lock.
-;;;
 ;;; See https://github.com/ch11ng/exwm/issues/285
 ;;; and https://gitlab.com/interception/linux/plugins/caps2esc/issues/2.
 
@@ -29,7 +24,7 @@ KEYS is passed to `kbd'."
 (defun boogs/exwm-rename-buffer-to-class-name ()
   (exwm-workspace-rename-buffer exwm-class-name))
 
-(add-hook 'exwm-update-title-hook 'boogs/exwm-rename-buffer-to-class-name)
+(add-hook 'exwm-update-title-hook 'boogs/exwm-rename-buffer-to-title)
 
 (add-hook 'exwm-floating-setup-hook 'exwm-layout-hide-mode-line)
 (add-hook 'exwm-floating-exit-hook 'exwm-layout-show-mode-line)
@@ -44,18 +39,56 @@ KEYS is passed to `kbd'."
 (exwm-systemtray-enable)
 (setq exwm-systemtray-height 16)
 
+(require 'exwm-randr)
+(exwm-randr-enable)
+
 ;; dual monitor
 (setq exwm-randr-workspace-output-plist '(0 "DP-2" 1 "eDP-1"))
+
+;; multi-monitor
+(defun boogs/multi-monitor-start ()
+  (interactive)
+  (start-process-shell-command "hz-two" nil "hz-two"))
+(exwm-input-set-key (kbd "s-q") #'boogs/multi-monitor-start)
 
 ;;; Those cannot be set globally: if Emacs would be run in another WM, the "s-"
 ;;; prefix will conflict with the WM bindings.
 (exwm-input-set-key (kbd "s-R") #'exwm-reset)
+(exwm-input-set-key (kbd "C-x q") #'exwm-restart)
 (exwm-input-set-key (kbd "s-x") #'exwm-input-toggle-keyboard)
 (exwm-input-set-key (kbd "s-h") #'windmove-left)
 (exwm-input-set-key (kbd "s-j") #'windmove-down)
 (exwm-input-set-key (kbd "s-k") #'windmove-up)
 (exwm-input-set-key (kbd "s-l") #'windmove-right)
 (exwm-input-set-key (kbd "s-D") #'kill-this-buffer)
+
+;; TODO: reuse existing buffer
+(defun boogs/start-or-switch-to-program (program)
+  (interactive)
+  (let ((buffer-name-regex (format ".*%s.*" program))
+        (existing-buffer nil)
+        (existing-process nil))
+    (dolist (buffer (buffer-list))
+      (when (string-match-p buffer-name-regex (buffer-name buffer))
+        (setq existing-buffer buffer)))
+    (if existing-buffer
+        (progn
+          (setq existing-process (get-buffer-process existing-buffer))
+          (if existing-process
+              (progn
+                (switch-to-buffer existing-buffer)
+                (select-window (display-buffer (process-buffer existing-process))))
+            (start-process program nil program)
+            (set-process-buffer (get-process program) existing-buffer))))
+      (start-process program nil program)))
+
+(exwm-input-set-key (kbd "C-c C-<return>") (lambda ()
+                                             (interactive)
+                                             (boogs/start-or-switch-to-program "firefox")))
+
+(exwm-input-set-key (kbd "C-x C-<return>") (lambda ()
+                                      (interactive)
+                                      (boogs/start-or-switch-to-program "alacritty")))
 
 (when (require 'windower nil 'noerror)
   (exwm-input-set-key (kbd "s-<tab>") 'windower-switch-to-last-buffer)
@@ -71,7 +104,8 @@ KEYS is passed to `kbd'."
 
 (with-eval-after-load 'helm
   (boogs/exwm-global-set-key "s-b" #'helm-mini)
-  (boogs/exwm-global-set-key "C-x j" #'helm-mini)
+  (boogs/exwm-global-set-key "\C-x\C-m" #'helm-M-x)
+  (boogs/exwm-global-set-key "C-c t" #'helm-tramp)
   (boogs/exwm-global-set-key "C-x b" #'helm-mini)
   (boogs/exwm-global-set-key "s-f" #'helm-find-files)
   (boogs/exwm-global-set-key "C-x f" #'helm-find-files)
@@ -98,14 +132,14 @@ KEYS is passed to `kbd'."
       (exwm-input-set-key (kbd "s-t") (lambda ()
                                         (interactive)
                                         (find-file (car org-agenda-files))))
-      (exwm-input-set-key (kbd "s-<return>") #'eshell)
+      (exwm-input-set-key (kbd "s-n") #'eshell)
       (exwm-input-set-key (kbd "s-m") #'notmuch-hello)
       (exwm-input-set-key (kbd "s-n") #'elfeed)
-      (exwm-input-set-key (kbd "s-e") #'eww)
-      (exwm-input-set-key (kbd "s-i") (lambda () ( call-process "nyxt"))))
+      (exwm-input-set-key (kbd "s-e") #'eww))
   (boogs/exwm-global-set-key "s-t" 'helm-selector-org)
   (boogs/exwm-global-set-key "s-T" 'helm-selector-org-other-window)
   (boogs/exwm-global-set-key "s-<return>" 'boogs/helm-selector-sly)
+  (boogs/exwm-global-set-key "C-x C-<tab>" #'eshell)
   (boogs/exwm-global-set-key "S-s-<return>" 'boogs/helm-selector-sly-other-window)
   (boogs/exwm-global-set-key "s-m" #'helm-selector-notmuch)
   (boogs/exwm-global-set-key "s-M" #'helm-selector-notmuch-other-window)
@@ -133,7 +167,8 @@ KEYS is passed to `kbd'."
   (boogs/exwm-global-set-key "s-p" #'helm-pass))
 
 (autoload 'boogs/slime-to-repl "lisp")
-(exwm-input-set-key (kbd "C-<backspace>") #'helm-selector-sly)
+(autoload 'boogs/helm-selector-sly-non-boogs "init-sly")
+(exwm-input-set-key (kbd "C-<backspace>") #'boogs/helm-selector-sly-non-boogs)
 (defun boogs/repl-switcher ()
   "Switch between Geiser and SLIME REPLs."
   (interactive)
@@ -161,7 +196,7 @@ KEYS is passed to `kbd'."
 (defun boogs/nyxt-start ()
   (interactive)
   (start-process-shell-command "nyxt" nil "nyxt"))
-(exwm-input-set-key (kbd "C-x <backspace>") #'boogs/nyxt-start)
+(exwm-input-set-key (kbd "C-c C-<tab>") #'boogs/nyxt-start)
 
 ;;; External application shortcuts.
 (defun boogs/exwm-start (command)
@@ -278,9 +313,6 @@ KEYS is passed to `kbd'."
               (when boogs/exwm-change-screen-turn-off-primary
                 (list "--output" default-output "--off"))))
       (setq exwm-randr-workspace-monitor-plist (list 0 second-output)))))
-
-(require 'exwm-randr)
-(exwm-randr-enable)
 
 (defun boogs/exwm-change-screen-toggle (&optional setting)
   "Toggle automatic multiscreen configuration.
