@@ -40,6 +40,7 @@
 (with-eval-after-load 'eshell (require 'init-eshell))
 (with-eval-after-load 'elfeed (require 'init-elfeed))
 (with-eval-after-load 'erc (require 'init-erc))
+(with-eval-after-load 'tramp (require 'init-tramp))
 
 (setq evil-want-keybinding nil
       evil-want-integration t)
