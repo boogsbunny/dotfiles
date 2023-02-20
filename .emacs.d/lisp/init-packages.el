@@ -28,6 +28,7 @@
         dockerfile-mode
         dumb-jump
         eat
+        ef-themes
         eglot
         elfeed
         elpy
@@ -68,11 +69,13 @@
         helm-org
         helm-org-contacts
         helm-pass
+        helm-projectile
         helm-selector
         helm-sly
         helm-system-packages
         helm-tramp
         highlight-indent-guides
+        hydra
         json-mode
         js2-mode
         kubernetes
@@ -91,6 +94,7 @@
         notmuch
         oauth2
         olivetti
+        ol-notmuch
         org
         org-caldav
         org-gcal
