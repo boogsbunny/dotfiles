@@ -191,4 +191,14 @@
 ;;   (define-key eshell-mode-map (kbd "C-x n d") 'boogs/eshell-narrow-to-prompt))
 ;; (add-hook 'eshell-mode-hook 'boogs/eshell-set-keys)
 
+(setq eshell-prompt-regexp "^[^#$\n]*[#$] "
+      eshell-prompt-function
+      (lambda nil
+        (concat
+         "["
+         (if (string= (eshell/pwd) (getenv "HOME"))
+             "~" (eshell/basename (eshell/pwd)))
+         "]"
+         (if (= (user-uid) 0) "# " "$ "))))
+
 (provide 'init-eshell)
