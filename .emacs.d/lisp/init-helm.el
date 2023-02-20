@@ -287,6 +287,12 @@ With prefix argument, UPDATE the databases with custom uptions thanks to the
   (helm-toggle-visible-mark (- arg)))
 (define-key helm-map (kbd "S-SPC") 'boogs/helm-toggle-visible-mark-backwards)
 
+(defun boogs/evil-helm-set-keys ()
+  (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
+  (define-key helm-map (kbd "C-j") 'helm-next-line)
+  (define-key helm-map (kbd "C-k") 'helm-previous-line))
+(add-hook 'helm-major-mode-hook 'boogs/evil-helm-set-keys)
+
 (global-set-key  (kbd "C-<f4>") 'helm-execute-kmacro)
 
 ;; From https://github.com/thierryvolpiatto/emacs-tv-config/blob/master/init-helm.el:
