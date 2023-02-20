@@ -5,6 +5,7 @@
    "arandr"
    "aspell-dict-de"
    "aspell-dict-en"
+   "bat"
    "bluez"
    "btrfs-progs"
    "calibre"
