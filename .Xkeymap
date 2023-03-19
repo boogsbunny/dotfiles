@@ -1408,7 +1408,7 @@ xkb_symbols "us-dvorak" {
 	key <HJCV> {         [    Hangul_Hanja ] };
 	key <LWIN> {         [         Super_L ] };
 	key <RWIN> {         [         Super_R ] };
-	key <COMP> {         [            Menu ] };
+	key <COMP> {         [         Super_R ] };
 	key <STOP> {         [          Cancel ] };
 	key <AGAI> {         [            Redo ] };
 	key <PROP> {         [        SunProps ] };
