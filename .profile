@@ -33,6 +33,7 @@ export GIT_EDITOR
 export VISUAL
 export TERMINAL="screen-256color"
 export BROWSER="nyxt"
+export TERM="xterm"
 # export STATUSBAR="dwmblocks"
 export READER="zathura"
 # export FILE="ranger"
@@ -61,6 +62,8 @@ fi
 export GPG_TTY=$(tty)
 # Refresh gpg-agent tty in case user switches into an X session
 gpg-connect-agent updatestartuptty /bye >/dev/null
+
+xkbcomp ~/.Xkeymap $DISPLAY 2>/dev/null
 
 echo "$0" | grep "bash$" >/dev/null && [ -f ~/.bashrc ] && source "$HOME/.bashrc"
 
