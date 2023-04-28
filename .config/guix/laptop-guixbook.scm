@@ -1,3 +1,35 @@
+(define-module (kmonad)
+  #:use-module (gnu services)
+  #:use-module (gnu services shepherd)
+  #:use-module (gnu packages haskell-apps)
+  #:use-module (guix gexp)
+  #:export (kmonad-service))
+
+(define (kmonad-shepherd-service config-path)
+  ;; Tells shepherd how we want it to create a (single) <shepherd-service>
+  ;; for kmonad from a string
+  (list (shepherd-service
+          (documentation "Run the kmonad daemon (kmonad-daemon).")
+          (provision '(kmonad-daemon))
+          (requirement '(udev user-processes))
+          (start #~(make-forkexec-constructor
+                     (list #$(file-append kmonad "/bin/kmonad")
+                           #$config-path)))
+          (stop #~(make-kill-destructor)))))
+
+(define kmonad-service-type
+  ;; Extend the shepherd root into a new type of service that takes a single string
+  (service-type
+    (name 'kmonad)
+    (description "Run the kmonad service type.")
+    (extensions
+      (list (service-extension shepherd-root-service-type
+                               kmonad-shepherd-service)))))
+
+(define (kmonad-service config-path)
+  ;; Create a service from our service type, which takes a single parameter
+  (service kmonad-service-type config-path))
+
 (use-modules (gnu)
              (gnu system)
              (gnu packages)
@@ -6,6 +38,7 @@
              (gnu packages admin)
              (gnu packages bash)
              (gnu packages fonts)
+             (gnu packages haskell-apps)
              (gnu packages linux)
              (gnu packages wm)
              (gnu system accounts)
@@ -29,6 +62,7 @@
              (guix git-download)
              (guix build-system trivial)
              ((guix licenses) #:prefix license:)
+             (kmonad)
              ;; import nonfree linux module
              (nongnu packages linux)
              (nongnu system linux-initrd)
@@ -81,6 +115,8 @@
             (specification->package "emacs-exwm-no-x-toolkit")
             (specification->package "glibc")
             (specification->package "grub")
+            (specification->package "kmonad")
+            (specification->package "nss-certs")
             (specification->package "nss-certs")
             (specification->package "st")
             (specification->package "wireguard-tools")
@@ -93,6 +129,7 @@
         (simple-service 'config-file etc-service-type
                         `(("config.scm" ,this-file)))
         (bluetooth-service #:auto-enable? #t)
+        (kmonad-service "/home/boogs/dotfiles/x2100.kbd")
         (service gnome-desktop-service-type)
         (service openssh-service-type)
         (service docker-service-type)
@@ -110,8 +147,12 @@
         (service redis-service-type)
         (set-xorg-configuration
           (xorg-configuration
-            (keyboard-layout keyboard-layout))))
-      %desktop-services))
+           (keyboard-layout keyboard-layout))))
+      (modify-services %desktop-services
+        (udev-service-type config =>
+          (udev-configuration (inherit config)
+           (rules (cons kmonad
+            (udev-configuration-rules config))))))))
   (bootloader
     (bootloader-configuration
       (bootloader grub-efi-bootloader)
