@@ -40,13 +40,15 @@
 )
 
 (defalias
+  tspch (tap-hold 200 spc esc)
+
   tah (tap-hold 200 a (layer-toggle borat))
   toh (tap-hold 200 o lalt)
   teh (tap-hold 200 e lctl)
   tuh (tap-hold 200 u lmet)
 
-  tih (tap-hold 200 i tab)
-  tdh (tap-hold 200 d bspc)
+  tih (tap-hold 100 i tab)
+  tdh (tap-hold 100 d bspc)
 
   thh (tap-hold 200 h lmet)
   tth (tap-hold 200 t rctl)
@@ -58,8 +60,8 @@
   tEh (tap-hold 200 E lctl)
   tUh (tap-hold 200 U lmet)
 
-  tIh (tap-hold 200 I tab)
-  tDh (tap-hold 200 D bspc)
+  tIh (tap-hold 100 I tab)
+  tDh (tap-hold 100 D bspc)
 
   tHh (tap-hold 200 H lmet)
   tTh (tap-hold 200 T rctl)
@@ -72,9 +74,9 @@
        f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11   f12      end  pgdn
   $    +    [    {    \(   !    =   \)    }    ]    *    &     |        bspc
   tab  ;    ,    .    p    y    f    g    c    r    l    /     @        ret
-  ret  @tah @toh @teh @tuh @tih @tdh  @thh @tth @tnh @tsh -     \\
+  bspc @tah @toh @teh @tuh @tih @tdh  @thh @tth @tnh @tsh -     \\
   lsft 102d '    q    j    k    x    b    m    w    v    z              rsft
-  wkup lctl lmet lalt           spc            ralt cmps rctl      back up   fwd
+  wkup lctl lmet lalt           @tspch         ralt cmps rctl      back up   fwd
                                                                    left down rght
 )
 
@@ -84,9 +86,9 @@
        f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11   f12      end  pgdn
   $    1    2    3    4    5    6    7    8    9    0    %     `        bspc
   tab  :    <    >    P    Y    F    G    C    R    L    ?     ^        ret
-  ret  @tAh @tOh @tEh @tUh @tIh @tDh @tHh @tTh @tNh @tSh \_     #
+  bspc @tAh @tOh @tEh @tUh @tIh @tDh @tHh @tTh @tNh @tSh \_     #
   lsft 102d "    Q    J    K    X    B    M    W    V    Z              rsft
-  wkup lctl lmet lalt           spc            ralt cmps rctl      back up   fwd
+  wkup lctl lmet lalt           @tspch         ralt cmps rctl      back up   fwd
                                                                    left down rght
 )
 
