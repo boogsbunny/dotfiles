@@ -104,7 +104,7 @@
                   (comment "Bugi Idris")
                   (group "users")
                   (supplementary-groups '("wheel" "netdev" "audio" "kvm" "libvirt" "lp" "video"
-                                          "docker" "postgres"))
+                                          "input" "docker" "postgres"))
                   (home-directory "/home/boogs"))
                 %base-user-accounts))
   (packages

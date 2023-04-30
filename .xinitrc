@@ -1,7 +1,6 @@
 #!/usr/bin/env sh
 
 [ -f "$HOME/.xprofile" ] && . ~/.xprofile
-[[ -f ~/.Xmodmap ]] && xmodmap ~/.Xmodmap
 
 if [ $# -eq 0 ]; then
     ## With no argument, launch custom session.
