@@ -47,8 +47,8 @@
   teh (tap-hold 200 e lctl)
   tuh (tap-hold 200 u lmet)
 
-  tih (tap-hold 100 i tab)
-  tdh (tap-hold 100 d bspc)
+  tih (tap-hold 200 i tab)
+  tdh (tap-hold 200 d bspc)
 
   thh (tap-hold 200 h lmet)
   tth (tap-hold 200 t rctl)
@@ -60,8 +60,8 @@
   tEh (tap-hold 200 E lctl)
   tUh (tap-hold 200 U lmet)
 
-  tIh (tap-hold 100 I tab)
-  tDh (tap-hold 100 D bspc)
+  tIh (tap-hold 200 I tab)
+  tDh (tap-hold 200 D bspc)
 
   tHh (tap-hold 200 H lmet)
   tTh (tap-hold 200 T rctl)
