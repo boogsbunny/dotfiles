@@ -42,3 +42,5 @@ alias mpv="mpv --input-ipc-server=/tmp/mpvsoc$(date +%s)"
 
 # dictionary
 alias ger="sdcv -u \"English-German\""
+
+alias cat="bat"
