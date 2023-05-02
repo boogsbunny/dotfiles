@@ -36,6 +36,7 @@
    "htop"
    "imagemagick"
    "isync"
+   "kmonad"
    "ledger"
    "libev"
    "libnotify"
