@@ -9,7 +9,8 @@
   (package-initialize))
 
 (setq package-selected-packages
-      '(alert
+      '(add-node-modules-path
+        alert
         auth-source-pass
         auto-complete
         cargo
@@ -24,6 +25,7 @@
         dired-du
         dmenu
         docker
+        docker-tramp
         docker-compose-mode
         dockerfile-mode
         dumb-jump
@@ -72,6 +74,8 @@
         helm-projectile
         helm-selector
         helm-sly
+        helm-switch-shell
+        helm-switch-to-repl
         helm-system-packages
         helm-tramp
         highlight-indent-guides
@@ -102,6 +106,7 @@
         org-modern
         orgit
         org-roam
+        org-mime
         pdf-tools
         pinentry
         prettier
