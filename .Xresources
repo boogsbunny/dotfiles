@@ -1,4 +1,4 @@
-dzen2.font:     xft:Fira Mono:size=10:antialias=true
+dzen2.font:     xft:Iosevka Comfy:size=14:antialias=true
 !! Xft options
 ! Xft.antialias: false
 ! Xft.antialias: rgba
@@ -7,7 +7,7 @@ Xft.hintstyle: hintlight
 Xft.rgba: rgb
 ! scaling
 Xft.dpi: 192
-Xcursor.size: 32
+! Xcursor.size: 32
 
 !! Xterm
 xterm*termName: xterm-256color
@@ -15,7 +15,7 @@ xterm*locale: true
 ! XTerm*charClass: 33:48,36-47:48,58-59:48,61:48,63-64:48,95:48,126:48
 ! xterm.font:              xft:Dina:pixelsize=18
 ! xterm*font       : -*-dejavu sans-medium-r-*-*-12-*-*-*-*-*-*-*
-xterm*faceName:DejaVu Sans Mono:pixelsize=$FONTSIZE
+xterm*faceName:Iosevka Term:pixelsize=$FONTSIZE
 ! xterm*faceName:DejaVu Sans Mono
 ! xterm*faceSize:20
 !! Make Meta-* bindings work.
