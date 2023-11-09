@@ -1,6 +1,6 @@
 #!/bin/sh
 
-export BROWSER=nyxt
+export BROWSER=firefox
 
 # start user services
 shepherd
