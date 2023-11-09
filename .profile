@@ -45,12 +45,13 @@ export GDK_DPI_SCALE=0.5
 # export STATUSBARSIZE=25
 # export FONTSIZE=18
 export STATUSBARSIZE=14
-export FONTSIZE=14
+export FONTSIZE=18
 LESSHISTFILE='-'
 export GOPATH="$HOME/go"
 # export GOROOT="$HOME/go"
 export PERSONAL="$HOME/projects/personal"
 export SBCL_HOME="$HOME/.guix-profile/lib/sbcl"
+export NODE_PATH="$HOME/.npm-packages/lib/node_modules"
 
 ## SSH-Agent
 ## Set SSH to use gpg-agent
