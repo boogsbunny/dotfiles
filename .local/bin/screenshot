@@ -1,13 +1,47 @@
 #!/bin/sh
-# This is bound to Shift+PrintScreen by default, requires maim. It lets you
-# choose the kind of screenshot to take, including copying the image or even
-# highlighting an area to copy. scrotcucks on suicidewatch right now.
+dir="/home/boogs/Pictures/screenshots/"
+output="$(date '+%y%m%d-%H%M-%S').png"
+xclip_cmd="xclip -sel clip -t image/png"
+image_path=""
 
-case "$(printf "a selected area\\ncurrent window\\nfull screen\\na selected area (copy)\\ncurrent window (copy)\\nfull screen (copy)" | dmenu -l 25 -i -p "Screenshot which area?")" in
-    "a selected area") maim -s pic-selected-"$(date '+%y%m%d-%H%M-%S').png" ;;
-    "current window") maim -i "$(xdotool getactivewindow)" pic-window-"$(date '+%y%m%d-%H%M-%S').png" ;;
-    "full screen") maim pic-full-"$(date '+%y%m%d-%H%M-%S').png" ;;
-    "a selected area (copy)") maim -s | xclip -selection clipboard -t image/png ;;
-    "current window (copy)") maim -i "$(xdotool getactivewindow)" | xclip -selection clipboard -t image/png ;;
-    "full screen (copy)") maim | xclip -selection clipboard -t image/png ;;
+case "$(printf "a selected area\\ncurrent window\\nfull screen\\na selected area (copy)\\ncurrent window (copy)\\nfull screen (copy)" | dmenu -l 6 -i -p "Screenshot which area?")" in
+    "a selected area")
+        image_path="${dir}"pic-selected-"${output}"
+        maim -u -s "${image_path}"
+        ;;
+    "current window")
+        image_path="${dir}"pic-window-"${output}"
+        maim -q -d 0.2 -i "$(xdotool getactivewindow)" "${image_path}"
+        ;;
+    "full screen")
+        image_path="${dir}"pic-full-"${output}"
+        maim -q -d 0.2 "${image_path}"
+        ;;
+    "a selected area (copy)")
+        maim -u -s | ${xclip_cmd}
+        ;;
+    "current window (copy)")
+        maim -q -d 0.2 -i "$(xdotool getactivewindow)" | ${xclip_cmd}
+        ;;
+    "full screen (copy)")
+        maim -q -d 0.2 | ${xclip_cmd}
+        ;;
 esac
+
+
+# Save the exit status of maim
+maim_exit_status=$?
+
+# Debugging info
+echo "Maim exit status: ${maim_exit_status}"
+echo "Image path: ${image_path}"
+
+if [ $maim_exit_status -eq 0 ]; then
+    if [[ -n "${image_path}" ]]; then
+        notify-send -u low -t 10000 -a 'Screenshot' 'Screenshot saved!' "Saved at: ${image_path}"
+    else
+        notify-send -u low -t 10000 -a 'Screenshot' 'Screenshot copied!' 'Image has been copied to clipboard.'
+    fi
+else
+    notify-send -u critical -t 10000 -a 'Screenshot' 'Screenshot failed' "Error details: maim exit status ${maim_exit_status}"
+fi
