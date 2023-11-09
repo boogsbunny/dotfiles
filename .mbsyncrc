@@ -28,13 +28,13 @@ Sync All
 Expunge Both
 SyncState *
 
-# Channel gmail-sent
-# Far :gmail-remote:
-# Near :gmail-local:
-# Patterns !* "Sent"
-# Create Both
-# Expunge Both
-# SyncState *
+Channel gmail-sent
+Far :gmail-remote:
+Near :gmail-local:
+Patterns !* "Sent"
+Create Both
+Expunge Both
+SyncState *
 
 ################################################################################
 
@@ -42,7 +42,7 @@ IMAPAccount uva
 Host imap.gmail.com
 Port 993
 User ba2ra@virginia.edu
-PassCmd "pass email/ba2ra@virginia.edu"
+PassCmd "pass email/uva/app-password"
 SSLType IMAPS
 SSLVersions TLSv1.2
 
@@ -105,6 +105,43 @@ SyncState *
 Channel vg-sent
 Far :vg-remote:
 Near :vg-local:
+Patterns !* "Sent"
+Create Both
+Expunge Both
+SyncState *
+
+################################################################################
+
+IMAPAccount axle
+Host imap.gmail.com
+Port 993
+User boogs@axleapi.com
+PassCmd "pass email/axle/mbsync"
+SSLType IMAPS
+SSLVersions TLSv1.2
+
+IMAPStore axle-remote
+Account axle
+
+MaildirStore axle-local
+# The trailing "/" is important
+Path /media/personal/mail/axle/
+Inbox /media/personal/mail/axle/inbox
+SubFolders Verbatim
+
+Channel axle-all
+Far :axle-remote:
+Near :axle-local:
+Patterns * "!Sent"
+Create Both
+# Create Near
+# Sync All
+Expunge Both
+SyncState *
+
+Channel axle-sent
+Far :axle-remote:
+Near :axle-local:
 Patterns !* "Sent"
 Create Both
 Expunge Both
