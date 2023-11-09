@@ -1,4 +1,4 @@
-;; Requires `boogs/sly-end-of-prompt-p'.
+;; requires `boogs/sly-end-of-prompt-p'.
 
 (defun boogs/sly-prompt-begin-position ()
   (cond

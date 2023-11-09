@@ -1,6 +1,6 @@
-;; ;;--------------------------------;
-;; ;; Eshell
-;; ;;--------------------------------;
+;;--------------------------------------------------------------------;
+;; eshell
+;;--------------------------------------------------------------------;
 
 ;; ;;; Eshell gets initialized differently.  When eshell.el first gets loaded, only
 ;; ;;; the core is defined and `eshell-load-hook' is called. For every Eshell

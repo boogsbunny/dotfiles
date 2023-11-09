@@ -1,8 +1,11 @@
-;;--------------------------------;
-;; IRC
-;;--------------------------------;
+;;--------------------------------------------------------------------;
+;; irc
+;;--------------------------------------------------------------------;
 
 (require 'erc-image)
+(require 'patch-erc)
+
+(add-to-list 'erc-sasl-server-regexp-list "irc\\.libera\\.chat")
 
 (setq erc-nick "boogs"
       erc-prompt-for-password nil

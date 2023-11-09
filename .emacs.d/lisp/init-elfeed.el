@@ -1,6 +1,6 @@
-;;--------------------------------;
-;; Elfeed -> Emacs Web Feed Reader
-;;--------------------------------;
+;;--------------------------------------------------------------------;
+;; elfeed -> emacs web feed reader
+;;--------------------------------------------------------------------;
 
 (setq elfeed-db-directory (expand-file-name "elfeed" user-emacs-directory)
       elfeed-search-title-max-width 100)

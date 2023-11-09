@@ -1,4 +1,7 @@
-;;; Dired
+;;--------------------------------------------------------------------;
+;; dired
+;;--------------------------------------------------------------------;
+
 ;;; WARNING: This file is loaded unconditionally on startup.
 ;;; We cannot assume that current buffer is in dired-mode.
 

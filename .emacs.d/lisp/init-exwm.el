@@ -1,4 +1,6 @@
-;;; EXWM
+;;--------------------------------------------------------------------;
+;; exwm
+;;--------------------------------------------------------------------;
 
 ;;; When stating the client from .xinitrc, `save-buffer-kill-terminal' will
 ;;; force-kill Emacs before it can run through `kill-emacs-hook'.

@@ -1,12 +1,12 @@
-;;--------------------------------;
-;; Message mode
-;;--------------------------------;
+;;--------------------------------------------------------------------;
+;; message mode
+;;--------------------------------------------------------------------;
 
 (require 'init-smtpmail)
 
 (setq user-full-name "Boogs"
       mm-default-directory "~/Downloads"
-      mml-secure-openpgp-sign-with-sender t
+      ;; mml-secure-openpgp-sign-with-sender t
       message-kill-buffer-on-exit t
       message-send-mail-function 'smtpmail-send-it
       mail-specify-envelope-from t
