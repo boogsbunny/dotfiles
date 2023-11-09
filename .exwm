@@ -1,7 +1,7 @@
 ;;; -*- mode: emacs-lisp; -*-
 
 (require 'exwm)
-(let ((win (shell-command "conky 2>/dev/null | dzen2 -h \"50\" -p -dock -ta l -fn \"Fira Mono-$STATUSBARSIZE\" &")))
+(let ((win (shell-command "conky 2>/dev/null | dzen2 -h \"50\" -p -dock -ta l -fn \"Iosevka Comfy-$STATUSBARSIZE\" &")))
 	;; Don't pop the output buffer.
 	(with-current-buffer (window-buffer win)
 		;; TODO: Calling fundmental-mode triggers the following error:
