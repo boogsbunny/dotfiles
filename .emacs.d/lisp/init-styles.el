@@ -12,29 +12,6 @@
                     :height 120)
 (set-face-background 'mouse "#777777")  ; darker mouse, less distracting.
 
-(defun switch-theme-based-on-time ()
-  "Switch between 'modus-operandi-tinted' and 'modus-vivendi-tinted' based on the time of day."
-  (let ((hour (string-to-number (format-time-string "%H"))))
-    (if (and (>= hour 7) (< hour 17)) ; from 7:00 to 16:59 use 'modus-operandi-tinted, then 'moduse-vivendi-tinted
-        (progn
-          (load-theme 'modus-operandi-tinted t)
-          (set-helm-ls-git-faces-for-modus-operandi-tinted)
-          (set-org-faces-for-modus-operandi-tinted)
-          (set-rainbow-delimiters-for-modus-operandi-tinted)
-          (set-helm-for-modus-operandi-tinted))
-      (progn
-        (load-theme 'modus-vivendi-tinted t)
-        (set-helm-ls-git-faces-for-modus-vivendi-tinted)
-        (set-org-faces-for-modus-vivendi-tinted)
-        (set-rainbow-delimiters-for-modus-operandi-tinted)
-        (set-helm-for-modus-vivendi-tinted)))))
-
-;; run the theme switch function at the start
-(switch-theme-based-on-time)
-
-(run-at-time "07:00" nil 'switch-theme-based-on-time) ; switch to day theme at 7:00 AM
-(run-at-time "17:00" nil 'switch-theme-based-on-time) ; switch to night theme at 5:00 PM
-
 ;;; when i want to change the font size
 (defhydra hydra-zoom (global-map "C-c")
   "zoom"
@@ -57,19 +34,20 @@
 ;;; rainbow-delimiters
 (defun set-rainbow-delimiters-faces (colors)
   (with-eval-after-load 'rainbow-delimiters
-    (set-face-foreground 'rainbow-delimiters-depth-1-face (nth 0 colors))
-    (set-face-foreground 'rainbow-delimiters-depth-2-face (nth 1 colors))
-    (set-face-foreground 'rainbow-delimiters-depth-3-face (nth 2 colors))
-    (set-face-foreground 'rainbow-delimiters-depth-4-face (nth 3 colors))
-    (set-face-foreground 'rainbow-delimiters-depth-5-face (nth 4 colors))
-    (set-face-foreground 'rainbow-delimiters-depth-6-face (nth 5 colors))
-    (set-face-foreground 'rainbow-delimiters-depth-7-face (nth 6 colors))
-    (set-face-foreground 'rainbow-delimiters-depth-8-face (nth 7 colors))
-    (set-face-foreground 'rainbow-delimiters-depth-9-face (nth 8 colors))
-    (set-face-attribute 'rainbow-delimiters-unmatched-face nil
-                        :foreground 'unspecified
-                        :inherit 'error
-                        :strike-through t)))
+    (let ((colors colors)) ; capture the colors parameter in a closure
+      (set-face-foreground 'rainbow-delimiters-depth-1-face (nth 0 colors))
+      (set-face-foreground 'rainbow-delimiters-depth-2-face (nth 1 colors))
+      (set-face-foreground 'rainbow-delimiters-depth-3-face (nth 2 colors))
+      (set-face-foreground 'rainbow-delimiters-depth-4-face (nth 3 colors))
+      (set-face-foreground 'rainbow-delimiters-depth-5-face (nth 4 colors))
+      (set-face-foreground 'rainbow-delimiters-depth-6-face (nth 5 colors))
+      (set-face-foreground 'rainbow-delimiters-depth-7-face (nth 6 colors))
+      (set-face-foreground 'rainbow-delimiters-depth-8-face (nth 7 colors))
+      (set-face-foreground 'rainbow-delimiters-depth-9-face (nth 8 colors))
+      (set-face-attribute 'rainbow-delimiters-unmatched-face nil
+                          :foreground 'unspecified
+                          :inherit 'error
+                          :strike-through t))))
 
 (defun set-rainbow-delimiters-for-modus-operandi-tinted ()
   "Set rainbow delimiters for the modus-operandi-tinted theme."
@@ -84,30 +62,31 @@
 ;;; helm
 (defun set-helm-faces (colors)
   (with-eval-after-load 'helm
-    (set-face-attribute 'helm-source-header nil
-                        :inherit 'header-line
-                        :height 'unspecified
-                        :background (cdr (assoc 'background colors))
-                        :foreground (cdr (assoc 'foreground colors)))
-    (set-face-background 'helm-selection (cdr (assoc 'selection colors)))
-    (set-face-background 'helm-visible-mark (cdr (assoc 'visible-mark-bg colors)))
-    (set-face-foreground 'helm-visible-mark (cdr (assoc 'visible-mark-fg colors)))
-    (set-face-foreground 'helm-match (cdr (assoc 'match colors)))
-    (set-face-attribute 'helm-buffer-directory nil
-                        :background 'unspecified
-                        :foreground (cdr (assoc 'directory-fg colors))
-                        :weight 'bold)
-    (set-face-attribute 'helm-ff-directory nil
-                        :background 'unspecified
-                        :foreground 'unspecified
-                        :weight 'unspecified
-                        :inherit 'helm-buffer-directory)
-    (set-face-attribute 'helm-ff-file nil
-                        :background 'unspecified
-                        :foreground 'unspecified
-                        :weight 'unspecified
-                        :inherit 'helm-buffer-file)
-    (set-face-foreground 'helm-grep-finish (cdr (assoc 'grep-finish colors)))))
+    (let ((colors colors)) ; capture the colors parameter in a closure
+      (set-face-attribute 'helm-source-header nil
+                          :inherit 'header-line
+                          :height 'unspecified
+                          :background (cdr (assoc 'background colors))
+                          :foreground (cdr (assoc 'foreground colors)))
+      (set-face-background 'helm-selection (cdr (assoc 'selection colors)))
+      (set-face-background 'helm-visible-mark (cdr (assoc 'visible-mark-bg colors)))
+      (set-face-foreground 'helm-visible-mark (cdr (assoc 'visible-mark-fg colors)))
+      (set-face-foreground 'helm-match (cdr (assoc 'match colors)))
+      (set-face-attribute 'helm-buffer-directory nil
+                          :background 'unspecified
+                          :foreground (cdr (assoc 'directory-fg colors))
+                          :weight 'bold)
+      (set-face-attribute 'helm-ff-directory nil
+                          :background 'unspecified
+                          :foreground 'unspecified
+                          :weight 'unspecified
+                          :inherit 'helm-buffer-directory)
+      (set-face-attribute 'helm-ff-file nil
+                          :background 'unspecified
+                          :foreground 'unspecified
+                          :weight 'unspecified
+                          :inherit 'helm-buffer-file)
+      (set-face-foreground 'helm-grep-finish (cdr (assoc 'grep-finish colors))))))
 
 (defun set-helm-for-modus-operandi-tinted ()
   "Configure Helm faces for the modus-operandi-tinted theme."
@@ -245,5 +224,32 @@
                     ((numberp (cadr alpha)) (cadr alpha)))
               100)
          '(85 . 50) '(100 . 100)))))
+
+(defun switch-theme-based-on-time ()
+  "Switch between 'modus-operandi-tinted' and 'modus-vivendi-tinted' based on the time of day."
+  (let ((hour (string-to-number (format-time-string "%H"))))
+    (if (and (>= hour 7) (< hour 17)) ; from 7:00 to 16:59 use 'modus-operandi-tinted, then 'moduse-vivendi-tinted
+        (progn
+          (load-theme 'modus-operandi-tinted t)
+          (set-helm-ls-git-faces-for-modus-operandi-tinted)
+          (set-org-faces-for-modus-operandi-tinted)
+          ;; TODO: fix closure since color variable is void
+          ;; (set-rainbow-delimiters-for-modus-operandi-tinted)
+          ;; (set-helm-for-modus-operandi-tinted)
+          )
+      (progn
+        (load-theme 'modus-vivendi-tinted t)
+        (set-helm-ls-git-faces-for-modus-vivendi-tinted)
+        (set-org-faces-for-modus-vivendi-tinted)
+        ;; TODO: fix closure since color variable is void
+        ;; (set-rainbow-delimiters-for-modus-operandi-tinted)
+        ;; (set-helm-for-modus-vivendi-tinted)
+        ))))
+
+;; run the theme switch function at the start
+(switch-theme-based-on-time)
+
+(run-at-time "07:00" nil 'switch-theme-based-on-time) ; switch to day theme at 7:00 AM
+(run-at-time "17:00" nil 'switch-theme-based-on-time) ; switch to night theme at 5:00 PM
 
 (provide 'init-styles)
