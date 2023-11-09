@@ -47,8 +47,8 @@
   teh (tap-hold 120 e lctl)
   tuh (tap-hold 120 u lmet)
 
-  tih (tap-hold 120 i bspc)
-  tdh (tap-hold 120 d bspc)
+  tih (tap-hold 100 i bspc)
+  tdh (tap-hold 100 d bspc)
 
   thh (tap-hold 120 h lmet)
   tth (tap-hold 120 t rctl)
@@ -63,8 +63,8 @@
   tEh (tap-hold 120 E lctl)
   tUh (tap-hold 120 U lmet)
 
-  tIh (tap-hold 120 I bspc)
-  tDh (tap-hold 120 D bspc)
+  tIh (tap-hold 100 I bspc)
+  tDh (tap-hold 100 D bspc)
 
   tHh (tap-hold 120 H lmet)
   tTh (tap-hold 120 T rctl)
