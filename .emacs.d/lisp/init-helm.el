@@ -2,6 +2,8 @@
 ;; helm
 ;;--------------------------------------------------------------------;
 
+(require 'cl-lib)
+
 ;;; TODO: helm-ff should allow opening several marks externally, e.g.  sxiv for
 ;;; pics. See
 ;;; https://github.com/emacs-helm/helm/wiki/Find-Files#open-files-externally.
@@ -35,8 +37,11 @@
              (helm-make-source "Git files" 'helm-ls-git-source
                :fuzzy-match helm-ls-git-fuzzy-match))))
 
+(setq helm-mode-line-string nil)
 (helm-mode 1)
 ;; (helm-autoresize-mode 1)
+;; (setq helm-autoresize-max-height 30)
+;; (setq helm-autoresize-min-height 30)
 (add-to-list 'helm-sources-using-default-as-input 'helm-source-man-pages)
 
 ;;; This makes the copy and rename operations asynchronous.
@@ -296,7 +301,7 @@ With prefix argument, UPDATE the databases with custom uptions thanks to the
 (global-set-key  (kbd "C-<f4>") 'helm-execute-kmacro)
 
 ;; From https://github.com/thierryvolpiatto/emacs-tv-config/blob/master/init-helm.el:
-(defmethod helm-setup-user-source ((source helm-source-ffiles))
+(cl-defmethod helm-setup-user-source ((source helm-source-ffiles))
   (helm-source-add-action-to-source-if
    "Magit status"
    (lambda (_candidate)
@@ -351,10 +356,11 @@ Useful for Guix."
                              1))
         (t actions)))
 
-(defmethod helm-setup-user-source ((source helm-moccur-class))
+(cl-defmethod helm-setup-user-source ((source helm-moccur-class))
   (setf (slot-value source 'action-transformer) 'helm-occur-action-transformer))
 
 (require 'patch-helm)
+(require 'patch-helm-comint)
 (require 'patch-helm-file-name-completion)
 
 (when (require 'helm-switch-to-repl nil :noerror)
