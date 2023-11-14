@@ -1,15 +1,19 @@
 -- -*- mode: lua; -*-
 
 conky.config = {
-	 out_to_x = false,
 	 background = false,
 	 border_width = 1,
 	 cpu_avg_samples = 2,
+	 extra_newline = false,
 	 net_avg_samples = 2,
 	 no_buffers = true,
 	 out_to_console = true,
 	 out_to_stderr = false,
-	 extra_newline = false,
+	 out_to_x = false,
+   own_window = true,
+   own_window_type = 'dock',
+   own_window_class = 'Conky',
+   own_window_transparent = true,
 	 update_interval = 1.0,
 	 update_interval_on_battery = 1.0,
 	 uppercase = false,
