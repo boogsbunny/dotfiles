@@ -15,4 +15,4 @@
 (add-to-list 'emms-player-mpv-parameters "--no-audio-display")
 (add-to-list 'emms-info-functions 'emms-info-cueinfo)
 
- (provide 'init-emms)
+(provide 'init-emms)
