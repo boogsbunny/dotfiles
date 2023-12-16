@@ -4,11 +4,14 @@
 
 (require 'slack)
 (require 'alert)
+(require 'init-helm-slack)
 
-(setq alert-default-style 'notifier)
+(url-cookie-store "d" "")
 
 (setq slack-buffer-emojify t
-      slack-prefer-current-team t)
+      slack-prefer-current-team t
+      slack-enable-global-mode-string t
+      alert-default-style 'notifier)
 
 (slack-register-team
  :name ""
