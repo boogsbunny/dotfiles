@@ -5,11 +5,9 @@
 (require 'modus-themes)
 
 ;;; general
-(defvar face-attribute-height 100)
-
 (set-face-attribute 'default nil
                     :font "Iosevka Term"
-                    :height 120)
+                    :height 140)
 (set-face-background 'mouse "#777777")  ; darker mouse, less distracting.
 
 ;;; when i want to change the font size
@@ -246,10 +244,10 @@
         ;; (set-helm-for-modus-vivendi-tinted)
         ))))
 
-;; run the theme switch function at the start
+;;; run the theme switch function at the start
 (switch-theme-based-on-time)
 
-(run-at-time "07:00" nil 'switch-theme-based-on-time) ; switch to day theme at 7:00 AM
-(run-at-time "17:00" nil 'switch-theme-based-on-time) ; switch to night theme at 5:00 PM
+(run-at-time "07:00" (* 24 60 60)'switch-theme-based-on-time) ; switch to day theme at 7:00 AM
+(run-at-time "17:00" (* 24 60 60)'switch-theme-based-on-time) ; switch to night theme at 5:00 PM
 
 (provide 'init-styles)
