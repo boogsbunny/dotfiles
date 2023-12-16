@@ -40,7 +40,7 @@
 )
 
 (defalias
-  tspch (tap-hold 120 spc esc)
+  tspch (tap-hold 120 spc (layer-toggle borat))
 
   tah (tap-hold 120 a (layer-toggle borat))
   toh (tap-hold 120 o lalt)
@@ -57,6 +57,8 @@
 
   tjh (tap-hold 120 j tab)
   tbh (tap-hold 120 b ret)
+  t.h (tap-hold 120 . tab)
+  tch (tap-hold 120 c ret)
 
   tAh (tap-hold 120 A (layer-toggle dvorak))
   tOh (tap-hold 120 O lalt)
@@ -73,13 +75,15 @@
 
   tJh (tap-hold 120 J tab)
   tBh (tap-hold 120 B ret)
+  t>h (tap-hold 120 > tab)
+  tCh (tap-hold 120 C ret)
 )
 
 (deflayer dvorak
   esc  mute vold volu                          prnt slck pause ins del  home pgup
        f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11   f12      end  pgdn
   $    +    [   {    \(    !    |    *    \)   }    ]    &     =        bspc
-  tab  ;    ,    .    p    y    f    g    c    r    l    /     @        ret
+  tab  ;    ,   @t.h  p    y    f    g    @tch r    l    /     @        ret
   bspc @tah @toh @teh @tuh @tih @tdh @thh @tth @tnh @tsh -     \\
   lsft 102d '    q    @tjh k    x    @tbh m    w    v    z              rsft
   wkup lctl lmet lalt           @tspch         ralt cmps rctl      back up   fwd
@@ -90,7 +94,7 @@
   esc  mute vold volu                          prnt slck pause ins del  home pgup
        f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11   f12      end  pgdn
   ~    1    2    3    4    5    6    7    8    9    0    %     `        bspc
-  tab  :    <    >    P    Y    F    G    C    R    L    ?     ^        ret
+  tab  :    <    @t>h P    Y    F    G    @tCh R    L    ?     ^        ret
   bspc @tAh @tOh @tEh @tUh @tIh @tDh @tHh @tTh @tNh @tSh \_     #
   lsft 102d "    Q    @tJh K    X    @tBh M    W    V    Z              rsft
   wkup lctl lmet lalt           @tspch         ralt cmps rctl      back up   fwd
