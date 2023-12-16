@@ -64,7 +64,6 @@
    (remove-hook 'sly-connected-hook 'sly-mrepl-on-connection)
    (remove-hook 'sly-net-process-close-hooks 'sly-mrepl--teardown-repls)))
 
-
 ;; User-visible variables
 ;;
 (defvar sly-mrepl-mode-hook nil
