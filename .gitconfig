@@ -1,0 +1,26 @@
+[core]
+    attributesfile = ~/.gitattributes
+[diff "common-lisp"]
+    xfuncname="^\\((def\\S+\\s+\\S+)"
+[diff "elisp"]
+    xfuncname="^\\((((def\\S+)|use-package)\\s+\\S+)"
+[includeIf "gitdir:~/dotfiles/"]
+  path = ~/.gitconfig-gitlab
+[includeIf "gitdir:~/common-lisp/"]
+  path = ~/.gitconfig-gitlab
+[includeIf "gitdir:~/projects/"]
+  path = ~/.gitconfig-github
+[user]
+	email = ba2ra@virginia.edu
+	name = Boogs
+[credential]
+	helper = store
+[github]
+	user = boogsbunny
+[gitlab]
+	user = boogs
+[url "git@github.com:"]
+	insteadOf = https://github.com/
+[alias]
+	module = submodule update --init --recursive
+	tree = worktree add
