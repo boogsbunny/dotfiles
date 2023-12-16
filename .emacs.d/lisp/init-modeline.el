@@ -240,8 +240,12 @@
      ((mode-line-window-selected-p)
       'mode-line-buffer-id))))
 
+;; (defun boogs/modeline--buffer-name ()
+;;   (when-let ((name (buffer-name)))
+;;     (boogs/modeline-string-truncate name)))
+
 (defun boogs/modeline--buffer-name ()
-  (when-let ((name (buffer-name)))
+  (when-let ((name (file-name-nondirectory (or (buffer-file-name) (buffer-name)))))
     (boogs/modeline-string-truncate name)))
 
 (defun boogs/modeline-buffer-name ()
@@ -265,6 +269,16 @@
                   'face (boogs/modeline-buffer-identification-face)
                   'mouse-face 'mode-line-highlight
                   'help-echo (boogs/modeline-buffer-name-help-echo))))
+
+;;; eglot
+(with-eval-after-load 'eglot
+  (setq mode-line-misc-info
+        (delete '(eglot--managed-mode (" [" eglot--mode-line-format "] ")) mode-line-misc-info)))
+
+(defvar-local modeline-eglot
+    `(:eval
+      (when (and (featurep 'eglot) (mode-line-window-selected-p))
+        '(eglot--managed-mode eglot--mode-line-format))))
 
 ;;; evil
 (defvar evil-state)
@@ -354,10 +368,17 @@
 ;;; vc
 (declare-function vc-git--symbolic-ref "vc-git" (file))
 
+(defun boogs/modeline--abbreviate-branch-name (branch)
+  "Abbreviate the branch name to keep only the first part and the number if it follows the specified format."
+  (if (string-match "^\\([A-Za-z]+\\)-\\([0-9]+\\)-.*$" branch)
+      (concat (match-string 1 branch) "-" (match-string 2 branch))
+    branch))
+
 (defun boogs/modeline--vc-branch-name (file backend)
   (when-let ((rev (vc-working-revision file backend))
-             (branch (or (vc-git--symbolic-ref file)
-                         (substring rev 0 7))))
+             (branch (boogs/modeline--abbreviate-branch-name
+                      (or (vc-git--symbolic-ref file)
+                          (substring rev 0 7)))))
     (capitalize branch)))
 
 (declare-function vc-git-working-revision "vc-git" (file))
