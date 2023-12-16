@@ -2,6 +2,7 @@
 ##############################
 *.tags
 *tags
+.config/mpd/*
 
 # emacs #
 ##############################
@@ -65,3 +66,7 @@ Thumbs.db
 .local/bin/*py*
 .local/bin/*pip*
 .local/bin/*odf*
+
+# browser #
+##############################
+.mozilla/firefox/*
