@@ -64,4 +64,14 @@
 
 (add-hook 'org-agenda-finalize-hook #'org-agenda-show-svg)
 
+(defvar org-dir
+  (if (file-directory-p "/media/personal/org")
+      "/media/personal/org"
+    "~/org"))
+
+(defvar org-roam-dir
+  (if (file-directory-p "/media/personal/org/roam")
+      "/media/personal/org/roam"
+    "~/org/roam"))
+
 (provide 'patch-org)
