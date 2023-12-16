@@ -47,4 +47,15 @@
                   (slack-ws--reconnect (oref slack-current-team :id) t)
                   (slack-im-list-update)))
 
+(defun boogs/filter-slack-messages (original-logger-func message level team)
+  "Filter out specific messages in slack-message-logger."
+  (unless (or (string-match-p "Slack Im List Updated" message)
+              (string-match-p "Reconnecting\\..." message)
+              (string-match-p "[error]" message)
+              (string-match-p "[info]" message))
+    (funcall original-logger-func message level team)))
+
+(advice-add 'slack-message-logger :around #'boogs/filter-slack-messages)
+
+
 (provide 'init-slack)
