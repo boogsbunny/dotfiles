@@ -36,4 +36,6 @@
 
 (setq max-lisp-eval-depth 10000)
 
+(setq xref-search-program 'ripgrep)
+
 (require 'init-packages)
