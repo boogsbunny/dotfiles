@@ -14,15 +14,18 @@
         alert
         auth-source-pass
         auto-complete
+        bui
         cargo
         circe
         cl-generic
         code-review
         company
+        company-box
         company-go
         company-restclient
         dap-mode
         dash
+        disk-usage
         dired-du
         dmenu
         docker
@@ -31,8 +34,10 @@
         dockerfile-mode
         dumb-jump
         eat
+        edit-indirect
         ef-themes
         eglot
+        eldoc-box
         elfeed
         elpy
         emms
@@ -54,8 +59,6 @@
         geiser
         geiser-guile
         go
-        go-eldoc
-        go-guru
         guix
         hackernews
         helm
@@ -101,6 +104,8 @@
         olivetti
         ol-notmuch
         org
+        org-alert
+        org-contrib
         org-caldav
         org-gcal
         org-journal
@@ -109,6 +114,8 @@
         org-roam
         org-mime
         pdf-tools
+        perspective
+        perspective-exwm
         pinentry
         prettier
         prettier-js
@@ -126,6 +133,7 @@
         sly-asdf
         sly-macrostep
         sly-quicklisp
+        sly-named-readtables
         smart-mode-line
         svg-tag-mode
         transmission
