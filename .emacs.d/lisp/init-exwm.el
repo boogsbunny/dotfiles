@@ -75,6 +75,8 @@ KEYS is passed to `kbd'."
 (exwm-input-set-key (kbd "s-k") #'windmove-up)
 (exwm-input-set-key (kbd "s-l") #'windmove-right)
 (exwm-input-set-key (kbd "s-D") #'kill-this-buffer)
+(exwm-input-set-key (kbd "s-w") #'exwm-workspace-switch)
+(exwm-input-set-key (kbd "s-W") #'exwm-workspace-switch-create)
 
 ;; TODO: reuse existing buffer
 (defun boogs/start-or-switch-to-program (program)
