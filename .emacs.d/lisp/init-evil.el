@@ -39,23 +39,13 @@
                                                 (interactive)
                                                 (evil-delete (point-at-bol) (point))))
 
-;; (define-key evil-normal-state-map (kbd "C-n") 'evil-prev-buffer)
-;; (define-key evil-normal-state-map (kbd "C-p") 'evil-next-buffer)
-
-;;(when (require 'evil-multiedit nil t)
-;;  (global-set-key (kbd "C-;") 'evil-multiedit-match-all)
-;;  (evil-multiedit-default-keybinds))
-
-(setq evil-default-modeline-color (cons (face-background 'mode-line)
-                                        (or (face-foreground 'mode-line) "black")))
-
-(defun boogs/evil-color-modeline ()
-  (let ((color (cond ((minibufferp) evil-default-modeline-color)
-                     ((evil-insert-state-p) '("#006fa0" . "#ffffff"))
-                     ((evil-emacs-state-p)  '("#444488" . "#ffffff"))
-                     (t evil-default-modeline-color))))
-    (set-face-background 'mode-line (car color))
-    (set-face-foreground 'mode-line (cdr color))))
+(setq evil-insert-state-message nil
+      evil-visual-state-message nil
+      evil-normal-state-message nil
+      evil-replace-state-message nil
+      evil-motion-state-message nil
+      evil-operator-state-message nil
+      evil-emacs-state-message nil)
 
 (setq evil-mode-line-format nil)
 
