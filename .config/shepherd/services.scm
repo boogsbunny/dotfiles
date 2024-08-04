@@ -46,22 +46,22 @@ Some DM merge this automatically; we merge it for the others."
     #:stop (make-system-destructor "pkill xss-lock")
     #:respawn? #t))
 
-;; (define auto-mount
-;;   (make <service>
-;;     #:provides '(auto-mount)
-;;     #:start (make-system-constructor "udiskie &")
-;;     #:stop (make-system-destructor "pkill udiskie")
-;;     #:respawn? #t))
+(define auto-mount
+  (make <service>
+    #:provides '(auto-mount)
+    #:start (make-system-constructor "udiskie &")
+    #:stop (make-system-destructor "pkill udiskie")
+    #:respawn? #t))
 
-;; (define cron
-;;   (make <service>
-;;     #:provides '(cron)
-;;     #:docstring "Crontab manager.
-;; Start after PATH is fully set or else local programs could
-;; be missing."
-;;     #:start (make-system-constructor "mcron &")
-;;     #:stop (make-system-destructor "pkill mcron")
-;;    #:respawn? #t))
+(define cron
+  (make <service>
+    #:provides '(cron)
+    #:docstring "Crontab manager.
+Start after PATH is fully set or else local programs could
+be missing."
+    #:start (make-system-constructor "mcron &")
+    #:stop (make-system-destructor "pkill mcron")
+   #:respawn? #t))
 
 ;; (define location-munich "48.13:11.58")
 (define location-nova "38.87:-77.42")
@@ -81,9 +81,9 @@ front of the screen at night."
     #:stop (make-kill-destructor)
     #:respawn? #t))
 
-;; (define main-services (list
-;;                        auto-mount
-;;                        cron))
+(define main-services (list
+                       auto-mount
+                       cron))
 
 (define display-services (list
                           xrdb
