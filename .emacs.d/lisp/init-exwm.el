@@ -120,6 +120,7 @@ KEYS is passed to `kbd'."
 
 (with-eval-after-load 'helm
   (boogs/exwm-global-set-key "s-b" #'helm-mini)
+  (boogs/exwm-global-set-key "M-x" #'helm-M-x)
   (boogs/exwm-global-set-key "\C-x\C-m" #'helm-M-x)
   (boogs/exwm-global-set-key "C-c t" #'helm-tramp)
   (boogs/exwm-global-set-key "C-x b" #'helm-mini)
