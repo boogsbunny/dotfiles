@@ -142,6 +142,13 @@ KEYS is passed to `kbd'."
   (exwm-input-set-key (kbd "s-<tab>") #'evil-switch-to-windows-last-buffer)
   (exwm-input-set-key (kbd "C-6") #'evil-switch-to-windows-last-buffer))
 
+(when (require 'perspective nil t)
+  (boogs/exwm-global-set-key "s-s" #'persp-switch)
+  (exwm-input-set-key (kbd "s-,") #'persp-prev)
+  (exwm-input-set-key (kbd "s-.") #'persp-next)
+  (exwm-input-set-key (kbd "s-[") #'perspective-exwm-cycle-exwm-buffers-backward)
+  (exwm-input-set-key (kbd "s-]") #'perspective-exwm-cycle-exwm-buffers-forward))
+
 ;;; Emacs mode shortcuts.
 (autoload 'boogs/helm-selector-sly "init-sly")
 (if (not (require 'helm-selector nil :noerror))
