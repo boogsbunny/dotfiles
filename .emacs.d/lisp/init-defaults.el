@@ -73,12 +73,21 @@
 (add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
 (setq highlight-indent-guides-method 'character)
 
-;; mode line
-(display-time-mode)
-(setq display-time-mode 1
-      display-time-format "%l:%M %p %b %y"
+;;; time
+(setq display-time-format " %a %e %b, %H:%M "
+      display-time-interval 60
       display-time-default-load-average nil)
+(display-time-mode 1)
 
+;;; battery
+(require 'battery)
+(setq battery-mode-line-format
+      (cond
+       ((eq battery-status-function #'battery-linux-proc-acpi)
+        "⏻%b%p%%,%d°C ")
+       (battery-status-function
+        "⏻%b%p%% ")))
+(display-battery-mode 1)
 
 (setq rm-excluded-modes
       (mapconcat
