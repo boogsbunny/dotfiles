@@ -210,7 +210,66 @@
 
 (setq switch-to-prev-buffer-skip 'boogs/buffer-skip-p)
 
-(setq olivetti-body-width 140)
+(defun boogs/buffer-predicate (buffer)
+  (if (or (string-match "helm" (buffer-name buffer))
+          (string-match "Slack" (buffer-name buffer)))
+      nil
+    t))
+
+(set-frame-parameter nil 'buffer-predicate 'boogs/buffer-predicate)
+
+(defun boogs/toggle-olivetti-mode ()
+  "Toggle olivetti mode based on number of open buffers in text-mode or prog-mode, and set body width to 140 for text-mode and prog-mode"
+  (let ((num-text-buffers 0)
+        (num-prog-buffers 0))
+    (dolist (buffer (buffer-list))
+      (when (buffer-live-p buffer)
+        (with-current-buffer buffer
+          (when (derived-mode-p 'text-mode)
+            (setq num-text-buffers (1+ num-text-buffers)))
+          (when (derived-mode-p 'prog-mode)
+            (setq num-prog-buffers (1+ num-prog-buffers))))))
+    (when (or (= (+ num-text-buffers num-prog-buffers) 1)
+              (and (= (+ num-text-buffers num-prog-buffers) 2)
+                   (or (= num-text-buffers 0)
+                       (= num-prog-buffers 0))))
+      (when (derived-mode-p 'text-mode 'prog-mode)
+        (setq olivetti-body-width 140))
+      (olivetti-mode 1))
+    (when (not (or (= (+ num-text-buffers num-prog-buffers) 1)
+                    (and (= (+ num-text-buffers num-prog-buffers) 2)
+                         (or (= num-text-buffers 0)
+                             (= num-prog-buffers 0)))))
+      (when (derived-mode-p 'text-mode 'prog-mode)
+        (setq olivetti-body-width nil))
+      (olivetti-mode 0))))
+
+(defun single-buffer-visible-p ()
+  "Check if only a single buffer is visible in the current frame."
+  (<= (length (window-list)) 1))
+
+(defun maybe-enable-olivetti-mode ()
+  "Enable olivetti mode if on monitor and only a single buffer is visible."
+  (if (or (and (derived-mode-p 'prog-mode) (single-buffer-visible-p))
+          (and (derived-mode-p 'org-mode) (single-buffer-visible-p))
+          (and (derived-mode-p 'yaml-mode) (single-buffer-visible-p))
+          (and (derived-mode-p 'eww-mode) (single-buffer-visible-p))
+          (and (derived-mode-p 'slack-mode) (single-buffer-visible-p))
+          (and (derived-mode-p 'magit-status-mode) (single-buffer-visible-p))
+          (and (derived-mode-p 'comint-mode) (single-buffer-visible-p))
+          (and (derived-mode-p 'erc-mode) (single-buffer-visible-p)))
+      (olivetti-mode 1)
+    (olivetti-mode -1)))
+
+(add-hook 'window-configuration-change-hook 'maybe-enable-olivetti-mode)
+(add-hook 'kill-buffer-hook 'maybe-enable-olivetti-mode)
+(add-hook 'after-change-major-mode-hook 'maybe-enable-olivetti-mode)
+
+;; (add-hook 'buffer-list-update-hook 'boogs/toggle-olivetti-mode)
+(setq olivetti-body-width 0.65
+      olivetti-minimum-body-width 72
+      olivetti-recall-visual-line-mode-entry-state t)
+
 (add-hook 'text-mode-hook #'olivetti-mode)
 (add-hook 'prog-mode-hook #'olivetti-mode)
 
