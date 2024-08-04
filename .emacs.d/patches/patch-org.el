@@ -22,6 +22,16 @@
       org-pretty-entities t
       org-ellipsis "...")
 
+(require 'org-alert)
+(setq alert-default-style 'libnotify)
+
+(setq org-alert-interval 300
+      org-alert-notify-cutoff 10
+      org-alert-notify-after-event-cutoff 10)
+
+(setq org-alert-time-match-string
+      "\\(?:SCHEDULED\\|DEADLINE\\):.*?<.*?\\([0-9]\\{2\\}:[0-9]\\{2\\}\\).*>")
+
 ;; org modern
 ;; (custom-theme-set-faces
 ;;  'user
