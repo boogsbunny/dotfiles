@@ -5,6 +5,10 @@
 ;; (add-to-list 'eglot-server-programs
 ;;              '(web-mode "/home/boogs/.npm-packages/bin/typescript-language-server --stdio"))
 
+(setq eglot-events-buffer-size 0
+      eglot-sync-connect nil
+      eglot-connect-timeout nil)
+
 (add-to-list 'eglot-server-programs
              '(web-mode "typescript-language-server" "--stdio"))
 
