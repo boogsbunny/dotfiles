@@ -18,6 +18,8 @@ auto-save-list
 *_archive
 /elpa/
 *~
+.emacs.d/lisp/init-sql.el
+.emacs.d/lisp/init-slack.el
 
 # compiled source #
 ##############################
