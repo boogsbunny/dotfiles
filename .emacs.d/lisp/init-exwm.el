@@ -1,6 +1,6 @@
-;;--------------------------------------------------------------------;
+;;--------------------------------------------------------------------
 ;; exwm
-;;--------------------------------------------------------------------;
+;;--------------------------------------------------------------------
 
 ;;; When stating the client from .xinitrc, `save-buffer-kill-terminal' will
 ;;; force-kill Emacs before it can run through `kill-emacs-hook'.
@@ -37,9 +37,21 @@ KEYS is passed to `kbd'."
 (window-divider-mode)
 
 ;;; System tray
-(require 'exwm-systemtray)
-(exwm-systemtray-enable)
-(setq exwm-systemtray-height 16)
+(defun boogs/toggle-conky ()
+  "Toggle Conky visibility."
+  (interactive)
+  (let ((conky-pid (shell-command-to-string "pidof dzen2")))
+    (if (string= conky-pid "")
+        (let ((win (shell-command "conky 2>/dev/null | dzen2 -h \"50\" -p -dock -ta l -fn \"Iosevka Comfy-$STATUSBAR_SIZE\" &")))
+          (with-current-buffer (window-buffer win)
+            (fundamental-mode)
+            (rename-buffer "*Async conky|dzen*"))
+          (delete-window win))
+      (let ((win "*Async conky|dzen*"))
+        (if (get-buffer win)
+            (kill-buffer win))
+        (shell-command (concat "kill -9 " conky-pid))))))
+(exwm-input-set-key (kbd "s-c") #'boogs/toggle-conky)
 
 (require 'exwm-randr)
 (exwm-randr-enable)
