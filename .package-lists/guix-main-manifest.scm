@@ -115,7 +115,6 @@
    "ungoogled-chromium"
    "udiskie"
    "unicode-emoji"
-   "unrar"
    "unzip"
    "virt-manager"
    "wget"
