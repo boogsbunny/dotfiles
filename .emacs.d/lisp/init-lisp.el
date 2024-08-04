@@ -23,6 +23,7 @@
   (require 'init-sly))
 
 (define-key lisp-mode-map (kbd "<tab>") 'sly-mrepl-indent-and-complete-symbol)
+(define-key lisp-mode-map (kbd "C-c d") 'common-lisp-hyperspec)
 
 ;; (defvar g-cl-function-names '("*" "+" "-" "/" "/=" "1+" "1-" "<" "<=" "=" ">"
 ;;   ">=" "abort" "abs" "acons" "acos" "acosh" "add-method" "adjoin"
