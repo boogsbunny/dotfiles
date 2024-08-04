@@ -20,8 +20,10 @@
                       ("\\.pdf\\'" . default)))
 
 (setq org-log-reschedule (quote time))
+(setq org-duration-format (quote h:mm))
+(setq org-directory org-dir)
 
-(setq org-directory "/media/personal/org")
+(setq org-clock-clocked-in-display nil)
 
 (setq org-todo-keywords
       '((sequence
@@ -32,19 +34,14 @@
          "SOMEDAY(s/!)"
          "|"
          "DONE(d@)"
-         "CANCELED(c)"
-         )))
+         "CANCELED(c)")))
 
-(setq org-todo-keyword-faces
-      '(("NEXT" . (:foreground "orange red" :weight bold))
-        ("WAITING" . (:foreground "HotPink2" :weight bold))
-        ))
-
-;; Don't show trailing whitespace in calendar mode
+;; don't show trailing whitespace in calendar mode
 (add-hook 'calendar-mode-hook
           (function (lambda () (setq show-trailing-whitespace nil))))
 
 (require 'org-crypt)
+
 (org-crypt-use-before-save-magic)
 (setq org-tags-exclude-from-inheritance '("crypt"))
 
@@ -78,7 +75,17 @@
    (python . t)
    (lisp . t)
    (C . t)
+   (sql . t)
+   (plantuml . t)
    (scheme . t)))
+
+(setq org-babel-lisp-eval-fn #'sly-eval)
+
+;; display images
+(setq org-startup-with-inline-images t)
+(add-hook 'org-babel-after-execute-hook (lambda ()
+                                          (when org-inline-image-overlays
+                                            (org-redisplay-inline-images))))
 
 ;; prevent confirmation
 (setq org-confirm-babel-evaluate nil)
@@ -103,17 +110,32 @@
 ;; hide markup markers e.g. *bold* -> bold
 (setq org-hide-emphasis-markers t)
 
+(add-hook 'org-mode-hook 'visual-line-mode)
+
+(add-hook 'org-mode-hook 'variable-pitch-mode)
+
+(setq org-list-indent-offset 4)
+
+(define-key org-mode-map (kbd "s-<tab>") 'org-global-cycle)
+
+(defun org-open-at-point-with-firefox ()
+  (interactive)
+  (let ((browse-url-browser-function 'browse-url-firefox))
+    (org-open-at-point )))
+
+(define-key org-mode-map (kbd "C-x C-o") 'org-open-at-point-with-firefox)
+
 ;; maintain visible empty lines while toggling heading contents
 (customize-set-variable 'org-blank-before-new-entry
                         '((heading . nil)
                           (plain-list-item . nil)))
 (setq org-cycle-separator-lines 1)
 
-;;--------------------------------;
-;; Org Roam
-;;--------------------------------;
+;;--------------------------------------------------------------------;
+;; org roam
+;;--------------------------------------------------------------------;
 
-(setq org-roam-directory "/media/personal/org/roam"
+(setq org-roam-directory org-roam-dir
       org-roam-dailies-directory "journal/")
 (setq boogs/daily-note-filename "%<%Y-%m-%d>.org"
       boogs/daily-note-header "#+title: %<%Y-%m-%d %a>\n\n[[roam:%<%Y-%B>]]\n\n")
@@ -145,7 +167,7 @@
 (defun boogs/org-path (path)
   (expand-file-name path org-roam-directory))
 
-(setq org-agenda-files '("/media/personal/org/roam"))
+(setq org-agenda-files (list org-roam-dir))
 
 (setq org-default-notes-file (boogs/org-path "inbox.org"))
 
@@ -286,6 +308,7 @@
 ;; agenda
 (global-set-key (kbd "C-c a") 'org-agenda)
 (global-set-key (kbd "C-c c") 'org-capture)
+(global-set-key (kbd "C-c l") 'org-store-link)
 
 (setq org-agenda-window-setup 'current-window
       org-agenda-span 'week
@@ -397,7 +420,11 @@
           (org-agenda-dim-blocked-tasks nil)))
 
         ("d" "Dashboard"
-         ((agenda "" ((org-deadline-warning-days 7)))
+         ((agenda "" ((org-deadline-warning-days 7)
+                      (org-agenda-span 1)
+                      (org-agenda-start-on-weekday nil)
+                      (org-agenda-start-day (org-today))
+                      (org-agenda-use-time-grid nil)))
           (tags-todo "+PRIORITY=\"A\""
                      ((org-agenda-overriding-header "High Priority")))
           (tags-todo "+followup" ((org-agenda-overriding-header "Needs Follow Up")))
@@ -468,7 +495,7 @@
 ;; org-roam capture templates for dailies
 (setq org-roam-dailies-capture-template
       `(("d" "default" entry
-         "* %?"
+         "journal%?"
          :if-new (file+head ,boogs/daily-note-filename
                             ,boogs/daily-note-header))
         ("t" "task" entry
@@ -499,5 +526,9 @@
 ;; (setq org-gcal-client-id "<client_id>"
 ;;       org-gcal-client-secret "<client_secret>"
 ;;       org-gcal-fetch-file-alist '(("<email>" .  "<path_of_org_file>")))
+
+(require 'yasnippet)
+(add-hook 'org-mode-hook #'yas-minor-mode)
+
 
 (provide 'init-org)
