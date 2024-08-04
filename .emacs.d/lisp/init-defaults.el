@@ -292,6 +292,28 @@
 
 (advice-add 'geiser-impl--set-buffer-implementation :after #'guix-geiser--set-project)
 
+;; REVIEW: If xdg-open is not found, set Emacs URL browser to the environment browser,
+;; or w3m if BROWSER is not set.
+;; See https://debbugs.gnu.org/cgi/bugreport.cgi?bug=18986.
+;; In Emacs 27, the BROWSER variable is still not checked.
+(require 'browse-url)
+(setq browse-url-generic-program (or
+                                  (executable-find (or (getenv "BROWSER") ""))
+                                  (when (executable-find "xdg-mime")
+                                    (let ((desktop-browser (boogs/call-process-to-string
+                                                            "xdg-mime" "query" "default" "text/html")))
+                                      (substring desktop-browser 0 (string-match "\\.desktop" desktop-browser))))
+                                  (executable-find browse-url-mozilla-program)
+                                  (executable-find browse-url-firefox-program)
+                                  (executable-find browse-url-chromium-program)
+                                  (executable-find browse-url-kde-program)
+                                  (executable-find browse-url-conkeror-program)
+                                  (executable-find browse-url-chrome-program)))
+(setq browse-url-handlers '(
+                                    ("http://www.lispworks.com/reference/HyperSpec/.*" . eww-browse-url)
+                                    ("file:///.*HyperSpec.*" . eww-browse-url)
+                                    ("." . browse-url-default-browser)))
+
 (require 'yasnippet)
 (setq yas-snippet-dirs '("~/dotfiles/.emacs.d/lisp/snippets"))
 (yas-reload-all)
