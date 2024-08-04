@@ -26,9 +26,6 @@
   (dolist (hook '(css-mode-hook html-mode-hook sass-mode-hook js-mode-hook js2-mode-hook typescript-mode python-mode))
     (add-hook hook 'rainbow-mode)))
 
-(when (require 'company nil t)
-  (setq company-idle-delay nil))
-
 (setq org-roam-v2-ack t)
 (with-eval-after-load 'org (require 'init-org))
 (autoload 'helm-org-switch "org")
