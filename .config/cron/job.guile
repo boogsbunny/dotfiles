@@ -1,0 +1,54 @@
+;; -*- mode: scheme; -*-
+(use-modules (ice-9 popen))
+(use-modules (rnrs io ports))
+
+;; This cannot be let-bound within `job'.
+(define currency-file (string-append (getenv "HOME") "/.cache/currency.units"))
+
+(define* (system-to-string #:rest args)
+  (let* ((port (apply open-pipe* OPEN_READ args))
+         (str (get-string-all port)))
+    (close-pipe port)
+    str))
+
+(define (gpg-keyinfo)
+  "Return GPG keyinfo as a list of list of strings.
+Typical output is:
+
+S KEYINFO ???????????????????????????????????????? D - - - P - - -
+S KEYINFO ???????????????????????????????????????? D - - 1 P - - -
+
+The \"1\" means the key is cached."
+  (filter (lambda (info) (string= (car info) "S"))
+          (map (lambda (s) (string-split s #\space))
+               (string-split
+                (system-to-string "gpg-connect-agent" "keyinfo --list" "/bye")
+                #\newline))))
+
+(define (gpg-key-cached?)
+  "Return #t if a key is cached in the GPG agent, #f otherwise."
+  (let ((keyinfo (gpg-keyinfo)))
+    (not (null? (filter (lambda (info) (string= (list-ref info 6) "1"))
+                        keyinfo)))))
+
+(job
+ (lambda (current-time)
+   (let* ((seconds-in-a-day (* 60 60 24))
+          (currency-time (if (not (file-exists? currency-file))
+                             0
+                             (stat:mtime (stat currency-file)))))
+     (if (< currency-time (- current-time seconds-in-a-day))
+         ;; Use next-minute to avoid overwhelming the system in case of failure.
+         (next-minute)
+         (next-hour-from (next-day) (list (tm:hour (localtime currency-time)))))))
+ ;; A string is nicer than Scheme code for `mcron --schedule' output.
+ ;; Otherwise we could return '(system* "units_cur" currency-file)
+ ;; and use job's 3rd argument as a description.
+ (string-append "units_cur " currency-file))
+
+(job '(next-minute (range 0 60 15))
+     (lambda ()
+       (when (gpg-key-cached?)
+         ;; Email is sync'ed from a pre-new hook.
+         (system* "notmuch" "new")))
+     "mail")
