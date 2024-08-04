@@ -2,6 +2,7 @@
 ;; version control
 ;;--------------------------------------------------------------------;
 
+(setq magit-todos-exclude-globs '("*.har"))
 (setq auto-revert-mode-text "")
 ;; (set-face-foreground 'magit-branch-remote "orange red")
 (setq git-commit-summary-max-length fill-column)
