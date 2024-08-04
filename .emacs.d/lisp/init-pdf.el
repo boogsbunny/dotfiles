@@ -11,12 +11,12 @@
 
 ;; orange / black
 ;; (setq pdf-view-midnight-colors '("#ff9900" . "#0a0a12"))
-;; sanityinc-tomrrow-night
-(setq pdf-view-midnight-colors '("#c5c8c6" . "#1d1f21"))
-
-;; midnight color scheme
-(add-hook 'pdf-view-mode-hook 'pdf-view-midnight-minor-mode)
+(add-hook 'pdf-view-mode-hook 'pdf-view-themed-minor-mode)
+(add-hook 'pdf-view-mode-hook (lambda () (global-display-line-numbers-mode 0)))
+(add-hook 'pdf-view-mode-hook (lambda () (display-line-numbers-mode 0)))
 
 (pdf-tools-install t t t)
+
+(require 'image-roll)
 
 (provide 'init-pdf)
