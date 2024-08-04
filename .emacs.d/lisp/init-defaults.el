@@ -297,6 +297,18 @@
 (yas-reload-all)
 (add-hook 'prog-mode-hook #'yas-minor-mode)
 
+(setq company-minimum-prefix-length 2
+      company-idle-delay 0.2
+      company-show-numbers nil
+      company-require-match nil
+      company-dabbrev-ignore-case t
+      company-dabbrev-code-ignore-case t
+      completion-ignore-case t)
+(add-hook 'after-init-hook 'global-company-mode)
+
+(require 'company-box)
+(add-hook 'company-mode-hook 'company-box-mode)
+
 (require 'perspective)
 (customize-set-variable 'persp-mode-prefix-key (kbd "C-c M-p"))
 (customize-set-variable 'persp-initial-frame-name "work")
