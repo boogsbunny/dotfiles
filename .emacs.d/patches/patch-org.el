@@ -41,6 +41,7 @@
 (add-hook 'org-mode-hook 'variable-pitch-mode)
 
 ;; svg tags
+(require 'svg-tag-mode)
 (setq svg-tag-tags
       '((":TODO:" . ((lambda (tag) (svg-tag-make "TODO"))))
         (":DONE:" . ((lambda (tag) (svg-tag-make "DONE"))))))
@@ -71,8 +72,9 @@
                        'display  (nth 3 (eval (nth 2 keyword)))) ))
       (pop keywords)
       (setq keyword (car keywords)))))
-
 (add-hook 'org-agenda-finalize-hook #'org-agenda-show-svg)
+
+(svg-tag-mode t)
 
 (defvar org-dir
   (if (file-directory-p "/media/personal/org")
