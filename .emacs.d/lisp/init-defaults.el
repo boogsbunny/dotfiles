@@ -135,6 +135,8 @@
       split-height-threshold nil
       split-width-threshold 160)
 
+(setq isearch-lazy-count t)
+
 ;; remember last cursor position
 (save-place-mode)
 ;; save if daemon is killed unexpectedly
