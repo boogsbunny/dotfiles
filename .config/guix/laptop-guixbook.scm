@@ -36,6 +36,7 @@
              (gnu bootloader)
              (gnu bootloader grub)
              (gnu packages admin)
+             (gnu packages cups)
              (gnu packages bash)
              (gnu packages fonts)
              (gnu packages haskell-apps)
@@ -70,7 +71,16 @@
              (ice-9 pretty-print)
              (ice-9 match)
              (ice-9 popen))
-(use-service-modules databases desktop networking ssh sddm virtualization xorg)
+(use-service-modules
+ cups
+ databases
+ desktop
+ networking
+ ssh
+ sddm
+ virtualization
+ xorg)
+
 (use-package-modules databases
                      geo
                      vpn
@@ -132,6 +142,11 @@
         (kmonad-service "/home/boogs/dotfiles/x2100.kbd")
         (service gnome-desktop-service-type)
         (service openssh-service-type)
+        (service cups-service-type
+                 (cups-configuration
+                  (web-interface? #t)
+                  (extensions
+                   (list cups-filters epson-inkjet-printer-escpr hplip-minimal))))
         (service docker-service-type)
         (postgresql-service #:extension-packages (list postgis))
         ;; (simple-service 'wireguard-module
