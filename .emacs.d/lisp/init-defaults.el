@@ -292,4 +292,9 @@
 
 (advice-add 'geiser-impl--set-buffer-implementation :after #'guix-geiser--set-project)
 
+(require 'perspective)
+(customize-set-variable 'persp-mode-prefix-key (kbd "C-c M-p"))
+(customize-set-variable 'persp-initial-frame-name "work")
+(persp-mode)
+
 (provide 'init-defaults)
