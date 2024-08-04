@@ -218,7 +218,7 @@
             (type luks-device-mapping))
           (mapped-device
             (source
-              (uuid "4c06c72d-c6cb-4482-8ab5-0015523ca977"))
+              (uuid "15f045ca-3d0f-4866-8d14-2d4ac7ece415"))
             (target "cryptmedia")
             (type luks-device-mapping))))
   (file-systems
