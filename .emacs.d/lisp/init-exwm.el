@@ -158,8 +158,7 @@ KEYS is passed to `kbd'."
                                         (find-file (car org-agenda-files))))
       (exwm-input-set-key (kbd "s-n") #'eshell)
       (exwm-input-set-key (kbd "s-m") #'notmuch-hello)
-      (exwm-input-set-key (kbd "s-n") #'elfeed)
-      (exwm-input-set-key (kbd "s-e") #'eww))
+      (exwm-input-set-key (kbd "s-e") #'helm-exwm))
   (boogs/exwm-global-set-key "s-t" 'helm-selector-org)
   (boogs/exwm-global-set-key "s-T" 'helm-selector-org-other-window)
   (boogs/exwm-global-set-key "s-<return>" 'boogs/helm-selector-sly)
@@ -169,7 +168,9 @@ KEYS is passed to `kbd'."
   (boogs/exwm-global-set-key "s-M" #'helm-selector-notmuch-other-window)
   (boogs/exwm-global-set-key "s-n" #'helm-selector-elfeed)
   (boogs/exwm-global-set-key "s-N" #'helm-selector-elfeed-other-window) ; "n" for "news"
-  (boogs/exwm-global-set-key "s-e" #'helm-selector-eww)
+  (boogs/exwm-global-set-key "s-e" #'helm-exwm)
+  (boogs/exwm-global-set-key "s-v" #'helm-selector-magit)
+  (boogs/exwm-global-set-key "s-u" #'helm-switch-shell)
   (boogs/exwm-global-set-key "s-E" #'helm-selector-eww-other-window))
 
 (when (fboundp 'magit-status)
