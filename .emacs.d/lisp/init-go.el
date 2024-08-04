@@ -4,10 +4,9 @@
 
 (add-to-list 'exec-path "~/go/bin")
 (setq gofmt-command "goimports")
-(add-hook 'go-mode-hook
-          (function (lambda ()
-                      (setq fill-column (string-to-number "140")
-                            olivetti-body-width 140))))
+
+(add-hook 'go-mode-hook (function (lambda () (setq olivetti-body-width 140))))
+(add-hook 'go-mode-hook (function (lambda () (setq fill-column 120))))
 
 (add-hook 'before-save-hook #'gofmt-before-save)
 (add-hook 'go-mode-hook #'tree-sitter-hl-mode)
