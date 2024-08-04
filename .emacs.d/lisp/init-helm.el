@@ -20,6 +20,8 @@
 ;;; TODO: Implement alternating-color multiline lists.
 ;;; See https://github.com/emacs-helm/helm/issues/1790.
 
+(setq helm-move-to-line-cycle-in-source nil)
+
 (when (require 'helm-descbinds nil t)
   (helm-descbinds-mode))
 
@@ -43,6 +45,7 @@
 ;; (setq helm-autoresize-max-height 30)
 ;; (setq helm-autoresize-min-height 30)
 (add-to-list 'helm-sources-using-default-as-input 'helm-source-man-pages)
+
 
 ;;; This makes the copy and rename operations asynchronous.
 (dired-async-mode)
@@ -83,7 +86,8 @@
  helm-ff-cache-mode-lighter " ⚒"
 
  helm-window-show-buffers-function 'helm-window-mosaic-fn
- helm-window-prefer-horizontal-split t)
+ helm-window-prefer-horizontal-split t
+ helm-locate-command "locate %s -e -A --regex %s")
 
 ; Helm cache tends to run out-of-sync to frequently when set to 'all.
 ;(helm-ff-cache-mode-remove-hooks) ; Just setting `helm-ff-keep-cached-candidates' to nil does not seem to remove the hook. Upstream bug?
