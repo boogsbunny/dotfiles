@@ -113,30 +113,8 @@
 
 (require 'evil-escape)
 (evil-escape-mode 1)
-(setq-default evil-escape-key-sequence "jk")
+(setq-default evil-escape-key-sequence "hu")
 (setq-default evil-escape-delay 0.2)
 (setq evil-escape-unordered-key-sequence 1)
-
-;; ;; sane bindings
-;; (defun boogs/jk ()
-;;   (interactive)
-;;   (let* ((initial-key ?j)
-;;          (final-key ?k)
-;;          (timeout 0.1)
-;;          (event (read-event nil nil timeout)))
-;;     (if event
-;;         ;; timeout met
-;;         (if (and (characterp event) (= event final-key))
-;;             (evil-normal-state)
-;;           (insert initial-key)
-;;           (push event unread-command-events))
-;;       ;; timeout exceeded
-;;       (insert initial-key))))
-
-;; (define-key evil-insert-state-map (kbd "j") 'boogs/jk)
-
-;; (eval-after-load 'evil-maps
-;;    '(progn
-;;        (define-key evil-motion-state-map (kbd ";") 'evil-ex)))
 
 (provide 'init-evil)
