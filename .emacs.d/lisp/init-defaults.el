@@ -292,6 +292,11 @@
 
 (advice-add 'geiser-impl--set-buffer-implementation :after #'guix-geiser--set-project)
 
+(require 'yasnippet)
+(setq yas-snippet-dirs '("~/dotfiles/.emacs.d/lisp/snippets"))
+(yas-reload-all)
+(add-hook 'prog-mode-hook #'yas-minor-mode)
+
 (require 'perspective)
 (customize-set-variable 'persp-mode-prefix-key (kbd "C-c M-p"))
 (customize-set-variable 'persp-initial-frame-name "work")
