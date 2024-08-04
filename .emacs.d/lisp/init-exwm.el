@@ -129,9 +129,10 @@ KEYS is passed to `kbd'."
   (boogs/exwm-global-set-key "C-x C-d" #'helm-browse-project)
   (boogs/exwm-global-set-key "C-x r p" #'helm-projects-history)
   ;; (push `(,(kbd "s-f") . helm-find-files) exwm-input-global-keys)
-  (exwm-input-set-key (kbd "s-F") #'helm-locate)
-  (when (fboundp 'boogs/helm-locate-meta)
-    (boogs/exwm-global-set-key "s-F" #'boogs/helm-locate-meta))
+  ;; (exwm-input-set-key (kbd "s-F") #'helm-locate)
+  (exwm-input-set-key (kbd "s-F") #'find-file-literally)
+  ;; (when (fboundp 'boogs/helm-locate-meta)
+  ;;   (boogs/exwm-global-set-key "s-F" #'boogs/helm-locate-meta))
   (boogs/exwm-global-set-key "s-g" 'boogs/helm-grep-git-or-ag)
   (boogs/exwm-global-set-key "s-G" 'boogs/helm-grep-git-all-or-ag)
   ;; Launcher
