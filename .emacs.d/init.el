@@ -7,6 +7,7 @@
 (require 'init-styles)
 (require 'init-defuns)
 (require 'init-web)
+(require 'init-pdf)
 (require 'functions)
 
 (with-eval-after-load 'dired (require 'init-dired))
@@ -16,9 +17,6 @@
 (with-eval-after-load 'tramp (require 'init-tramp))
 
 (when (require 'evil nil t) (require 'init-evil))
-
-(when (fboundp 'pdf-view-mode)
-  (require 'init-pdf))
 
 (when (fboundp 'rainbow-delimiters-mode)
   (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
