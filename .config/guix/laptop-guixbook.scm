@@ -56,6 +56,7 @@
              (gnu services databases)
              (gnu services desktop)
              (gnu services docker)
+             (gnu services mcron)
              (gnu services virtualization)
              (guix gexp)
              (guix packages)
@@ -85,6 +86,34 @@
                      geo
                      vpn
                      virtualization)
+
+(define rsync-backup-job
+  ;; Run 'backup-job' at 7pm every day.
+  #~(job '(next-hour '(19))
+         (lambda ()
+           (system "rsync -avLx --exclude 'node_modules' --progress /home/boogs/repos /media/home/")
+           (system "rsync -avLx --exclude 'node_modules' --progress /home/boogs/projects /media/home/")
+           (system "rsync -avx --progress /home/boogs/dotfiles /media/home/")
+           (system "rsync -avx --progress /home/boogs/common-lisp /media/home/")
+           (system "rsync -avx --progress /home/boogs/.gnupg /media/home/")
+           (system "rsync -avx --progress /home/boogs/.password-store /media/home")
+           (system "rsync -avx --progress /home/boogs/Pictures /media/home"))
+     "backup"))
+
+(define btrfs-snapshot-job
+  ;; Run 'btrfs-snapshots' at 8PM every day.
+  #~(job '(next-hour '(20))
+         (lambda ()
+           (let ((timestamp (strftime "%F_%R:%S" (localtime (current-time)))))
+             (system (string-append "btrfs subvolume snapshot -r /media/personal /media/.snapshots/personal/" timestamp))
+             (system (string-append "btrfs subvolume snapshot -r /media/home /media/.snapshots/home/" timestamp)))
+           "snapshot")))
+
+(define garbage-collector-job
+  ;; Collect garbage 5 minutes after midnight every day.
+  ;; The job's action is a shell command.
+  #~(job "5 0 * * *" ; Vixie cron syntax
+         "guix gc -F 1G"))
 
 (define this-file
   (local-file (basename (assoc-ref (current-source-location) 'filename))
@@ -121,13 +150,14 @@
     (append
       (list (specification->package "bluez")
             (specification->package "bluez-alsa")
+            (specification->package "btrfs-progs")
             (specification->package "pulseaudio")
             (specification->package "emacs-exwm-no-x-toolkit")
             (specification->package "glibc")
             (specification->package "grub")
             (specification->package "kmonad")
             (specification->package "nss-certs")
-            (specification->package "nss-certs")
+            (specification->package "rsync")
             (specification->package "st")
             (specification->package "wireguard-tools")
             (specification->package "wofi"))
@@ -138,6 +168,13 @@
         ;; Copy current config to /etc/config.scm
         (simple-service 'config-file etc-service-type
                         `(("config.scm" ,this-file)))
+        (simple-service 'my-cron-jobs
+                        mcron-service-type
+                        (list
+                         rsync-backup-job
+                         btrfs-snapshot-job
+                         garbage-collector-job))
+        (service alsa-service-type)
         (bluetooth-service #:auto-enable? #t)
         (kmonad-service "/home/boogs/dotfiles/x2100.kbd")
         (service gnome-desktop-service-type)
