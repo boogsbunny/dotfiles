@@ -210,14 +210,6 @@
 
 (setq switch-to-prev-buffer-skip 'boogs/buffer-skip-p)
 
-(defun boogs/buffer-predicate (buffer)
-  (if (or (string-match "helm" (buffer-name buffer))
-          (string-match "Slack" (buffer-name buffer)))
-      nil
-    t))
-
-(set-frame-parameter nil 'buffer-predicate 'boogs/buffer-predicate)
-
 (defun boogs/toggle-olivetti-mode ()
   "Toggle olivetti mode based on number of open buffers in text-mode or prog-mode, and set body width to 140 for text-mode and prog-mode"
   (let ((num-text-buffers 0)

@@ -26,6 +26,14 @@
   (add-to-list 'load-path site-lisp)
   (boogs/package-refresh-load-path site-lisp))
 
+(defun boogs/buffer-predicate (buffer)
+  (if (or (string-match "helm" (buffer-name buffer))
+          (string-match "Slack" (buffer-name buffer)))
+      nil
+    t))
+
+(set-frame-parameter nil 'buffer-predicate 'boogs/buffer-predicate)
+
 (setq evil-want-keybinding nil
       evil-want-integration t)
 
