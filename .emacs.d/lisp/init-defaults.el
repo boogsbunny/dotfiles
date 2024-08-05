@@ -332,6 +332,7 @@
 (require 'perspective)
 (customize-set-variable 'persp-mode-prefix-key (kbd "C-c M-p"))
 (customize-set-variable 'persp-initial-frame-name "work")
+(customize-set-variable 'persp-state-default-file "~/.emacs.d/lisp/persp-state")
 (persp-mode)
 
 (provide 'init-defaults)
