@@ -42,50 +42,59 @@
 (defalias
   tdv (tap-hold-next-release 120 spc (layer-switch dvorak))
   tls (tap-hold-next-release 120 spc (layer-switch layers))
-
+  ;; modifiers in layers layer
   ces (layer-switch caps)
   sul (layer-switch specials)
   nhs (layer-switch numbers)
   ctr (layer-switch cursor)
-
+  ;; modifiers in dvorak layer
+  tph (tap-hold 120 p tab)
+  tch (tap-hold 120 c ret)
   tah (tap-hold 120 a lsft)
   toh (tap-hold 120 o lalt)
   teh (tap-hold 120 e lctl)
   tuh (tap-hold 120 u lmet)
-
-  tih (tap-hold 80 i bspc)
-  tdh (tap-hold 80 d bspc)
-
+  tih (tap-hold 80  i bspc)
+  tdh (tap-hold 80  d bspc)
   thh (tap-hold 120 h lmet)
   tth (tap-hold 120 t rctl)
   tnh (tap-hold 120 n ralt)
   tsh (tap-hold 120 s rsft)
-
-  tjh (tap-hold 120 j tab)
-  tbh (tap-hold 120 b ret)
-  tph (tap-hold 120 p tab)
-  tch (tap-hold 120 c ret)
-
+  ;; modifiers in caps layer
+  tPh (tap-hold 120 P tab)
+  tCh (tap-hold 120 C ret)
   tAh (tap-hold 120 A lsft)
   tOh (tap-hold 120 O lalt)
   tEh (tap-hold 120 E lctl)
   tUh (tap-hold 120 U lmet)
-
-  tIh (tap-hold 80 I bspc)
-  tDh (tap-hold 80 D bspc)
-
+  tIh (tap-hold 80  I bspc)
+  tDh (tap-hold 80  D bspc)
   tHh (tap-hold 120 H lmet)
   tTh (tap-hold 120 T rctl)
   tNh (tap-hold 120 N ralt)
   tSh (tap-hold 120 S rsft)
-
-  tJh (tap-hold 120 J tab)
-  tBh (tap-hold 120 B ret)
-  tPh (tap-hold 120 P tab)
-  tCh (tap-hold 120 C ret)
-
-  tok (tap-hold 120 \_ tab)
-  tik (tap-hold 120 ` ret)
+  ;; modifiers in specials layer
+  tok  (tap-hold 120 \_ tab)
+  tik  (tap-hold 120 ` ret)
+  t$h  (tap-hold 120 $  lsft)
+  t[h  (tap-hold 120 [  lalt)
+  t{h  (tap-hold 120 {  lctl)
+  t/h  (tap-hold 120 \( lmet)
+  t\h  (tap-hold 120 \) lmet)
+  t}h  (tap-hold 120 }  rctl)
+  t]h  (tap-hold 120 ]  ralt)
+  t+h  (tap-hold 120 +  rsft)
+  ;; modifiers in number layer
+  t1h (tap-hold 120 1 lsft)
+  t2h (tap-hold 120 2 lalt)
+  t3h (tap-hold 120 3 lctl)
+  t4h (tap-hold 120 4 lmet)
+  t5h (tap-hold 80  5 bspc)
+  t6h (tap-hold 80  6 bspc)
+  t7h (tap-hold 120 7 lmet)
+  t8h (tap-hold 120 8 rctl)
+  t9h (tap-hold 120 9 ralt)
+  t0h (tap-hold 120 0 rsft)
 )
 
 (deflayer dvorak
@@ -102,11 +111,11 @@
 (deflayer layers
   esc  mute vold volu                          prnt slck pause ins del  home pgup
        f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11   f12      end  pgdn
-  -    -    -    -    -    -    -    -    -    -    -    -     -        bspc
-  -    -    -    -    -    -    -    -    -    -    -    -     -        ret
-  -    -    -    @ces @sul bspc bspc @nhs @ctr -    -    -     -
-  -    -    -    -    -    -    -    -    -    -    -    -              rsft
-  -    lctl lmet lalt           @tdv          ralt cmps rctl       back up   fwd
+  XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX    XX       bspc
+  XX   XX   XX   XX   tab  XX   XX   XX   ret  XX   XX   XX    XX       ret
+  XX   @ces @ctr @nhs @sul bspc bspc @sul @nhs @ctr @ces XX    XX
+  XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX             rsft
+  XX   lctl lmet lalt          @tdv            ralt  cmps rctl     back up   fwd
                                                                    left down rght
 )
 
@@ -122,23 +131,23 @@
 )
 
 (deflayer specials
-  esc  mute vold volu                          prnt slck pause ins del  home pgup
-       f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11   f12      end  pgdn
-  ~    1    2    3    4    5    6    7    8    9    0    %     `        bspc
-  tab  :    ^    =    @tok *    &    %    @tik @    |    ?     ^        ret
-  bspc $    [    {   \(    bspc bspc \)   }    ]    +    \_    #
-  lsft <    |    -    >    /    ~    !    #   \\    ;    ,              rsft
-  wkup lctl lmet lalt           @tdv           ralt cmps rctl      back up   fwd
-                                                                   left down rght
+  esc  mute vold volu                           prnt slck pause ins del  home pgup
+       f1   f2   f3   f4    f5   f6   f7   f8   f9   f10  f11   f12      end  pgdn
+  ~    1    2    3    4     5    6    7    8    9    0    %     `        bspc
+  tab  :    ^    =    @tok  *    &    %    @tik @    |    ?     ^        ret
+  bspc @t$h @t[h @t{h @t/h  bspc bspc @t\h @t}h @t]h @t+h \_    #
+  lsft <    |    -    >     /    ~    !    #   \\    ;    ,              rsft
+  wkup lctl lmet lalt           @tdv           ralt cmps rctl       back up   fwd
+                                                                    left down rght
 )
 
 (deflayer numbers
   esc  mute vold volu                          prnt slck pause ins del  home pgup
        f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11   f12      end  pgdn
-  -    -    -    -    -    -    -    -    -    -    -    -     -        bspc
-  -    -    -    -    tab  -    -    -    ret  -    -    -     -        ret
-  -    1    2    3    4    5    6    7    8    9    0    \_    #
-  -    -    -    -    &    /    "    -    =    -    -    -              rsft
+  XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX    XX       bspc
+  XX   XX   XX   XX   tab  XX   XX   XX   ret  XX   XX   XX    XX       ret
+  XX   @t1h @t2h @t3h @t4h @t5h @t6h @t7h @t8h @t9h @t0h \_    #
+  XX   XX   XX   XX   &    /    "    -    =    XX   XX   XX             rsft
   wkup lctl lmet lalt           @tdv           ralt cmps rctl      back up   fwd
                                                                    left down rght
 )
@@ -146,10 +155,10 @@
 (deflayer cursor
   esc  mute vold volu                          prnt slck pause ins del  home pgup
        f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11   f12      end  pgdn
-  -    -    -    -    -    -    -    -    -    -    -    -     -        bspc
-  -    -    -    -    up   -    -    -    -    -    -    -     -        ret
-  -    -    left down rght esc  esc  -    -    -    -    -     -
-  -    -    -    pgdn pgup -    -    -    -    -    -    -              rsft
+  XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX    XX       bspc
+  XX   XX   XX   XX   up   XX   XX   XX   XX   XX   XX   XX    XX       ret
+  XX   XX   left down rght bspc bspc esc  XX   XX   XX   XX    XX
+  XX   XX   XX   pgdn pgup XX   XX   XX   XX   XX   XX   XX             rsft
   wkup lctl lmet lalt           @tdv           ralt cmps rctl      back up   fwd
                                                                    left down rght
 )
