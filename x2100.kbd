@@ -40,13 +40,17 @@
 )
 
 (defalias
-  tdv (tap-hold-next-release 120 spc (layer-switch dvorak))
-  tls (tap-hold-next-release 120 spc (layer-switch layers))
+  tdv (tap-hold-next-release 90 spc (layer-switch dvorak))
+  tls (tap-hold-next-release 90 spc (layer-toggle layers))
   ;; modifiers in layers layer
-  ces (layer-switch caps)
-  sul (layer-switch specials)
-  nhs (layer-switch numbers)
-  ctr (layer-switch cursor)
+  cas (tap-hold-next-release 90 A (layer-delay 500 caps))
+  cos (tap-hold-next-release 90 O (layer-delay 500 cursor))
+  nes (tap-hold-next-release 90 E (layer-delay 1000 numbers))
+  sus (tap-hold-next-release 90 U (layer-delay 1000 specials))
+  shs (tap-hold-next-release 90 H (layer-delay 1000 specials))
+  nts (tap-hold-next-release 90 T (layer-delay 1000 numbers))
+  cns (tap-hold-next-release 90 N (layer-delay 500 cursor))
+  css (tap-hold-next-release 90 S (layer-delay 500 caps))
   ;; modifiers in dvorak layer
   tph (tap-hold 120 p tab)
   tch (tap-hold 120 c ret)
@@ -54,8 +58,8 @@
   toh (tap-hold 120 o lalt)
   teh (tap-hold 120 e lctl)
   tuh (tap-hold 120 u lmet)
-  tih (tap-hold 80  i bspc)
-  tdh (tap-hold 80  d bspc)
+  tih (tap-hold 75 i bspc)
+  tdh (tap-hold 75 d bspc)
   thh (tap-hold 120 h lmet)
   tth (tap-hold 120 t rctl)
   tnh (tap-hold 120 n ralt)
@@ -67,8 +71,8 @@
   tOh (tap-hold 120 O lalt)
   tEh (tap-hold 120 E lctl)
   tUh (tap-hold 120 U lmet)
-  tIh (tap-hold 80  I bspc)
-  tDh (tap-hold 80  D bspc)
+  tIh (tap-hold 75 I bspc)
+  tDh (tap-hold 75 D bspc)
   tHh (tap-hold 120 H lmet)
   tTh (tap-hold 120 T rctl)
   tNh (tap-hold 120 N ralt)
@@ -89,8 +93,8 @@
   t2h (tap-hold 120 2 lalt)
   t3h (tap-hold 120 3 lctl)
   t4h (tap-hold 120 4 lmet)
-  t5h (tap-hold 80  5 bspc)
-  t6h (tap-hold 80  6 bspc)
+  t5h (tap-hold 75 5 bspc)
+  t6h (tap-hold 75 6 bspc)
   t7h (tap-hold 120 7 lmet)
   t8h (tap-hold 120 8 rctl)
   t9h (tap-hold 120 9 ralt)
@@ -102,7 +106,7 @@
        f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11   f12      end  pgdn
   $    +    [   {    \(    !    |    *    \)   }    ]    &     =        bspc
   tab  ;    ,   .     @tph y    f    g    @tch r    l    /     @        ret
-  bspc @tah @toh @teh @tuh @tih @tdh @thh @tth @tnh @tsh -     \\
+  caps @tah @toh @teh @tuh @tih @tdh @thh @tth @tnh @tsh -     \\
   lsft 102d '    q    j    k    x    b    m    w    v    z              rsft
   wkup lctl lmet lalt           @tls           ralt cmps rctl      back up   fwd
                                                                    left down rght
@@ -111,11 +115,11 @@
 (deflayer layers
   esc  mute vold volu                          prnt slck pause ins del  home pgup
        f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11   f12      end  pgdn
-  XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX    XX       bspc
-  XX   XX   XX   XX   tab  XX   XX   XX   ret  XX   XX   XX    XX       ret
-  XX   @ces @ctr @nhs @sul bspc bspc @sul @nhs @ctr @ces XX    XX
-  XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX             rsft
-  XX   lctl lmet lalt          @tdv            ralt  cmps rctl     back up   fwd
+  ~    1    2    3    4    5    6    7    8    9    0    %     `        bspc
+  tab  :    <    >    @tPh Y    F    G    @tCh R    L    ?     ^        ret
+  bspc @cas @cos @nes @sus @tIh @tDh @shs @nts @cns @css \_    #
+  lsft 102d  "   Q    J    K    X    B    M    W    V    Z              rsft
+  wkup lctl lmet lalt          @tdv            ralt  cmps rctl     back up   fwd
                                                                    left down rght
 )
 
