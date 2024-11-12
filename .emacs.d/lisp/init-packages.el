@@ -76,6 +76,7 @@
         helm-org-contacts
         helm-pass
         helm-projectile
+        helm-rg
         helm-selector
         helm-sly
         helm-switch-shell
@@ -113,7 +114,10 @@
         orgit
         org-roam
         org-mime
+        password-store
+        password-store-otp
         pdf-tools
+        pers-projectile
         perspective
         perspective-exwm
         pinentry
