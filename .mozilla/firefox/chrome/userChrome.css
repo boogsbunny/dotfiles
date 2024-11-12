@@ -58,4 +58,24 @@
   toolbox[inFullscreen="true"] {
     display: none;
   }
+
+  /* "Auto-hide" address bar unless focused (e.g. Ctrl-L) or tab bar is hovered. */
+  :root {
+    --address-bar-height: 40px;
+    --browser-offset: calc(-1 * (var(--address-bar-height) + 1px));
+  }
+
+  #navigator-toolbox {
+    position: absolute !important;
+    left: 0;
+    right: 0;
+  }
+
+  #navigator-toolbox ~ #browser {
+    margin-top: var(--browser-offset) !important;
+  }
+
+  #navigator-toolbox:hover, #navigator-toolbox:focus-within {
+    z-index: 9001 !important;
+  }
 }
