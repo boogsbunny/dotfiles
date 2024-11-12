@@ -39,6 +39,18 @@
              (helm-make-source "Git files" 'helm-ls-git-source
                :fuzzy-match helm-ls-git-fuzzy-match))))
 
+;; faster
+(setq helm-grep-git-grep-command
+      (concat "rg"
+              " --color=always"
+              " --smart-case"
+              " --no-heading"
+              " --line-number %c"
+              " --column"
+              " --hidden"
+              " --glob \"!.git/\""
+              " -e %p %f"))
+
 (setq helm-mode-line-string nil)
 (helm-mode 1)
 ;; (helm-autoresize-mode 1)
@@ -86,7 +98,7 @@
  helm-ff-cache-mode-lighter " ⚒"
 
  helm-window-show-buffers-function 'helm-window-mosaic-fn
- helm-window-prefer-horizontal-split t
+ helm-window-prefer-horizontal-split nil
  helm-locate-command "locate %s -e -A --regex %s")
 
 ; Helm cache tends to run out-of-sync to frequently when set to 'all.
@@ -124,6 +136,11 @@
                   (if (> (window-pixel-width) (window-pixel-height))
                       'right
                     'below)))))
+
+(setq helm-always-two-windows nil
+      helm-display-buffer-default-height 13
+      helm-default-display-buffer-functions '(display-buffer-in-atom-window))
+
 (setq helm-split-window-preferred-function 'boogs/helm-split-window-combined-fn)
 
 (setq enable-recursive-minibuffers t)
@@ -168,9 +185,27 @@
 ;;; https://github.com/emacs-helm/helm/issues/1118
 ;; (define-key helm-read-file-map (kbd "M-p") 'helm-ff-run-switch-to-history)
 
-;; Follow symlinks with 'ag', otherwise visiting a symlinked files and greping
-;; may yield (unexpectedly) no result.
-(setq helm-grep-ag-command "ag --follow --line-numbers -S --color --nogroup %s %s %s")
+;; faster to use ripgrep
+(setq helm-grep-ag-command (concat "rg"
+                                   " --color=never"
+                                   " --smart-case"
+                                   " --no-heading"
+                                   " --line-number %s %s %s")
+      helm-grep-file-path-style 'relative)
+
+(setq helm-grep-default-command
+      (concat "rg"
+              " --color=always"
+              " --smart-case"
+              " --no-heading"
+              " --line-number %e -H -n %p %f"))
+
+(setq helm-grep-default-recurse-command
+      (concat "rg"
+              " --color=always"
+              " --smart-case"
+              " --no-heading"
+              " --line-number %e -H -n %p %f"))
 
 (defun boogs/helm-grep-git-or-ag (arg)
   "Run `helm-grep-do-git-grep' if possible; fallback to `helm-do-grep-ag' otherwise.
@@ -180,13 +215,18 @@ Requires `call-process-to-string' from `functions'."
   (require 'functions)
   (if (and (vc-find-root default-directory ".git")
            (or arg (split-string (boogs/call-process-to-string "git" "ls-files" "-z") "\0" t)))
-      (helm-grep-do-git-grep arg)
+      ;; faster
+      (helm-do-grep-ag arg)
+      ;; (helm-grep-do-git-grep arg)
     (helm-do-grep-ag nil)))
 
 (defun boogs/helm-grep-git-all-or-ag ()
   "Run `helm-grep-do-git-grep' over all git files."
   (interactive)
-  (helm-grep-do-git-grep t))
+  ;; faster
+  (helm-grep-do-git-grep t)
+  ;; (helm-do-grep-ag nil)
+  )
 
 (defun boogs/helm-mark-or-exchange-rect ()
   "Run `helm-all-mark-rings-before-mark-point' or `rectangle-exchange-point-and-mark' if in rectangle-mark-mode."
