@@ -34,7 +34,7 @@
          "SOMEDAY(s/!)"
          "|"
          "DONE(d@)"
-         "CANCELED(c)")))
+         "CANCELED(c@)")))
 
 ;; don't show trailing whitespace in calendar mode
 (add-hook 'calendar-mode-hook
@@ -378,6 +378,29 @@
                 (org-agenda-day-face-function (lambda (date) 'org-agenda-date))
                 (org-agenda-format-date "")
                 (org-agenda-overriding-header "\nPending scheduled tasks")))
+    (agenda "" ((org-agenda-time-grid nil)
+                (org-agenda-start-on-weekday nil)
+                (org-agenda-span 1)
+                (org-agenda-show-all-dates nil)
+                (org-scheduled-past-days 365)
+                ;; Excludes today's scheduled items
+                ;; (org-scheduled-delay-days 1)
+                (org-agenda-block-separator nil)
+                ;; (org-agenda-entry-types '(:scheduled))
+                (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
+                (org-agenda-day-face-function (lambda (date) 'org-agenda-date))
+                (org-agenda-format-date "")
+                (org-agenda-overriding-header "\nUnprocessed tasks")))
+    ;; (tags-todo "*" ((org-agenda-time-grid nil)
+    ;;             (org-agenda-start-on-weekday nil)
+    ;;             (org-agenda-span 1)
+    ;;             (org-agenda-show-all-dates nil)
+    ;;             (org-scheduled-past-days 365)
+    ;;             (org-agenda-block-separator nil)
+    ;;             (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
+    ;;             (org-agenda-day-face-function (lambda (date) 'org-agenda-date))
+    ;;             (org-agenda-format-date "")
+    ;;             (org-agenda-overriding-header "\nUnprocessed tasks")))
     (agenda "" ((org-agenda-span 1)
                 (org-deadline-warning-days 0)
                 (org-agenda-block-separator nil)
@@ -520,8 +543,51 @@
                                 ,boogs/daily-note-header
                                 ("Log")))))
 
-;; mail server
-;; (require 'org-gcal)
+(defun boogs/build-contact-item (template-string contact-property)
+  (if-let ((stuff (org-entry-get nil contact-property)))
+      (concat (format template-string stuff) "\n")
+    ""))
+
+(defun boogs/build-phone-items (phone-string)
+  (let ((phones (split-string phone-string "," t " ")))
+    (mapconcat
+     (lambda (phone)
+       (format "TEL;CELL:%s\n" (string-trim phone)))
+     phones
+     "")))
+
+(defun boogs/vcard ()
+  "Create a .vcf file containing all contact information."
+  (interactive)
+  (write-region
+   (string-join
+    (org-map-entries
+     (lambda ()
+       (let ((id (org-entry-get nil "ID")))
+         (string-join
+          `("BEGIN:VCARD\nVERSION:2.1\n"
+            ,(format "UID:%s\n" id)
+            ,(boogs/build-contact-item "FN:%s" "ITEM")
+            ,(if-let ((phones (org-entry-get nil "PHONE")))
+                  (boogs/build-phone-items phones)
+                "")
+            ,(boogs/build-contact-item "EMAIL:%s" "EMAIL")
+            ,(boogs/build-contact-item "ORG:%s" "GROUP")
+            ,(boogs/build-contact-item "ADR;HOME:;;%s" "ADDRESS_HOME")
+            ,(boogs/build-contact-item "ADR;WORK:;;%s" "ADDRESS_WORK")
+            ,(boogs/build-contact-item "BDAY:%s" "BIRTHDAY")
+            ,(format "REV:%s\n" (format-time-string "%Y-%m-%dT%T"))
+            "END:VCARD")
+          "")))
+     "LEVEL=1")
+    "\n")
+   nil
+   (read-file-name
+    "Where to save the .vcf file?"
+    "~/bunny/"
+    "contacts.vcf")))
+
+(setq plstore-cache-passphrase-for-symmetric-encryption t)
 
 ;; (setq org-gcal-client-id "<client_id>"
 ;;       org-gcal-client-secret "<client_secret>"
