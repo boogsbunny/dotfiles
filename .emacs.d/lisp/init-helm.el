@@ -408,7 +408,7 @@ Useful for Guix."
     (save-excursion
       (goto-char (point-min))
       (while (re-search-forward
-              "(\\(def\\(?:method\\|[^ ]+\\)\\)\\s-+\\(\\(?:\\sw\\|\\s_\\)+\\)\\s-*\\(?::[^(]*\\)?\\s-*(.*)"  ; Updated regex
+              "(\\(def\\(?:method\\|[^ ]+\\)\\)\\s-+\\(\\(?:\\sw\\|\\s_\\)+\\)\\s-*\\(?::[^(]*\\)?\\s-*(.*)"
               nil t)
         (let ((def-type (match-string 1))
               (name (match-string 2))
