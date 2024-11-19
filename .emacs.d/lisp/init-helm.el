@@ -403,6 +403,39 @@ Useful for Guix."
 (cl-defmethod helm-setup-user-source ((source helm-moccur-class))
   (setf (slot-value source 'action-transformer) 'helm-occur-action-transformer))
 
+(defun boogs/lisp-imenu-create-index ()
+  (let ((index-alist '()))
+    (save-excursion
+      (goto-char (point-min))
+      (while (re-search-forward
+              "(\\(def[^ ]+\\)\\s-+\\(\\(?:\\sw\\|\\s_\\)+\\)\\s-*(.*)"
+              nil t)
+        (let ((def-type (match-string 1))
+              (name (match-string 2))
+              (pos (match-beginning 0)))
+          (push (cons (format "%s [%s]" name def-type) pos) index-alist))))
+    (nreverse index-alist)))
+
+(defun boogs/helm-imenu ()
+  "Integrate helm with imenu."
+  (interactive)
+  (require 'which-func)
+  (let* ((imenu-auto-rescan t)
+         (str (thing-at-point 'symbol))
+         (init-reg (and str (concat "\\_<" (regexp-quote str) "\\_>")))
+         (custom-source (helm-make-source "Custom Definitions" 'helm-imenu-source
+                         :candidates (boogs/lisp-imenu-create-index))))
+    (helm :sources custom-source
+          :default (and str (list init-reg str))
+          :preselect (helm-aif (which-function)
+                         (concat "\\_<" (regexp-quote it) "\\_>")
+                       init-reg)
+          :buffer "*helm imenu*")))
+
+(add-hook 'lisp-mode-hook
+          (lambda ()
+            (local-set-key (kbd "M-i") #'boogs/helm-imenu)))
+
 (require 'patch-helm)
 (require 'patch-helm-comint)
 (require 'patch-helm-file-name-completion)
