@@ -436,6 +436,45 @@ Useful for Guix."
           (lambda ()
             (local-set-key (kbd "M-i") #'boogs/helm-imenu)))
 
+(defun boogs/helm-imenu-in-all-buffers ()
+  "Search custom definitions across all Lisp buffers."
+  (interactive)
+  (require 'which-func)
+  (let* ((imenu-auto-rescan t)
+         (helm-highlight-matches-around-point-max-lines 'never)
+         (str (thing-at-point 'symbol))
+         (init-reg (and str (concat "\\_<" (regexp-quote str) "\\_>")))
+         (candidates
+          (cl-loop for buf in (buffer-list)
+                   when (with-current-buffer buf
+                          (derived-mode-p 'lisp-mode))
+                   append
+                   (with-current-buffer buf
+                     (mapcar (lambda (item)
+                              (cons (format "%s [in %s]" (car item) (buffer-name))
+                                    (cons (car item) (cons buf (cdr item)))))
+                            (boogs/lisp-imenu-create-index)))))
+         (source (helm-make-source "Custom Definitions in All Buffers" 'helm-source-sync
+                  :candidates candidates
+                  :fuzzy-match t
+                  :persistent-action (lambda (candidate)
+                                     (switch-to-buffer (cadr candidate))
+                                     (goto-char (cddr candidate))
+                                     (helm-highlight-current-line))
+                  :action (lambda (candidate)
+                           (switch-to-buffer (cadr candidate))
+                           (goto-char (cddr candidate))))))
+    (helm :sources source
+          :default (and str (list init-reg str))
+          :preselect (helm-aif (which-function)
+                        (concat "\\_<" (regexp-quote it) "\\_>")
+                      init-reg)
+          :buffer "*helm custom imenu*")))
+
+(add-hook 'lisp-mode-hook
+          (lambda ()
+            (local-set-key (kbd "M-s i") #'boogs/helm-imenu-in-all-buffers)))
+
 (require 'patch-helm)
 (require 'patch-helm-comint)
 (require 'patch-helm-file-name-completion)
