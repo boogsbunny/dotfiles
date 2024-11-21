@@ -54,7 +54,7 @@ KEYS is passed to `kbd'."
 (exwm-input-set-key (kbd "s-c") #'boogs/toggle-conky)
 
 (require 'exwm-randr)
-(exwm-randr-enable)
+(exwm-randr-mode 1)
 
 ;; dual monitor
 (setq exwm-randr-workspace-output-plist '(0 "DP-2" 1 "eDP-1"))
@@ -68,7 +68,7 @@ KEYS is passed to `kbd'."
 ;;; Those cannot be set globally: if Emacs would be run in another WM, the "s-"
 ;;; prefix will conflict with the WM bindings.
 (exwm-input-set-key (kbd "s-R") #'exwm-reset)
-(exwm-input-set-key (kbd "C-x q") #'exwm-restart)
+(exwm-input-set-key (kbd "C-x R") #'exwm-restart)
 (exwm-input-set-key (kbd "s-x") #'exwm-input-toggle-keyboard)
 (exwm-input-set-key (kbd "s-h") #'windmove-left)
 (exwm-input-set-key (kbd "s-j") #'windmove-down)
@@ -78,33 +78,50 @@ KEYS is passed to `kbd'."
 (exwm-input-set-key (kbd "s-w") #'exwm-workspace-switch)
 (exwm-input-set-key (kbd "s-W") #'exwm-workspace-switch-create)
 
-;; TODO: reuse existing buffer
-(defun boogs/start-or-switch-to-program (program)
+(defun boogs/switch-to-or-start (program &optional class-name)
+  "Switch to existing buffer of PROGRAM or start a new instance.
+CLASS-NAME is used for matching instead of PROGRAM name if provided."
   (interactive)
-  (let ((buffer-name-regex (format ".*%s.*" program))
-        (existing-buffer nil)
-        (existing-process nil))
-    (dolist (buffer (buffer-list))
-      (when (string-match-p buffer-name-regex (buffer-name buffer))
-        (setq existing-buffer buffer)))
-    (if existing-buffer
-        (progn
-          (setq existing-process (get-buffer-process existing-buffer))
-          (if existing-process
-              (progn
-                (switch-to-buffer existing-buffer)
-                (select-window (display-buffer (process-buffer existing-process))))
-            (start-process program nil program)
-            (set-process-buffer (get-process program) existing-buffer))))
-      (start-process program nil program)))
+  (let* ((class-to-match (or class-name (capitalize program)))
+         (program-buffer (seq-find
+                          (lambda (buf)
+                            (let ((buf-name (buffer-name buf)))
+                              (and (eq
+                                    (buffer-local-value 'major-mode buf)
+                                    'exwm-mode)
+                                   (string-match-p
+                                    (concat
+                                     ".*"
+                                     (regexp-quote class-to-match) ".*")
+                                    buf-name))))
+                          (buffer-list))))
+    (if program-buffer
+        (switch-to-buffer program-buffer)
+      (start-process program nil program))))
 
-(exwm-input-set-key (kbd "C-c C-<return>") (lambda ()
-                                             (interactive)
-                                             (boogs/start-or-switch-to-program "firefox")))
+(defun boogs/start-new (program)
+  "Start a new instance of PROGRAM, regardless of existing instances."
+  (interactive)
+  (start-process program nil program))
 
-(exwm-input-set-key (kbd "C-x C-<return>") (lambda ()
-                                      (interactive)
-                                      (boogs/start-or-switch-to-program "alacritty")))
+;; Terminal
+(boogs/exwm-global-set-key "s-y"
+                           (lambda ()
+                             (interactive)
+                             (boogs/switch-to-or-start "alacritty")))
+(boogs/exwm-global-set-key "s-Y"
+                           (lambda ()
+                             (interactive)
+                             (boogs/start-new "alacritty")))
+;; Browser
+(boogs/exwm-global-set-key "s-i"
+                           (lambda ()
+                             (interactive)
+                             (boogs/switch-to-or-start "firefox" "Nightly")))
+(boogs/exwm-global-set-key "s-I"
+                           (lambda ()
+                             (interactive)
+                             (boogs/start-new "firefox")))
 
 (when (require 'windower nil 'noerror)
   (exwm-input-set-key (kbd "s-<tab>") 'windower-switch-to-last-buffer)
@@ -190,6 +207,7 @@ KEYS is passed to `kbd'."
     (exwm-input-set-key (kbd "s-A") #'emms))))
 
 (when (fboundp 'helm-pass)
+  (boogs/exwm-global-set-key "s-P" #'password-store-otp-token-copy)
   (boogs/exwm-global-set-key "s-p" #'helm-pass))
 
 (autoload 'boogs/slime-to-repl "lisp")
@@ -218,12 +236,6 @@ KEYS is passed to `kbd'."
      (boogs/exwm-global-set-key "s-<backspace>" #'racket-repl))))
 (exwm-input-set-key (kbd "s-C-<backspace>") #'boogs/repl-switcher)
 
-;; browser
-(defun boogs/nyxt-start ()
-  (interactive)
-  (start-process-shell-command "nyxt" nil "nyxt"))
-(exwm-input-set-key (kbd "C-c C-<tab>") #'boogs/nyxt-start)
-
 ;;; External application shortcuts.
 (defun boogs/exwm-start (command)
   (interactive (list (read-shell-command "$ ")))
@@ -240,10 +252,7 @@ KEYS is passed to `kbd'."
                                     ,(when (boundp 'helm-source-ls-git) 'helm-source-ls-git)
                                     helm-source-bookmarks
                                     helm-source-bookmark-set
-                                    helm-source-buffer-not-found))
-  ;; Web browser
-  (exwm-input-set-key (kbd "s-w") #'helm-exwm-switch-browser)
-  (exwm-input-set-key (kbd "s-W") #'helm-exwm-switch-browser-other-window))
+                                    helm-source-buffer-not-found)))
 
 (when (require 'desktop-environment nil 'noerror)
   ;; REVIEW: Remove the override on next version release:
@@ -288,17 +297,10 @@ KEYS is passed to `kbd'."
     (exwm-input-release-keyboard (exwm--buffer->id (window-buffer)))))
 (add-hook 'exwm-manage-finish-hook 'boogs/exwm-start-in-char-mode)
 
-;;; Some programs escape EXWM control and need be tamed.  See
-;; https://github.com/ch11ng/exwm/issues/287
-(add-to-list 'exwm-manage-configurations '((string= exwm-title "Kingdom Come: Deliverance")
-                                           managed t))
-
-;; Gens
-(add-to-list 'exwm-manage-configurations '((string= exwm-class-name "Gens") floating nil))
-
 ;; Askpass.
-(add-to-list 'exwm-manage-configurations '((string= exwm-class-name "lxqt-openssh-askpass")
-                                           floating t))
+(add-to-list 'exwm-manage-configurations
+             '((string= exwm-class-name "lxqt-openssh-askpass")
+               floating t))
 
 (defvar boogs/exwm-change-screen-turn-off-primary nil
   "Turn off primary display when cable is plugged.")
