@@ -4,78 +4,135 @@
   /* requires that you set
 	 * toolkit.legacyUserProfileCustomizations.stylesheets = true
 	 * in about:config
+	 * figure out current firefox's profile folder in about:support
 	 */
-  #mainPopupSet ~ box {
-    -moz-box-ordinal-group: 10;
+  #main-window body {
+    flex-direction: column-reverse !important;
   }
-  #titlebar {
-    -moz-box-ordinal-group: 10;
+
+  #navigator-toolbox {
+    flex-direction: column-reverse !important;
   }
+
   #urlbar {
-    top: unset !important;
-    bottom: calc(
-      (var(--urlbar-toolbar-height) - var(--urlbar-height)) / 2
-    ) !important;
     box-shadow: none !important;
     display: flex !important;
     flex-direction: column !important;
   }
-  #urlbar-input-container {
+
+  #urlbar > * {
+    flex: none;
+  }
+
+  #urlbar .urlbar-input-container {
     order: 2;
   }
+
   #urlbar > .urlbarView {
     order: 1;
     border-bottom: 1px solid #666;
   }
+
   #urlbar-results {
     display: flex;
     flex-direction: column-reverse;
   }
+
   .search-one-offs {
     display: none !important;
   }
+
   .tab-background {
     border-top: none !important;
   }
+
   #navigator-toolbox::after {
     border: none;
   }
+
+  #urlbar[open] > .urlbarView {
+    position: absolute !important;
+    bottom: 100% !important;
+    margin-bottom: 2px !important;
+    transform-origin: bottom center !important;
+  }
+
+  .urlbarView {
+    margin-top: calc(-100vh + 100px) !important;
+    flex-direction: column-reverse !important;
+  }
+
+  #TabsToolbar {
+    visibility: collapse;
+  }
+
   #TabsToolbar .tabbrowser-arrowscrollbox,
   #tabbrowser-tabs,
   .tab-stack {
     min-height: 28px !important;
   }
+
   .tabbrowser-tab {
     font-size: 80%;
   }
+
   .tab-content {
     padding: 0 5px;
   }
+
   .tab-close-button .toolbarbutton-icon {
     width: 12px !important;
     height: 12px !important;
   }
+
   toolbox[inFullscreen="true"] {
     display: none;
   }
 
-  /* "Auto-hide" address bar unless focused (e.g. Ctrl-L) or tab bar is hovered. */
-  :root {
-    --address-bar-height: 40px;
-    --browser-offset: calc(-1 * (var(--address-bar-height) + 1px));
+  /*
+	 * the following makes it so that the on-click panels in the nav-bar
+	 * extend upwards, not downwards. some of them are in the #mainPopupSet
+	 * (hamburger + unified extensions), and the rest are in
+	 * #navigator-toolbox. They all end up with an incorrectly-measured
+	 * max-height (based on the distance to the _bottom_ of the screen), so
+	 * we correct that. The ones in #navigator-toolbox then adjust their
+	 * positioning automatically, so we can just set max-height. The ones
+	 * in #mainPopupSet do _not_, and so we need to give them a
+	 * negative margin-top to offset them *and* a fixed height so their
+	 * bottoms align with the nav-bar. We also calc to ensure they don't
+	 * end up overlapping with the nav-bar itself. The last bit around
+	 * cui-widget-panelview is needed because "new"-style panels (those
+	 * using "unified" panels) don't get flex by default, which results in
+	 * them being the wrong height.
+	 *
+	 * Oh, yeah, and the popup-notification-panel (like biometrics prompts)
+	 * of course follows different rules again, and needs its own special
+	 * rule.
+	 */
+  #mainPopupSet panel.panel-no-padding {
+    margin-top: calc(-50vh + 40px) !important;
   }
 
-  #navigator-toolbox {
-    position: absolute !important;
-    left: 0;
-    right: 0;
+  #mainPopupSet .panel-viewstack,
+  #mainPopupSet popupnotification {
+    max-height: 50vh !important;
+    height: 50vh;
   }
 
-  #navigator-toolbox ~ #browser {
-    margin-top: var(--browser-offset) !important;
+  #mainPopupSet panel.panel-no-padding.popup-notification-panel {
+    margin-top: calc(-50vh - 35px) !important;
   }
 
-  #navigator-toolbox:hover, #navigator-toolbox:focus-within {
-    z-index: 9001 !important;
+  #navigator-toolbox .panel-viewstack {
+    max-height: 75vh !important;
+  }
+
+  panelview.cui-widget-panelview {
+    flex: 1;
+  }
+
+  panelview.cui-widget-panelview > vbox {
+    flex: 1;
+    min-height: 50vh;
   }
 }
