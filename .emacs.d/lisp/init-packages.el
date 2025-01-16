@@ -29,7 +29,6 @@
         dired-du
         dmenu
         docker
-        docker-tramp
         docker-compose-mode
         dockerfile-mode
         dumb-jump
@@ -59,6 +58,7 @@
         geiser
         geiser-guile
         go
+        gptel
         guix
         hackernews
         helm
@@ -90,7 +90,6 @@
         kubernetes
         kubernetes-evil
         kubernetes-helm
-        kubernetes-tramp
         language-detection
         ledger-mode
         leetcode
