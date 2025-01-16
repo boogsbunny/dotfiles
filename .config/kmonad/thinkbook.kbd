@@ -40,19 +40,17 @@
 )
 
 (defalias
-  tdv (tap-hold-next-release 70 spc (layer-switch dvorak))
-  tdl (tap-hold-next-release 70 spc (layer-toggle layers))
-  teg (tap-hold-next-release 70 spc (layer-switch engram))
-  tel (tap-hold-next-release 70 spc (layer-toggle engramlayers))
+  tdv (tap-hold-next-release 90 spc (layer-switch dvorak))
+  tdl (tap-hold-next-release 90 spc (layer-toggle layers))
   ;; modifiers in layers layer
-  cad (tap-hold-next-release 70 A (layer-delay 400 caps))
-  cod (tap-hold-next-release 70 O (layer-delay 400 cursor))
-  ned (tap-hold-next-release 60 E (layer-delay 400 numbers))
-  sud (tap-hold-next-release 60 U (layer-delay 400 specials))
-  shd (tap-hold-next-release 60 H (layer-delay 400 specials))
-  ntd (tap-hold-next-release 60 T (layer-delay 400 numbers))
-  cnd (tap-hold-next-release 70 N (layer-delay 400 cursor))
-  csd (tap-hold-next-release 70 S (layer-delay 400 caps))
+  cad (tap-hold-next-release 70 A (layer-delay 300 caps))
+  cod (tap-hold-next-release 70 O (layer-delay 300 cursor))
+  ned (tap-hold-next-release 60 E (layer-delay 300 numbers))
+  sud (tap-hold-next-release 60 U (layer-delay 300 specials))
+  shd (tap-hold-next-release 60 H (layer-delay 300 specials))
+  ntd (tap-hold-next-release 60 T (layer-delay 300 numbers))
+  cnd (tap-hold-next-release 70 N (layer-delay 300 cursor))
+  csd (tap-hold-next-release 70 S (layer-delay 300 caps))
   ;; modifiers in cursor layer
   lcc (layer-switch cursor)
   ;; modifiers in dvorak layer
@@ -62,8 +60,8 @@
   tod (tap-hold 120 o lalt)
   ted (tap-hold 120 e lctl)
   tud (tap-hold 120 u lmet)
-  tid (tap-hold 75 i bspc)
-  tdd (tap-hold 75 d bspc)
+  tid (tap-hold 85 i bspc)
+  tdd (tap-hold 85 d bspc)
   thd (tap-hold 120 h lmet)
   ttd (tap-hold 120 t rctl)
   tnd (tap-hold 120 n ralt)
@@ -76,47 +74,12 @@
   tOd (tap-hold 120 O lalt)
   tEd (tap-hold 120 E lctl)
   tUd (tap-hold 120 U lmet)
-  tId (tap-hold 75 I bspc)
-  tDd (tap-hold 75 D bspc)
+  tId (tap-hold 85 I bspc)
+  tDd (tap-hold 85 D bspc)
   tHd (tap-hold 120 H lmet)
   tTd (tap-hold 120 T rctl)
   tNd (tap-hold 120 N ralt)
   tSd (tap-hold 120 S rsft)
-  ;; modifiers in engramlayers layer
-  cCe (tap-hold-next-release 70 C (layer-delay 500 caps))
-  cIe (tap-hold-next-release 70 I (layer-delay 400 cursor))
-  nEe (tap-hold-next-release 60 E (layer-delay 500 numbers))
-  sAe (tap-hold-next-release 60 A (layer-delay 500 specials))
-  sHe (tap-hold-next-release 60 H (layer-delay 500 specials))
-  nTe (tap-hold-next-release 60 T (layer-delay 500 numbers))
-  cNe (tap-hold-next-release 70 N (layer-delay 500 cursor))
-  cSe (tap-hold-next-release 70 S (layer-delay 500 caps))
-  ;; modifiers in engram layer
-  tue (tap-hold 120 u tab)
-  tde (tap-hold 120 d ret)
-  tce (tap-hold 120 c lsft)
-  tie (tap-hold 120 i lalt)
-  tee (tap-hold 120 e lctl)
-  tae (tap-hold 120 a lmet)
-  t,e (tap-hold 75 , bspc)
-  t.e (tap-hold 75 . bspc)
-  the (tap-hold 120 h lmet)
-  tte (tap-hold 120 t rctl)
-  tne (tap-hold 120 n ralt)
-  tse (tap-hold 120 s rsft)
-  ;; modifiers in engramcaps layer
-  tUe (tap-hold 120 U tab)
-  tDe (tap-hold 120 D ret)
-  tCe (tap-hold 120 C lsft)
-  tIe (tap-hold 120 I lalt)
-  tEe (tap-hold 120 E lctl)
-  tAe (tap-hold 120 A lmet)
-  t;e (tap-hold 75 ; bspc)
-  t:e (tap-hold 75 : bspc)
-  tHe (tap-hold 120 H lmet)
-  tTe (tap-hold 120 T rctl)
-  tNe (tap-hold 120 N ralt)
-  tSe (tap-hold 120 S rsft)
   ;; modifiers in specials layer
   lss (layer-switch specials)
   tok (tap-hold 120 \_ tab)
@@ -135,8 +98,8 @@
   t2h (tap-hold 120 2 lalt)
   t3h (tap-hold 120 3 lctl)
   t4h (tap-hold 120 4 lmet)
-  t5h (tap-hold 75 5 bspc)
-  t6h (tap-hold 75 6 bspc)
+  t5h (tap-hold 85 5 bspc)
+  t6h (tap-hold 85 6 bspc)
   t7h (tap-hold 120 7 lmet)
   t8h (tap-hold 120 8 rctl)
   t9h (tap-hold 120 9 ralt)
@@ -145,54 +108,21 @@
 (deflayer dvorak
   esc  mute vold volu                          prnt slck pause ins del  home pgup
        f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11   f12      end  pgdn
-  $    +    [    {    \(   !    |    *    \)   }    ]    &     =        bspc
-  tab  ;    ,    .    @tpd y    f    g    @tcd r    q    /     @        ret
-  caps @tad @tod @ted @tud @tid @tdd @thd @ttd @tnd @tsd -     \\
-  @teg 102d '    x    j     k   b    l    m    w    v    z              rsft
+  $    +    [    {    \(   !    XX   |    *    \)   }     ]    &        bspc
+  tab  ;    ,    .    @tpd y    XX   f    g    @tcd r    q     /        ret
+  caps @tad @tod @ted @tud @tid XX   @tdd @thd @ttd @tnd @tsd  @
+  lsft 102d '    x    j    k    b    z    l    m    w    v              rsft
   wkup lctl lmet lalt            @tdl           ralt cmps rctl      back up   fwd
                                                                     left down rght
-)
-
-(deflayer engram
-  esc  mute vold volu                          prnt slck pause ins del  home pgup
-       f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11   f12      end  pgdn
-  $    +    [    {    \(    !    |    *    \)   }    ]    &     =        bspc
-  tab  b    y    o    @tue \(  \)    l    @tde w    v    z     #        ret
-  caps @tce @tie @tee @tae @t,e @t.e @the @tte @tne @tse -     \\
-  @tdv 102d g    x    j    k    -    ?    r    m    f    p              rsft
-  wkup lctl lmet lalt           @tel           ralt cmps rctl      back up   fwd
-                                                                   left down rght
-)
-
-(deflayer engramcaps
-  esc  mute vold volu                          prnt slck pause ins del  home pgup
-       f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11   f12      end  pgdn
-  ~    1    2    3    4    5    6    7    8    9    0    %     `        bspc
-  tab  B    Y    O    @tUe \(  \)    L    @tDe W    V    Z     #        ret
-  caps @tCe @tIe @tEe @tAe @t;e @t:e @tHe @tTe @tNe @tSe -     \\
-  lsft 102d G    X    J    K    _    ?    R    M    F    P              rsft
-  wkup lctl lmet lalt           @teg           ralt cmps rctl      back up   fwd
-                                                                   left down rght
-)
-
-(deflayer engramlayers
-  esc  mute vold volu                          prnt slck pause ins del  home pgup
-       f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11   f12      end  pgdn
-  ~    1    2    3    4    5    6    7    8    9    0    %     `        bspc
-  tab  B    Y    O    @tUe \(  \)    L    @tDe W    V    Z     #        ret
-  caps @tCe @tIe @tEe @tAe @t;e @t:e @tHe @tTe @tNe @tSe -     \\
-  lsft 102d G    X    J    K    _    ?    R    M    F    P              rsft
-  wkup lctl lmet lalt           @teg           ralt cmps rctl      back up   fwd
-                                                                   left down rght
 )
 
 (deflayer layers
   esc  mute vold volu                          prnt slck pause ins del  home pgup
        f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11   f12      end  pgdn
-  ~    1    2    3    4    5    6    7    8    9    0    %     `        bspc
-  tab  :    <    >    @tPd Y    F    G    @tCd R    Q    ?     ^        ret
-  bspc @cad @cod @ned @sud @tId @tDd @shd @ntd @cnd @csd \_    #
-  lsft 102d  "   X    J    K    B    L    M    W    V    Z              rsft
+  ~    1    2    3    4    5    XX   6    7    8    9    0     %        bspc
+  tab  :    <    >    @tPd Y    XX   F    G    @tCd R    Q     ?        ret
+  bspc @cad @cod @ned @sud @tId XX   @tDd @shd @ntd @cnd @csd  \_
+  lsft 102d  "   X    J    K    B    Z    L    M    W    V              rsft
   wkup lctl lmet lalt          @tdv            ralt  cmps rctl     back up   fwd
                                                                    left down rght
 )
@@ -200,10 +130,10 @@
 (deflayer caps
   esc  mute vold volu                          prnt slck pause ins del  home pgup
        f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11   f12      end  pgdn
-  ~    1    2    3    @lsc 5    6    7    @lsc 9    0    %     `        bspc
-  tab  :    <    >    @tPd Y    F    G    @tCd R    Q    ?     ^        ret
-  bspc @tAd @tOd @tEd @tUd @tId @tDd @tHd @tTd @tNd @tSd \_    #
-  lsft 102d "    X    J    K    B    L    M    W    V    Z              rsft
+  ~    1    2    3    @lsc 5    XX   6    7    @lsc 9    0     %        bspc
+  tab  :    <    >    @tPd Y    XX   F    G    @tCd R    Q     ?        ret
+  bspc @tAd @tOd @tEd @tUd @tId XX   @tDd @tHd @tTd @tNd @tSd  \_
+  lsft 102d "    X    J    K    B    Z    L    M    W    V              rsft
   wkup lctl lmet lalt           @tdv           ralt cmps rctl      back up   fwd
                                                                    left down rght
 )
@@ -211,9 +141,9 @@
 (deflayer specials
   esc  mute vold volu                           prnt slck pause ins del  home pgup
        f1   f2   f3   f4    f5   f6   f7   f8   f9   f10  f11   f12      end  pgdn
-  ~    1    2    3    @lss  5    6    7    @lss 9    0    %     `        bspc
-  tab  :    ^    =    @tok  *    &    %    @tik @    |    ?     ^        ret
-  bspc @t$h @t[h @t{h @t/h  bspc bspc @t\h @t}h @t]h @t+h \_    #
+  ~    1    2    3    @lss  5    XX   6    7    @lss 9    0     %        bspc
+  tab  :    ^    =    @tok  *    XX   &    %    @tik @    |     ?        ret
+  bspc @t$h @t[h @t{h @t/h  bspc XX   bspc @t\h @t}h @t]h @t+h  \_
   lsft <    |    >    -     /    ~    !    #   \\    ;    ,              rsft
   wkup lctl lmet lalt           @tdv           ralt cmps rctl       back up   fwd
                                                                     left down rght
@@ -222,9 +152,9 @@
 (deflayer numbers
   esc  mute vold volu                          prnt slck pause ins del  home pgup
        f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11   f12      end  pgdn
-  XX   XX   XX   XX   @lsn XX   XX   XX   @lsn XX   XX   XX    XX       bspc
-  XX   XX   XX   XX   tab  XX   XX   XX   ret  XX   XX   XX    XX       ret
-  XX   @t1h @t2h @t3h @t4h @t5h @t6h @t7h @t8h @t9h @t0h \_    #
+  XX   XX   XX   XX   @lsn XX   XX   XX   XX   @lsn XX   XX    XX       bspc
+  XX   XX   XX   XX   tab  XX   XX   XX   XX   ret  XX   XX    XX       ret
+  XX   @t1h @t2h @t3h @t4h @t5h XX   @t6h @t7h @t8h @t9h @t0h  \_
   XX   XX   XX   XX   -    /    "    &    =    XX   XX   XX             rsft
   wkup lctl lmet lalt           @tdv           ralt cmps rctl      back up   fwd
                                                                    left down rght
@@ -233,9 +163,9 @@
 (deflayer cursor
   esc  mute vold volu                          prnt slck pause ins del  home pgup
        f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11   f12      end  pgdn
-  XX   XX   XX   XX   @lcc XX   XX   XX   @lcc XX   XX   XX    XX       bspc
+  XX   XX   XX   XX   @lcc XX   XX   XX   XX   @lcc XX   XX    XX       bspc
   XX   XX   XX   XX   up   XX   XX   XX   XX   XX   XX   XX    XX       ret
-  XX   XX   left down rght bspc bspc esc  XX   XX   XX   XX    XX
+  XX   XX   left down rght bspc XX   bspc esc  XX   XX   XX    XX
   XX   XX   XX   pgdn pgup XX   XX   XX   XX   XX   XX   XX             rsft
   wkup lctl lmet lalt           @tdv           ralt cmps rctl      back up   fwd
                                                                    left down rght
