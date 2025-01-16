@@ -5,9 +5,17 @@
 (require 'modus-themes)
 
 ;;; general
+(defun boogs/get-face-attribute-height ()
+  (if (laptop-screen-p)
+      ;; 120
+      140
+    120))
+
 (set-face-attribute 'default nil
                     :font "Iosevka Term"
-                    :height 140)
+                    :width 'normal
+                    :height (boogs/get-face-attribute-height))
+
 (set-face-background 'mouse "#777777")  ; darker mouse, less distracting.
 
 ;;; when i want to change the font size
@@ -180,7 +188,15 @@
             ("DELEGATED" . (:foreground ,(cdr (assoc 'blue colors)) :weight bold))
             ("SOMEDAY" . (:foreground ,(cdr (assoc 'cyan colors)) :weight bold))
             ("DONE" . (:foreground ,(cdr (assoc 'green colors)) :weight bold))
-            ("CANCELED" . (:foreground ,(cdr (assoc 'magenta colors)) :weight bold))))))
+            ("CANCELED" . (:foreground ,(cdr (assoc 'magenta colors)) :weight bold))))
+    (setf org-modern-todo-faces
+          `(("TODO" . (:background ,(cdr (assoc 'red colors)) :foreground "white" :weight bold))
+            ("NEXT" . (:background ,(cdr (assoc 'orange colors)) :foreground "white" :weight bold))
+            ("WAITING" . (:background ,(cdr (assoc 'yellow colors)) :foreground "white" :weight bold))
+            ("DELEGATED" . (:background ,(cdr (assoc 'blue colors)) :foreground "white" :weight bold))
+            ("SOMEDAY" . (:background ,(cdr (assoc 'cyan colors)) :foreground "white" :weight bold))
+            ("DONE" . (:background ,(cdr (assoc 'green colors)) :foreground "white" :weight bold))
+            ("CANCELED" . (:background ,(cdr (assoc 'magenta colors)) :foreground "white" :weight bold))))))
 
 (defun set-org-faces-for-modus-operandi-tinted ()
   "Configure Org faces for the modus-operandi-tinted theme."
@@ -223,11 +239,28 @@
               100)
          '(85 . 50) '(100 . 100)))))
 
+(defun run-gsettings-safely (is-dark)
+  "Run gsettings commands safely to switch theme mode.
+IS-DARK should be non-nil for dark mode, nil for light mode."
+  (let ((scheme (if is-dark "prefer-dark" "prefer-light"))
+        (theme (if is-dark "Adwaita-dark" "Adwaita")))
+    (dolist (cmd `(("set" "org.gnome.desktop.interface" "color-scheme" ,scheme)
+                   ("set" "org.gnome.desktop.interface" "gtk-theme" ,theme)
+                   ("set" "org.gnome.desktop.interface" "prefer-dark" ,(if is-dark "true" "false"))))
+      (condition-case err
+          (apply #'call-process "gsettings" nil nil nil cmd)
+        (error
+         (message "Warning: couldn't set gsettings theme: %s"
+                  (error-message-string err)))))
+    ;; Add small delay to allow changes to propagate
+    (sleep-for 0.5)))
+
 (defun switch-theme-based-on-time ()
   "Switch between 'modus-operandi-tinted' and 'modus-vivendi-tinted' based on the time of day."
   (let ((hour (string-to-number (format-time-string "%H"))))
-    (if (and (>= hour 7) (< hour 17)) ; from 7:00 to 16:59 use 'modus-operandi-tinted, then 'moduse-vivendi-tinted
+    (if (and (>= hour 7) (< hour 20)) ; from 7:00 to 19:59 use 'modus-operandi-tinted, then 'moduse-vivendi-tinted
         (progn
+          (run-gsettings-safely nil)
           (load-theme 'modus-operandi-tinted t)
           (set-helm-ls-git-faces-for-modus-operandi-tinted)
           (set-org-faces-for-modus-operandi-tinted)
@@ -236,6 +269,7 @@
           ;; (set-helm-for-modus-operandi-tinted)
           )
       (progn
+        (run-gsettings-safely t)
         (load-theme 'modus-vivendi-tinted t)
         (set-helm-ls-git-faces-for-modus-vivendi-tinted)
         (set-org-faces-for-modus-vivendi-tinted)
@@ -248,6 +282,6 @@
 (switch-theme-based-on-time)
 
 (run-at-time "07:00" (* 24 60 60)'switch-theme-based-on-time) ; switch to day theme at 7:00 AM
-(run-at-time "17:00" (* 24 60 60)'switch-theme-based-on-time) ; switch to night theme at 5:00 PM
+(run-at-time "20:00" (* 24 60 60)'switch-theme-based-on-time) ; switch to night theme at 8:00 PM
 
 (provide 'init-styles)
