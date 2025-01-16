@@ -15,6 +15,12 @@
 (add-hook 'pdf-view-mode-hook (lambda () (global-display-line-numbers-mode 0)))
 (add-hook 'pdf-view-mode-hook (lambda () (display-line-numbers-mode 0)))
 
+(defun boogs/pdf-set-keys ()
+  (evil-define-key 'normal pdf-view-mode-map (kbd "C-u") 'pdf-view-scroll-down-or-previous-page)
+  (evil-define-key 'normal pdf-view-mode-map (kbd "C-d") 'pdf-view-scroll-up-or-next-page))
+
+(add-hook 'pdf-view-mode-hook 'boogs/pdf-set-keys)
+
 (pdf-tools-install t t t)
 
 (require 'image-roll)
