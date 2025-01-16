@@ -1,4 +1,4 @@
-;; sudo -E guix system reconfigure ~/.config/guix/laptop-guixbook.scm
+;; sudo -E guix system reconfigure ~/.config/guix/x210-thinkbook.scm
 (define-module (kmonad)
   #:use-module (gnu services)
   #:use-module (gnu services shepherd)
@@ -7,8 +7,8 @@
   #:export (kmonad-service))
 
 (define (kmonad-shepherd-service config-path)
-  ;; Tells shepherd how we want it to create a (single) <shepherd-service>
-  ;; for kmonad from a string
+  "Tells shepherd how we want it to create a (single)
+<shepherd-service> for kmonad from a string."
   (list (shepherd-service
          (documentation "Run the kmonad daemon (kmonad-daemon).")
          (provision '(kmonad-daemon))
@@ -18,8 +18,9 @@
                          #$config-path)))
          (stop #~(make-kill-destructor)))))
 
+;;; Extend the shepherd root into a new type of service that takes a
+;;; single string.
 (define kmonad-service-type
-  ;; Extend the shepherd root into a new type of service that takes a single string
   (service-type
    (name 'kmonad)
    (description "Run the kmonad service type.")
@@ -28,7 +29,8 @@
                              kmonad-shepherd-service)))))
 
 (define (kmonad-service config-path)
-  ;; Create a service from our service type, which takes a single parameter
+  "Create a service from our service type, which takes a single
+parameter."
   (service kmonad-service-type config-path))
 
 (use-modules (gnu)
@@ -57,8 +59,10 @@
              (gnu services docker)
              (gnu services mcron)
              (gnu services networking)
+             (gnu services pm)
              (gnu services syncthing)
              (gnu services virtualization)
+             (gnu services vpn)
              (gnu services xorg)
              (guix gexp)
              (guix packages)
@@ -66,9 +70,11 @@
              (guix git-download)
              (guix build-system trivial)
              ((guix licenses) #:prefix license:)
+             (guix utils)
              (kmonad)
              ;; import nonfree linux module
              (nongnu packages linux)
+             (nongnu packages video)
              (nongnu system linux-initrd)
              (srfi srfi-1)
              (ice-9 pretty-print)
@@ -80,38 +86,80 @@
  databases
  desktop
  networking
+ pm
  ssh
  sddm
  syncthing
  virtualization
+ vpn
  xorg)
 
 (use-package-modules
+ audio
  databases
+ emacs-xyz
+ fonts
  geo
+ gnome
+ gnome-xyz
+ linux
+ rsync
+ vim
  vpn
  virtualization)
 
+(define-public %backup-paths
+  '(("repos" . "-avLx --exclude 'node_modules'")
+    ("projects" . "-avLx --exclude 'node_modules'")
+    ("dotfiles" . "-avx")
+    ("common-lisp" . "-avx")
+    (".gnupg" . "-avx")
+    (".password-store" . "-avx")
+    ("grapheneboogs" . "-avx")
+    ("Pictures" . "-avx")))
+
 (define rsync-backup-job
-  ;; Run 'backup-job' at 7pm every day.
-  #~(job '(next-hour '(19))
-         (lambda ()
-           (system "rsync -avLx --exclude 'node_modules' --progress /home/boogs/repos /media/home/")
-           (system "rsync -avLx --exclude 'node_modules' --progress /home/boogs/projects /media/home/")
-           (system "rsync -avx --progress /home/boogs/dotfiles /media/home/")
-           (system "rsync -avx --progress /home/boogs/common-lisp /media/home/")
-           (system "rsync -avx --progress /home/boogs/.gnupg /media/home/")
-           (system "rsync -avx --progress /home/boogs/.password-store /media/home")
-           (system "rsync -avx --progress /home/boogs/Pictures /media/home"))
-         "backup"))
+  #~(begin
+      (define home-directory
+        (or (getenv "HOME")
+            (error "HOME environment variable not set")))
+
+      (define media-directory
+        (if (file-exists? "/media")
+            "/media/home/"
+            (string-append home-directory "/media/home/")))
+
+      (define (make-rsync-command path opts)
+        (format #f "rsync ~a --progress ~a/~a ~a"
+                opts home-directory path media-directory))
+
+      (job '(next-hour '(19))
+           (lambda ()
+             (for-each (lambda (path-opts)
+                         (system (make-rsync-command
+                                 (car path-opts)
+                                 (cdr path-opts))))
+                       '#$%backup-paths))
+           "backup")))
 
 (define btrfs-snapshot-job
-  ;; Run 'btrfs-snapshots' at 8PM every day.
-  #~(job '(next-hour '(20))
-         (lambda ()
-           (let ((timestamp (strftime "%F_%R:%S" (localtime (current-time)))))
-             (system (string-append "btrfs subvolume snapshot -r /media/personal /media/.snapshots/personal/" timestamp))
-             (system (string-append "btrfs subvolume snapshot -r /media/home /media/.snapshots/home/" timestamp)))
+  #~(begin
+      (define (make-snapshot-command subvol timestamp)
+        (format #f
+                "btrfs subvolume snapshot -r /media/~a ~
+                 /media/.snapshots/~a/~a"
+                subvol
+                subvol
+                timestamp))
+
+      (job '(next-hour '(20))
+           (lambda ()
+             (let ((timestamp (strftime "%F_%R:%S"
+                                      (localtime (current-time)))))
+               (for-each
+                (lambda (subvol)
+                  (system (make-snapshot-command subvol timestamp)))
+                '("personal" "home"))))
            "snapshot")))
 
 (define garbage-collector-job
@@ -126,50 +174,52 @@
 
 (define linux-guixbook
   (package
-   (inherit linux)
+   (inherit linux-6.6)
    (name "linux-guixbook")
    (native-inputs
-    `(("kconfig" ,(local-file "./kernel-guixbook.conf"))
-      ,@(alist-delete "kconfig" (package-native-inputs linux))))))
+    `(("kconfig" ,(local-file "./kernel-thinkbook.conf"))
+      ,@(alist-delete "kconfig" (package-native-inputs linux-6.6))))))
 
 (operating-system
  (locale "en_US.utf8")
  (host-name "guixbook")
  (timezone "America/New_York")
  (keyboard-layout (keyboard-layout "us"
-                                   #:options
-                                   '("ctrl:nocaps")))
- (kernel linux)
- ;; (kernel-loadable-modules (list wireguard-linux-compat))
+                                   #:options '("ctrl:nocaps")))
+ (kernel linux-guixbook)
  (initrd microcode-initrd)
- (firmware (list linux-firmware))
+ (firmware (cons* iwlwifi-firmware
+                  %base-firmware))
  (users (cons* (user-account
                 (name "boogs")
                 (comment "boogs")
                 (group "users")
-                (supplementary-groups '("wheel" "netdev" "audio" "kvm" "libvirt" "lp" "video"
-                                        "input" "docker" "postgres"))
+                (supplementary-groups '("wheel"
+                                        "netdev"
+                                        "audio"
+                                        "kvm"
+                                        "libvirt"
+                                        "lp"
+                                        "video"
+                                        "input"
+                                        "docker"
+                                        "postgres"))
                 (home-directory "/home/boogs"))
                %base-user-accounts))
  (packages
-  (append
-   (list
-    (specification->package "bluez")
-    (specification->package "bluez-alsa")
-    (specification->package "btrfs-progs")
-    (specification->package "pulseaudio")
-    (specification->package "emacs-exwm-no-x-toolkit")
-    (specification->package "glibc")
-    (specification->package "gnome")
-    (specification->package "grub")
-    (specification->package "kmonad")
-    (specification->package "rsync")
-    (specification->package "st")
-    (specification->package "wayland")
-    (specification->package "wireguard-tools")
-    (specification->package "wofi")
-    (specification->package "xorg-server-xwayland"))
-   %base-packages))
+  (cons* bluez
+         bluez-alsa
+         brightnessctl
+         btrfs-progs
+         emacs-exwm-no-x-toolkit
+         gvfs
+         intel-media-driver/nonfree
+         kmonad
+         neovim
+         rsync
+         tlp
+         vim
+         %base-packages))
  (services
   (append
    (list
@@ -185,45 +235,80 @@
     (service bluetooth-service-type
              (bluetooth-configuration
               (auto-enable? #t)))
-    (kmonad-service "/home/boogs/dotfiles/x2100.kbd")
-    (service gnome-desktop-service-type)
-    (service openssh-service-type)
+    (kmonad-service "/home/boogs/.config/kmonad/thinkbook.kbd")
+    (service containerd-service-type)
     (service cups-service-type
              (cups-configuration
               (web-interface? #t)
               (extensions
-               (list cups-filters epson-inkjet-printer-escpr hplip-minimal))))
-    (service containerd-service-type)
+               (list cups-filters
+                     epson-inkjet-printer-escpr
+                     hplip-minimal))))
     (service docker-service-type)
-    (service postgresql-service-type
-             (postgresql-configuration
-              (extension-packages (list postgis))))
-    ;; (simple-service 'wireguard-module
-    ;;                 kernel-module-loader-service-type
-    ;;                 '("wireguard"))
+    (service gnome-desktop-service-type)
+    (service plasma-desktop-service-type)
     (service libvirt-service-type
              (libvirt-configuration
               (unix-sock-group "libvirt")
               (tls-port "16555")))
-    (service virtlog-service-type
-             (virtlog-configuration
-              (max-clients 1000)))
+    (service oci-container-service-type
+             (list
+              (oci-container-configuration
+               (image "jellyfin/jellyfin")
+               (provision "jellyfin")
+               (network "host")
+               (ports
+                '(("8096" . "8096")))
+               (volumes '("jellyfin-config:/config"
+                          "jellyfin-cache:/cache"
+                          "/media/personal/entertainment:/media")))))
+    (service openssh-service-type)
+    (service postgresql-service-type
+             (postgresql-configuration
+              (postgresql postgresql-16)
+              (extension-packages (list postgis))))
     (service redis-service-type)
     (service syncthing-service-type
              (syncthing-configuration
               (user "boogs")))
+    (service thermald-service-type)
+    (service tlp-service-type
+             (tlp-configuration
+              (cpu-scaling-governor-on-ac (list "performance"))
+              (sched-powersave-on-bat? #t)))
+    (service virtlog-service-type
+             (virtlog-configuration
+              (max-clients 1000)))
     (set-xorg-configuration
      (xorg-configuration
-      (keyboard-layout keyboard-layout))))))
+      (keyboard-layout keyboard-layout))))
+   (modify-services %desktop-services
+                    (console-font-service-type
+                     config =>
+                     (map (lambda (tty)
+                            (cons tty
+                                  (file-append
+                                   font-terminus
+                                   "/share/consolefonts/ter-132n")))
+                          '("tty1"
+                            "tty2"
+                            "tty3"
+                            "tty4"
+                            "tty5"
+                            "tty6")))
+                    (gdm-service-type
+                     config =>
+                     (gdm-configuration
+                      (inherit config)
+                      (wayland? #t))))))
  (bootloader
   (bootloader-configuration
-   (bootloader grub-efi-bootloader)
+   (bootloader grub-efi-removable-bootloader)
    (targets '("/boot/efi"))
    (keyboard-layout keyboard-layout)
    (theme (grub-theme
-           (image (local-file "background.png"))
-           (gfxmode '("3000x2000" "auto"))))
-   (timeout 2)))
+           (image (local-file "aot.png"))))
+   (timeout 3)))
  (mapped-devices
   (list (mapped-device
          (source
