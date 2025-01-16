@@ -4,7 +4,7 @@ IMAPAccount gmail
 Host imap.gmail.com
 Port 993
 User bugrahanabdulkarim@gmail.com
-PassCmd "pass email/gmail/mbsync"
+PassCmd "pass branches/master/email/gmail/mbsync"
 SSLType IMAPS
 SSLVersions TLSv1.2
 
@@ -42,7 +42,7 @@ IMAPAccount uva
 Host imap.gmail.com
 Port 993
 User ba2ra@virginia.edu
-PassCmd "pass email/uva/app-password"
+PassCmd "pass branches/master/email/uva/app-password"
 SSLType IMAPS
 SSLVersions TLSv1.2
 
@@ -79,7 +79,7 @@ IMAPAccount vg
 Host mail.venatores.group
 Port 993
 User boogs@venatores.group
-PassCmd "pass email/boogs@venatores.group"
+PassCmd "pass branches/master/email/boogs@venatores.group"
 SSLType IMAPS
 
 IMAPStore vg-remote
@@ -112,26 +112,26 @@ SyncState *
 
 ################################################################################
 
-IMAPAccount axle
+IMAPAccount drumkit
 Host imap.gmail.com
 Port 993
-User boogs@axleapi.com
-PassCmd "pass email/axle/mbsync"
+User boogs@drumkit.ai
+PassCmd "pass branches/master/email/axle/mbsync"
 SSLType IMAPS
 SSLVersions TLSv1.2
 
-IMAPStore axle-remote
-Account axle
+IMAPStore drumkit-remote
+Account drumkit
 
-MaildirStore axle-local
+MaildirStore drumkit-local
 # The trailing "/" is important
-Path /media/personal/mail/axle/
-Inbox /media/personal/mail/axle/inbox
+Path /media/personal/mail/drumkit/
+Inbox /media/personal/mail/drumkit/inbox
 SubFolders Verbatim
 
-Channel axle-all
-Far :axle-remote:
-Near :axle-local:
+Channel drumkit-all
+Far :drumkit-remote:
+Near :drumkit-local:
 Patterns * "!Sent"
 Create Both
 # Create Near
@@ -139,9 +139,9 @@ Create Both
 Expunge Both
 SyncState *
 
-Channel axle-sent
-Far :axle-remote:
-Near :axle-local:
+Channel drumkit-sent
+Far :drumkit-remote:
+Near :drumkit-local:
 Patterns !* "Sent"
 Create Both
 Expunge Both
