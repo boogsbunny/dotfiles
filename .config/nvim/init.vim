@@ -1,7 +1,7 @@
 "================================================"
 "                  Vim Config                    "
-"              Author: Bugi Abdulkarim           "
-"           Last Modified: 09/28/2020            "
+"              Author: boogsbunny                "
+"           Last Modified: 01/16/2025            "
 "================================================"
 "
 if empty(glob('~/.vim/autoload/plug.vim'))
@@ -20,6 +20,8 @@ call plug#begin('~/.vim/plugged')
 " Plug 'nvim-lua/completion-nvim'
 " Plug 'tjdevries/nlua.nvim'
 " Plug 'tjdevries/lsp_extensions.nvim'
+Plug 'vlime/vlime'
+Plug 'kovisoft/paredit'
 
 " Telescope fuzzy finder
 Plug 'nvim-lua/telescope.nvim'
@@ -255,6 +257,7 @@ noremap <silent> <leader>cc :TComment<cr>
 " close quickfix window
 map <silent> <leader>gq :ccl<cr>
 
+let g:vlime_leader = "<Space>"
 "--------------------------------"
 "     React Native Mappings      "
 "--------------------------------"
