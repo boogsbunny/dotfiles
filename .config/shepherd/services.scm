@@ -25,7 +25,7 @@ into a single string using SEPARATOR."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define xrdb
-  (make <service>
+  (make <shepherd-service>
     #:docstring "X resources for xterm.
 Some DM merge this automatically; we merge it for the others."
     #:provides '(xrdb)
@@ -34,27 +34,27 @@ Some DM merge this automatically; we merge it for the others."
     #:one-shot? #t))
 
 (define no-bell
-  (make <service>
+  (make <shepherd-service>
     #:provides '(no-bell)
     #:start (make-system-constructor "xset -b")
     #:one-shot? #t))
 
 (define auto-lock
-  (make <service>
+  (make <shepherd-service>
     #:provides '(auto-lock)
     #:start (make-system-constructor "xss-lock slock &")
     #:stop (make-system-destructor "pkill xss-lock")
     #:respawn? #t))
 
 (define auto-mount
-  (make <service>
+  (make <shepherd-service>
     #:provides '(auto-mount)
     #:start (make-system-constructor "udiskie &")
     #:stop (make-system-destructor "pkill udiskie")
     #:respawn? #t))
 
 (define cron
-  (make <service>
+  (make <shepherd-service>
     #:provides '(cron)
     #:docstring "Crontab manager.
 Start after PATH is fully set or else local programs could
@@ -67,7 +67,7 @@ be missing."
 (define location-nova "38.87:-77.42")
 
 (define redshift
-  (make <service>
+  (make <shepherd-service>
     #:provides '(redshift)
     #:docstring "Redshift adjusts the color temperature of your screen according
 to your surroundings.  This may help your eyes hurt less if you are working in
