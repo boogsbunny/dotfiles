@@ -53,6 +53,16 @@
   csd (tap-hold-next-release 70 S (layer-delay 300 caps))
   ;; modifiers in cursor layer
   lcc (layer-switch cursor)
+  lpd (tap-hold 120 up tab)
+  lcd (tap-hold 120 up ret)
+  lad (tap-hold 120 left lsft)
+  lod (tap-hold 120 down lalt)
+  led (tap-hold 120 rght lctl)
+  lud (tap-hold 120 esc lmet)
+  lhd (tap-hold 120 esc lmet)
+  ltd (tap-hold 120 left rctl)
+  lnd (tap-hold 120 down ralt)
+  lsd (tap-hold 120 rght rsft)
   ;; modifiers in dvorak layer
   tpd (tap-hold 120 p tab)
   tcd (tap-hold 120 c ret)
@@ -164,8 +174,8 @@
   esc  mute vold volu                          prnt slck pause ins del  home pgup
        f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11   f12      end  pgdn
   XX   XX   XX   XX   @lcc XX   XX   XX   XX   @lcc XX   XX    XX       bspc
-  XX   XX   XX   XX   up   XX   XX   XX   XX   XX   XX   XX    XX       ret
-  XX   XX   left down rght bspc XX   bspc esc  XX   XX   XX    XX
+  XX   XX   XX   XX   @lpd XX   XX   XX   XX   @lcd XX   XX    XX       ret
+  XX   @lad @lod @led @lud bspc XX   bspc @lhd @ltd @lnd @lsd  XX
   XX   XX   XX   pgdn pgup XX   XX   XX   XX   XX   XX   XX             rsft
   wkup lctl lmet lalt           @tdv           ralt cmps rctl      back up   fwd
                                                                    left down rght
