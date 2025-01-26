@@ -26,30 +26,26 @@ export XDG_DATA_DIRS=/var/lib/flatpak/exports/share:$XDG_DATA_DIRS
 for i in emacsclient em emacs vim nano vi; do
 	command -v $i >/dev/null 2>&1 && export EDITOR=$i && break
 done
+
 GIT_EDITOR="$EDITOR"
 VISUAL="$EDITOR"
 [ "$GIT_EDITOR" = em ] && GIT_EDITOR=emc
 [ "$VISUAL" = emc ] && VISUAL=emc
 export GIT_EDITOR
 export VISUAL
+
 export TERMINAL="screen-256color"
-export BROWSER="nyxt"
+export BROWSER="firefox"
 export TERM="xterm"
-# export STATUSBAR="dwmblocks"
 export READER="zathura"
-# export FILE="ranger"
 export MANWIDTH=70
 export GDK_SCALE=2
-export GDK_DPI_SCALE=0.5
-# export GDK_SCALE=1.0
-# export GDK_DPI_SCALE=1.0
-# export STATUSBARSIZE=25
-# export FONTSIZE=18
+export GDK_DPI_SCALE=1.2
 export STATUSBARSIZE=14
 export FONTSIZE=18
 LESSHISTFILE='-'
+
 export GOPATH="$HOME/go"
-# export GOROOT="$HOME/go"
 export PERSONAL="$HOME/projects/personal"
 export SBCL_HOME="$HOME/.guix-profile/lib/sbcl"
 export NODE_PATH="$HOME/.npm-packages/lib/node_modules"
@@ -62,6 +58,7 @@ unset SSH_AGENT_PID
 if [ "${gnupg_SSH_AUTH_SOCK_by:-0}" -ne $$ ]; then
   export SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
 fi
+
 # Set GPG TTY
 export GPG_TTY=$(tty)
 # Refresh gpg-agent tty in case user switches into an X session
@@ -85,4 +82,4 @@ echo "$0" | grep "bash$" >/dev/null && [ -f ~/.bashrc ] && source "$HOME/.bashrc
 
 [ "$(tty)" = "/dev/tty1" ] && ! pgrep -x i3 >/dev/null && exec startx
 
-shepherd
+(shepherd 2>>$HOME/.config/guix/home/shepherd.log || true) &

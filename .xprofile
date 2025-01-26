@@ -1,6 +1,0 @@
-#!/bin/sh
-
-export BROWSER=firefox
-
-# start user services
-shepherd
