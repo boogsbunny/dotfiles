@@ -1,2 +1,3 @@
 (specifications->manifest
- '("gopls"))
+ '("go"
+   "gopls"))
