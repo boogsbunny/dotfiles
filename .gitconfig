@@ -11,8 +11,9 @@
 [includeIf "gitdir:~/projects/"]
   path = ~/.gitconfig-github
 [user]
-	email = ba2ra@virginia.edu
-	name = Boogs
+	email = boogs@virginia.edu
+	name = Bugrahan Abdulkarim
+	signingkey = FE32E2EC5E93703E5E1EBFA5437EC8EA278E5FEF
 [credential]
 	helper = store
 [github]
@@ -24,3 +25,7 @@
 [alias]
 	module = submodule update --init --recursive
 	tree = worktree add
+[safe]
+	directory = *
+[commit]
+	gpgsign = true
