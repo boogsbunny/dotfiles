@@ -33,10 +33,10 @@
 (setq coding-system-for-write 'utf-8)
 
 ;; native comp settings
-(setq native-comp-deferred-compilation t
+(setq native-comp-deferred-compilation nil
       native-comp-async-report-warnings-errors 'silent
       native-comp-async-query-on-exit t
-      native-comp-async-jobs-number 4
+      native-comp-async-jobs-number 2
       native-comp-speed 3)
 
 ;; avoid outdated byte-compiled elisp files
