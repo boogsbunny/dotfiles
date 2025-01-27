@@ -12,7 +12,9 @@
   #:use-module (gnu))
 
 (use-service-modules
+ databases
  desktop
+ syncthing
  xorg)
 
 (use-package-modules bootloaders)
@@ -26,7 +28,9 @@
                     cups-pk-helper-service-type
                     geoclue-service-type
                     gdm-service-type
-                    gnome-desktop-service-type)))
+                    gnome-desktop-service-type
+                    redis-service-type
+                    syncthing-service-type)))
     %boogs/services)))
 
 (operating-system
@@ -37,7 +41,7 @@
                (targets '("/dev/sdb"))))
   (kernel linux)
   (initrd microcode-initrd)
-  (firmware (append (list iwlwifi-firmware)
+  (firmware (append (list linux-firmware)
                     %boogs/firmware))
 
   (file-systems (cons* (file-system

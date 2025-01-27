@@ -47,7 +47,7 @@
 
    (kernel linux-obelisk)
    (initrd microcode-initrd)
-   (firmware (append (list iwlwifi-firmware)
+   (firmware (append (list linux-firmware)
                      %boogs/firmware))
 
    (packages (cons* intel-media-driver/nonfree
