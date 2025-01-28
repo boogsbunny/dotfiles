@@ -9,7 +9,6 @@
   #:use-module (gnu packages fontutils)
   #:use-module (gnu packages syncthing)
   #:use-module (backup)
-  #:use-module (desktop)
   #:use-module (keyboard))
 
 (use-service-modules
@@ -102,9 +101,7 @@
                   (max-clients 1000)))))
 
 (define %desktop-environment
-  (list (service gnome-desktop-service-type
-                 (gnome-desktop-configuration
-                  (gnome %boogs/gnome-minimal)))))
+  (list (service plasma-desktop-service-type)))
 
 (define %development-services
   (list (service containerd-service-type)

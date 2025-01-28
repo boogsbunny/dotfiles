@@ -29,6 +29,7 @@
                     geoclue-service-type
                     gdm-service-type
                     gnome-desktop-service-type
+                    plasma-desktop-service-type
                     redis-service-type
                     syncthing-service-type)))
     %boogs/services)))
