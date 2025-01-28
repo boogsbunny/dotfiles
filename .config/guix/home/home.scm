@@ -1,6 +1,7 @@
 ;; guix home reconfigure -L ~/.config/guix/home home.scm
 (define-module (home)
   #:use-module (gnu home)
+  #:use-module (gnu home services mcron)
   #:use-module (gnu home services desktop)
   #:use-module (gnu home services sound)
   #:use-module (gnu services)
@@ -8,7 +9,8 @@
   #:use-module (home services pipewire))
 
 (home-environment
- (services (list (service home-dbus-service-type)
+ (services (list (service home-mcron-service-type)
+                 (service home-dbus-service-type)
                  (service home-udiskie-service-type)
                  (service home-pipewire-service-type)
                  (service home-redshift-service-type
