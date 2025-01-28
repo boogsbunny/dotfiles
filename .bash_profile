@@ -41,6 +41,7 @@ export READER="zathura"
 export MANWIDTH=70
 export GDK_SCALE=2
 export GDK_DPI_SCALE=1.2
+export XDG_CURRENT_DESKTOP="KDE"
 export STATUSBARSIZE=14
 export FONTSIZE=18
 LESSHISTFILE='-'
@@ -79,7 +80,5 @@ for i in ~/.guix-extra-profiles/*; do
 done
 
 echo "$0" | grep "bash$" >/dev/null && [ -f ~/.bashrc ] && source "$HOME/.bashrc"
-
-[ "$(tty)" = "/dev/tty1" ] && ! pgrep -x i3 >/dev/null && exec startx
 
 (shepherd 2>>$HOME/.config/guix/home/shepherd.log || true) &
