@@ -22,10 +22,9 @@
         web-mode-markup-indent-offset 2
         web-mode-css-indent-offset 2))
 
-(add-hook 'web-mode-hook  'boogs/web-mode-hook)
+(add-hook 'web-mode-hook 'boogs/web-mode-hook)
 (add-hook 'web-mode-hook 'add-node-modules-path)
 (add-hook 'web-mode-hook 'prettier-js-mode)
-(add-hook 'web-mode-hook 'eglot-ensure)
 
 (require 'init-lass)
 (add-to-list 'auto-mode-alist '("\\.lass\\'" . lass-mode))
