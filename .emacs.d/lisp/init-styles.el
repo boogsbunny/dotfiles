@@ -255,12 +255,30 @@ IS-DARK should be non-nil for dark mode, nil for light mode."
     ;; Add small delay to allow changes to propagate
     (sleep-for 0.5)))
 
+(defun run-kde-theme-safely (is-dark)
+  "Run KDE commands safely to switch theme mode.
+IS-DARK should be non-nil for dark mode, nil for light mode."
+  (let* ((look-and-feel (if is-dark "org.kde.breezedark.desktop" "org.kde.breeze.desktop"))
+         (commands
+          `(("plasma-apply-lookandfeel" "-a" ,look-and-feel)
+            ("plasma-apply-desktoptheme" ,(if is-dark "breeze-dark" "breeze-light")))))
+
+    (dolist (cmd commands)
+      (when (executable-find (car cmd))
+        (condition-case err
+            (apply #'call-process (car cmd) nil nil nil (cdr cmd))
+          (error
+           (message "Warning: couldn't set KDE theme command %s: %s"
+                    (car cmd) (error-message-string err))))))
+    (sleep-for 0.5)))
+
 (defun switch-theme-based-on-time ()
   "Switch between 'modus-operandi-tinted' and 'modus-vivendi-tinted' based on the time of day."
   (let ((hour (string-to-number (format-time-string "%H"))))
     (if (and (>= hour 7) (< hour 20)) ; from 7:00 to 19:59 use 'modus-operandi-tinted, then 'moduse-vivendi-tinted
         (progn
-          (run-gsettings-safely nil)
+          ;; (run-gsettings-safely nil)
+          (run-kde-theme-safely nil)
           (load-theme 'modus-operandi-tinted t)
           (set-helm-ls-git-faces-for-modus-operandi-tinted)
           (set-org-faces-for-modus-operandi-tinted)
@@ -269,7 +287,8 @@ IS-DARK should be non-nil for dark mode, nil for light mode."
           ;; (set-helm-for-modus-operandi-tinted)
           )
       (progn
-        (run-gsettings-safely t)
+        ;; (run-gsettings-safely t)
+        (run-kde-theme-safely t)
         (load-theme 'modus-vivendi-tinted t)
         (set-helm-ls-git-faces-for-modus-vivendi-tinted)
         (set-org-faces-for-modus-vivendi-tinted)
