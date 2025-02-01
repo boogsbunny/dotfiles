@@ -37,18 +37,7 @@
                 #:log-file #$(get-log-file "pipewire.log")
                 #:environment-variables
                 (append (list "DISABLE_RTKIT=1")
-                        (default-environment-variables)))))
-    ;; (start #~(make-forkexec-constructor
-    ;;           (list #$(file-append pipewire "/bin/pipewire"))
-    ;;           #:log-file (string-append
-    ;;                       (or (getenv "XDG_LOG_HOME")
-    ;;                           (format #f "~a/.local/var/log"
-    ;;                                   (getenv "HOME")))
-    ;;                       "/pipewire.log")
-    ;;           #:environment-variables
-    ;;           (append (list "DISABLE_RTKIT=1")
-    ;;                   (default-environment-variables))))
-    )
+                        (default-environment-variables))))))
    ;; Start Pipewire PulseAudio module
    (shepherd-service
     (requirement '(pipewire))
@@ -59,18 +48,7 @@
               #:log-file #$(get-log-file "pipewire-pulse.log")
               #:environment-variables
               (append (list "DISABLE_RTKIT=1")
-                      (default-environment-variables))))
-    ;; (start #~(make-forkexec-constructor
-    ;;           (list #$(file-append pipewire "/bin/pipewire-pulse"))
-    ;;           #:log-file (string-append
-    ;;                       (or (getenv "XDG_LOG_HOME")
-    ;;                           (format #f "~a/.local/var/log"
-    ;;                                   (getenv "HOME")))
-    ;;                       "/pipewire-pulse.log")
-    ;;           #:environment-variables
-    ;;           (append (list "DISABLE_RTKIT=1")
-    ;;                   (default-environment-variables))))
-    )
+                      (default-environment-variables)))))
    ;; Start Wireplumber session manager
    (shepherd-service
     (requirement '(pipewire))
@@ -81,18 +59,7 @@
               #:log-file #$(get-log-file "wireplumber.log")
               #:environment-variables
               (append (list "DISABLE_RTKIT=1")
-                      (default-environment-variables))))
-    ;; (start #~(make-forkexec-constructor
-    ;;           (list #$(file-append wireplumber "/bin/wireplumber"))
-    ;;           #:log-file (string-append
-    ;;                       (or (getenv "XDG_LOG_HOME")
-    ;;                           (format #f "~a/.local/var/log"
-    ;;                                   (getenv "HOME")))
-    ;;                       "/wireplumber.log")
-    ;;           #:environment-variables
-    ;;           (append (list "DISABLE_RTKIT=1")
-    ;;                   (default-environment-variables))))
-    )))
+                      (default-environment-variables)))))))
 
 (define (home-pipewire-xdg-configuration-service config)
   `(("alsa/asoundrc"
