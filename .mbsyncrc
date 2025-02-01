@@ -5,8 +5,7 @@ Host imap.gmail.com
 Port 993
 User bugrahanabdulkarim@gmail.com
 PassCmd "pass branches/master/email/gmail/mbsync"
-SSLType IMAPS
-SSLVersions TLSv1.2
+TLSType IMAPS
 
 IMAPStore gmail-remote
 Account gmail
@@ -43,8 +42,7 @@ Host imap.gmail.com
 Port 993
 User ba2ra@virginia.edu
 PassCmd "pass branches/master/email/uva/app-password"
-SSLType IMAPS
-SSLVersions TLSv1.2
+TLSType IMAPS
 
 IMAPStore uva-remote
 Account uva
@@ -80,7 +78,7 @@ Host mail.venatores.group
 Port 993
 User boogs@venatores.group
 PassCmd "pass branches/master/email/boogs@venatores.group"
-SSLType IMAPS
+TLSType IMAPS
 
 IMAPStore vg-remote
 Account vg
@@ -117,8 +115,7 @@ Host imap.gmail.com
 Port 993
 User boogs@drumkit.ai
 PassCmd "pass branches/master/email/axle/mbsync"
-SSLType IMAPS
-SSLVersions TLSv1.2
+TLSType IMAPS
 
 IMAPStore drumkit-remote
 Account drumkit
