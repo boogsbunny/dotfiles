@@ -5,11 +5,14 @@
   #:use-module (gnu home services desktop)
   #:use-module (gnu home services sound)
   #:use-module (gnu services)
+  #:use-module (home services cron)
   #:use-module (home services udiskie)
   #:use-module (home services pipewire))
 
 (home-environment
- (services (list (service home-mcron-service-type)
+ (services (list (service home-mcron-service-type
+                          (home-mcron-configuration
+                           (jobs (list email-job))))
                  (service home-dbus-service-type)
                  (service home-udiskie-service-type)
                  (service home-pipewire-service-type)
