@@ -1,0 +1,116 @@
+#!/bin/sh
+
+# Colors
+readonly GREEN='\033[0;32m\033[1m'
+readonly RED='\033[0;31m\033[1m'
+readonly CYAN='\033[0;36m\033[1m'
+readonly NORMAL='\033[0m'
+
+# Message prefixes
+readonly PREFIX_SECTION="==>"
+readonly PREFIX_ERROR="ERROR::"
+readonly PREFIX_QUESTION="::?"
+
+# Paths
+readonly GUIX_EXTRA_PROFILES="$HOME/.guix-extra-profiles"
+readonly GUIX_MANIFESTS="$HOME/.package-lists"
+
+# Output functions
+section() {
+  echo -e "${GREEN}${PREFIX_SECTION} $@${NORMAL}"
+}
+
+error() {
+  echo -e "${RED}${PREFIX_ERROR} $@${NORMAL}" >&2
+  exit 1
+}
+
+question() {
+  echo -e -n "${CYAN}${PREFIX_QUESTION} $@${NORMAL}"
+}
+
+# Confirmation function
+confirm() {
+    question "$1 [y/N] "
+    read -r answer
+    case "$answer" in
+        [yY][eE][sS]|[yY]) return 0 ;;
+        *) return 1 ;;
+    esac
+}
+
+# Parse command line options
+YES_ALL=0
+while getopts "y" opt; do
+    case $opt in
+        y) YES_ALL=1 ;;
+        *) error "Invalid option: -$OPTARG" ;;
+    esac
+done
+shift $((OPTIND-1))
+
+# Convert seconds to human readable time
+human_time() {
+  local seconds=$1
+  local minutes=$((seconds / 60))
+  local hours=$((minutes / 60))
+  seconds=$((seconds % 60))
+  minutes=$((minutes % 60))
+
+  local result=""
+  [ $hours -gt 0 ] && result="${hours}h "
+  [ $minutes -gt 0 ] && result="${result}${minutes}m "
+  result="${result}${seconds}s"
+
+  echo "$result"
+}
+
+# Get profiles to update
+if [ $# -eq 0 ]; then
+    set -- "$GUIX_EXTRA_PROFILES"/*
+fi
+
+# Record total start time
+start_time=$(date +%s)
+
+# Update each profile
+for profile in "$@"; do
+  profileName=$(basename "$profile")
+  profilePath="$GUIX_EXTRA_PROFILES/$profileName"
+  manifestPath="$GUIX_MANIFESTS/guix-$profileName-manifest.scm"
+
+  if [ ! -f "$manifestPath" ]; then
+    error "Manifest not found: $manifestPath"
+  fi
+
+  # Ask for confirmation unless -y was specified
+  if [ "$YES_ALL" -eq 0 ]; then
+    if ! confirm "Update profile: $profileName?"; then
+      section "Skipping $profileName"
+      continue
+    fi
+  fi
+
+  section "Updating guix profile: $profileName"
+
+  # Record profile start time
+  profile_start_time=$(date +%s)
+
+  guix package --profile="$profilePath/$profileName" \
+               --manifest="$manifestPath"
+
+  # Record end time and calculate duration
+  profile_end_time=$(date +%s)
+  profile_duration=$((profile_end_time - profile_start_time))
+
+  # Print profile duration
+  section "Updated $profileName guix profile in $(human_time $profile_duration)"
+
+done
+
+# Record end time and calculate duration
+end_time=$(date +%s)
+duration=$((end_time - start_time))
+
+# Print duration
+section "Operation completed in $(human_time $duration)"
