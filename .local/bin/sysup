@@ -1,0 +1,63 @@
+#!/bin/sh
+
+# Colors
+readonly GREEN='\033[0;32m\033[1m'
+readonly RED='\033[0;31m\033[1m'
+readonly NORMAL='\033[0m'
+
+# Message prefixes
+readonly PREFIX_SECTION="==>"
+readonly PREFIX_ERROR="ERROR::"
+
+# Paths
+readonly SYSTEM_DIR="$HOME/.config/guix/system"
+
+# Output functions
+section() {
+  echo -e "${GREEN}${PREFIX_SECTION} $@${NORMAL}"
+}
+
+error() {
+  echo -e "${RED}${PREFIX_ERROR} $@${NORMAL}" >&2
+  exit 1
+}
+
+# Convert seconds to human readable time
+human_time() {
+  local seconds=$1
+  local minutes=$((seconds / 60))
+  local hours=$((minutes / 60))
+  seconds=$((seconds % 60))
+  minutes=$((minutes % 60))
+
+  local result=""
+  [ $hours -gt 0 ] && result="${hours}h "
+  [ $minutes -gt 0 ] && result="${result}${minutes}m "
+  result="${result}${seconds}s"
+
+  echo "$result"
+}
+
+# System configuration
+SYSTEM_NAME=$(hostname)
+CONFIG_FILE="$SYSTEM_DIR/$SYSTEM_NAME.scm"
+
+# Check if the configuration exists
+if [ ! -f "$CONFIG_FILE" ]; then
+  error "System configuration not found: $CONFIG_FILE"
+fi
+
+section "Updating guix system configuration for $SYSTEM_NAME..."
+
+# Record start time
+start_time=$(date +%s)
+
+# Run the reconfigure command from the system directory using subshell
+(cd "$SYSTEM_DIR" && sudo guix system -L "$SYSTEM_DIR" reconfigure "$CONFIG_FILE")
+
+# Record end time and calculate duration
+end_time=$(date +%s)
+duration=$((end_time - start_time))
+
+# Print duration
+section "Operation completed in $(human_time $duration)"
