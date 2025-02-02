@@ -1,0 +1,60 @@
+#!/bin/sh
+
+# Colors
+readonly GREEN='\033[0;32m\033[1m'
+readonly RED='\033[0;31m\033[1m'
+readonly NORMAL='\033[0m'
+
+# Message prefixes
+readonly PREFIX_SECTION="==>"
+readonly PREFIX_ERROR="ERROR::"
+
+# Paths
+readonly GUIX_HOME_CONFIG="$HOME/.config/guix/home/home.scm"
+
+# Output functions
+section() {
+  echo -e "${GREEN}${PREFIX_SECTION} $@${NORMAL}"
+}
+
+error() {
+  echo -e "${RED}${PREFIX_ERROR} $@${NORMAL}" >&2
+  exit 1
+}
+
+# Convert seconds to human readable time
+human_time() {
+  local seconds=$1
+  local minutes=$((seconds / 60))
+  local hours=$((minutes / 60))
+  seconds=$((seconds % 60))
+  minutes=$((minutes % 60))
+
+  local result=""
+  [ $hours -gt 0 ] && result="${hours}h "
+  [ $minutes -gt 0 ] && result="${result}${minutes}m "
+  result="${result}${seconds}s"
+
+  echo "$result"
+}
+
+# Check if config exists
+if [ ! -f "$GUIX_HOME_CONFIG" ]; then
+  error "Home configuration not found: $GUIX_HOME_CONFIG"
+fi
+
+section "Updating guix home configuration..."
+
+# Record start time
+start_time=$(date +%s)
+
+# Run the command
+RUNNING_GUIX_HOME=1 guix home -L ~/.config/guix/home \
+  reconfigure "$GUIX_HOME_CONFIG"
+
+# Record end time and calculate duration
+end_time=$(date +%s)
+duration=$((end_time - start_time))
+
+# Print duration
+section "Operation completed in $(human_time $duration)"
