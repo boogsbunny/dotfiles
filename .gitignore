@@ -65,6 +65,7 @@ Thumbs.db
 
 # local #
 ##############################
+.local/bin/*
 .local/bin/*py*
 .local/bin/*pip*
 .local/bin/*odf*
