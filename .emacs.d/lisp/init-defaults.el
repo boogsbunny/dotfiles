@@ -42,6 +42,8 @@
 ;; avoid outdated byte-compiled elisp files
 (setq load-prefer-newer t)
 
+(setq-default truncate-lines t)
+
 ;;; Support for Emacs pinentry.
 ;;; Required for eshell/sudo and everything relying on GPG queries.
 (setq epa-pinentry-mode 'loopback) ; This will fail if gpg >= 2.1 is not available.
@@ -210,32 +212,6 @@
 
 (setq switch-to-prev-buffer-skip 'boogs/buffer-skip-p)
 
-(defun boogs/toggle-olivetti-mode ()
-  "Toggle olivetti mode based on number of open buffers in text-mode or prog-mode, and set body width to 140 for text-mode and prog-mode"
-  (let ((num-text-buffers 0)
-        (num-prog-buffers 0))
-    (dolist (buffer (buffer-list))
-      (when (buffer-live-p buffer)
-        (with-current-buffer buffer
-          (when (derived-mode-p 'text-mode)
-            (setq num-text-buffers (1+ num-text-buffers)))
-          (when (derived-mode-p 'prog-mode)
-            (setq num-prog-buffers (1+ num-prog-buffers))))))
-    (when (or (= (+ num-text-buffers num-prog-buffers) 1)
-              (and (= (+ num-text-buffers num-prog-buffers) 2)
-                   (or (= num-text-buffers 0)
-                       (= num-prog-buffers 0))))
-      (when (derived-mode-p 'text-mode 'prog-mode)
-        (setq olivetti-body-width 140))
-      (olivetti-mode 1))
-    (when (not (or (= (+ num-text-buffers num-prog-buffers) 1)
-                    (and (= (+ num-text-buffers num-prog-buffers) 2)
-                         (or (= num-text-buffers 0)
-                             (= num-prog-buffers 0)))))
-      (when (derived-mode-p 'text-mode 'prog-mode)
-        (setq olivetti-body-width nil))
-      (olivetti-mode 0))))
-
 (defun single-buffer-visible-p ()
   "Check if only a single buffer is visible in the current frame."
   (<= (length (window-list)) 1))
@@ -249,12 +225,14 @@
   "Enable olivetti mode if on monitor and only a single buffer is visible."
   (if (and (not (laptop-screen-p))
            (or (and (derived-mode-p 'prog-mode) (single-buffer-visible-p))
+               (and (derived-mode-p 'json-mode) (single-buffer-visible-p))
                (and (derived-mode-p 'org-mode) (single-buffer-visible-p))
                (and (derived-mode-p 'yaml-mode) (single-buffer-visible-p))
                (and (derived-mode-p 'eww-mode) (single-buffer-visible-p))
                (and (derived-mode-p 'slack-mode) (single-buffer-visible-p))
                (and (derived-mode-p 'magit-status-mode) (single-buffer-visible-p))
                (and (derived-mode-p 'comint-mode) (single-buffer-visible-p))
+               (and (derived-mode-p 'notmuch-show-mode) (single-buffer-visible-p))
                (and (derived-mode-p 'erc-mode) (single-buffer-visible-p))))
       (olivetti-mode 1)
     (olivetti-mode -1)))
@@ -263,13 +241,9 @@
 (add-hook 'kill-buffer-hook 'maybe-enable-olivetti-mode)
 (add-hook 'after-change-major-mode-hook 'maybe-enable-olivetti-mode)
 
-;; (add-hook 'buffer-list-update-hook 'boogs/toggle-olivetti-mode)
 (setq olivetti-body-width 0.65
       olivetti-minimum-body-width 72
       olivetti-recall-visual-line-mode-entry-state t)
-
-(add-hook 'text-mode-hook #'olivetti-mode)
-(add-hook 'prog-mode-hook #'olivetti-mode)
 
 ;; kill this buffer
 (global-set-key (kbd "C-x C-k") 'kill-this-buffer)
@@ -307,15 +281,17 @@
                                   (executable-find browse-url-kde-program)
                                   (executable-find browse-url-conkeror-program)
                                   (executable-find browse-url-chrome-program)))
-(setq browse-url-handlers '(
-                                    ("http://www.lispworks.com/reference/HyperSpec/.*" . eww-browse-url)
-                                    ("file:///.*HyperSpec.*" . eww-browse-url)
-                                    ("." . browse-url-default-browser)))
+(setq browse-url-handlers '(("http://www.lispworks.com/reference/HyperSpec/.*" . eww-browse-url)
+                            ("file:///.*HyperSpec.*" . eww-browse-url)
+                            ("." . browse-url-default-browser)))
 
 (require 'yasnippet)
 (setq yas-snippet-dirs '("~/dotfiles/.emacs.d/lisp/snippets"))
 (yas-reload-all)
 (add-hook 'prog-mode-hook #'yas-minor-mode)
+
+(setq warning-suppress-types
+      '((yasnippet backquote-change)))
 
 (setq company-minimum-prefix-length 2
       company-idle-delay 0.2
@@ -324,15 +300,50 @@
       company-dabbrev-ignore-case t
       company-dabbrev-code-ignore-case t
       completion-ignore-case t)
-(add-hook 'after-init-hook 'global-company-mode)
+;; (add-hook 'after-init-hook 'global-company-mode)
 
 (require 'company-box)
 (add-hook 'company-mode-hook 'company-box-mode)
 
+;;;###autoload
+(defun boogs/project-vc-dir ()
+  "Run `magit-status' in the current project's root."
+  (interactive)
+  (magit-status (project-root (project-current t))))
+
+(define-key project-prefix-map (kbd "m") 'boogs/project-vc-dir)
+
+(setq project-switch-commands '((project-find-file "Find file")
+                                (project-find-regexp "Find regexp")
+                                (project-find-dir "Find directory")
+                                (boogs/project-vc-dir "Magit")
+                                (project-eshell "Eshell")))
+
+(setq project--list
+      '(("~/projects/drumkit/drumkit/branches/main/")
+       ("~/projects/drumkit/drumkit-portal/branches/main/")
+       ("~/projects/drumkit/mercury/branches/main/")
+       ("~/projects/drumkit/parthenon/branches/main/")
+       ("~/projects/drumkit/vesta/branches/main/")
+       ("~/projects/drumkit/vulcan/branches/main/")
+       ("~/dotfiles/")
+       ("~/projects/boogs.gitlab.io/branches/master/")
+       ("~/common-lisp/shosha/")))
+
 (require 'perspective)
-(customize-set-variable 'persp-mode-prefix-key (kbd "C-c M-p"))
+(customize-set-variable 'persp-mode-prefix-key (kbd "C-M-w"))
 (customize-set-variable 'persp-initial-frame-name "work")
 (customize-set-variable 'persp-state-default-file "~/.emacs.d/lisp/persp-state")
 (persp-mode)
+
+;; Add advice to stop hangs on EXWM
+;; The problem happens with floating windows that disappear - like open file dialog or a Zoom dialog when starting a meeting
+;; The solution is to assure all frames in winner-modified-list pass the frame-live-p test
+(defun boogs/winner-clean-up-modified-list ()
+  "Remove dead frames from `winner-modified-list`"
+  (dolist (frame winner-modified-list)
+    (unless (frame-live-p frame)
+      (delete frame winner-modified-list))))
+(advice-add 'winner-save-old-configurations :before #'boogs/winner-clean-up-modified-list)
 
 (provide 'init-defaults)
