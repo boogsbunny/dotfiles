@@ -95,7 +95,9 @@
         (service tlp-service-type
                  (tlp-configuration
                   (cpu-scaling-governor-on-ac (list "performance"))
-                  (sched-powersave-on-bat? #t)))
+                  (sched-powersave-on-bat? #t)
+                  (usb-autosuspend? #f)
+                  (wifi-pwr-on-bat? #f)))
         (service virtlog-service-type
                  (virtlog-configuration
                   (max-clients 1000)))))
