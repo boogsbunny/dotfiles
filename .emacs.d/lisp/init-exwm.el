@@ -62,7 +62,7 @@ KEYS is passed to `kbd'."
 ;; multi-monitor
 (defun boogs/multi-monitor-start ()
   (interactive)
-  (start-process-shell-command "hz-two" nil "hz-two"))
+  (start-process-shell-command "horizontal" nil "horizontal"))
 (exwm-input-set-key (kbd "s-q") #'boogs/multi-monitor-start)
 
 ;;; Those cannot be set globally: if Emacs would be run in another WM, the "s-"
@@ -104,24 +104,37 @@ CLASS-NAME is used for matching instead of PROGRAM name if provided."
   (interactive)
   (start-process program nil program))
 
+(boogs/exwm-global-set-key
+ "s-;"
+ (lambda ()
+   (interactive)
+   (boogs/start-new "screenshot")))
+
 ;; Terminal
-(boogs/exwm-global-set-key "s-y"
-                           (lambda ()
-                             (interactive)
-                             (boogs/switch-to-or-start "alacritty")))
-(boogs/exwm-global-set-key "s-Y"
-                           (lambda ()
-                             (interactive)
-                             (boogs/start-new "alacritty")))
+(boogs/exwm-global-set-key
+ "s-y"
+ (lambda ()
+   (interactive)
+   (boogs/switch-to-or-start "ghostty")))
+
+(boogs/exwm-global-set-key
+ "s-Y"
+ (lambda ()
+   (interactive)
+   (boogs/start-new "ghostty")))
+
 ;; Browser
-(boogs/exwm-global-set-key "s-i"
-                           (lambda ()
-                             (interactive)
-                             (boogs/switch-to-or-start "firefox" "Nightly")))
-(boogs/exwm-global-set-key "s-I"
-                           (lambda ()
-                             (interactive)
-                             (boogs/start-new "firefox")))
+(boogs/exwm-global-set-key
+ "s-i"
+ (lambda ()
+   (interactive)
+   (boogs/switch-to-or-start "firefox" "Nightly")))
+
+(boogs/exwm-global-set-key
+ "s-I"
+ (lambda ()
+   (interactive)
+   (boogs/start-new "firefox")))
 
 (when (require 'windower nil 'noerror)
   (exwm-input-set-key (kbd "s-<tab>") 'windower-switch-to-last-buffer)
@@ -137,6 +150,7 @@ CLASS-NAME is used for matching instead of PROGRAM name if provided."
 
 (with-eval-after-load 'helm
   (boogs/exwm-global-set-key "s-b" #'helm-mini)
+  (boogs/exwm-global-set-key "s-z" #'helm-mini)
   (boogs/exwm-global-set-key "M-x" #'helm-M-x)
   (boogs/exwm-global-set-key "\C-x\C-m" #'helm-M-x)
   (boogs/exwm-global-set-key "C-c t" #'helm-tramp)
@@ -174,13 +188,12 @@ CLASS-NAME is used for matching instead of PROGRAM name if provided."
       (exwm-input-set-key (kbd "s-t") (lambda ()
                                         (interactive)
                                         (find-file (car org-agenda-files))))
-      (exwm-input-set-key (kbd "s-n") #'eshell)
       (exwm-input-set-key (kbd "s-m") #'notmuch-hello)
       (exwm-input-set-key (kbd "s-e") #'helm-exwm))
-  (boogs/exwm-global-set-key "s-t" 'helm-selector-org)
-  (boogs/exwm-global-set-key "s-T" 'helm-selector-org-other-window)
+  (boogs/exwm-global-set-key "s-t" 'gptel)
+  (boogs/exwm-global-set-key "s-T" 'gptel-menu)
   (boogs/exwm-global-set-key "s-<return>" 'boogs/helm-selector-sly)
-  (boogs/exwm-global-set-key "C-x C-<tab>" #'eshell)
+  (boogs/exwm-global-set-key "s-<backspace>" 'boogs/sly-start-new-connection)
   (boogs/exwm-global-set-key "S-s-<return>" 'boogs/helm-selector-sly-other-window)
   (boogs/exwm-global-set-key "s-m" #'helm-selector-notmuch)
   (boogs/exwm-global-set-key "s-M" #'helm-selector-notmuch-other-window)
@@ -194,8 +207,8 @@ CLASS-NAME is used for matching instead of PROGRAM name if provided."
 (when (fboundp 'magit-status)
   (if (require 'helm-selector-magit nil :noerror)
       (progn
-        (boogs/exwm-global-set-key "s-v" #'helm-selector-magit)
-        (exwm-input-set-key (kbd "s-V") #'magit-status))
+        (boogs/exwm-global-set-key "s-V" #'helm-selector-magit)
+        (exwm-input-set-key (kbd "s-v") #'magit-status))
     (exwm-input-set-key (kbd "s-v") #'magit-status)))
 
 (cond
@@ -236,10 +249,14 @@ CLASS-NAME is used for matching instead of PROGRAM name if provided."
      (boogs/exwm-global-set-key "s-<backspace>" #'racket-repl))))
 (exwm-input-set-key (kbd "s-C-<backspace>") #'boogs/repl-switcher)
 
-;;; External application shortcuts.
 (defun boogs/exwm-start (command)
   (interactive (list (read-shell-command "$ ")))
-  (start-process-shell-command command nil command))
+  (call-process-shell-command command nil 0))
+
+;;; External application shortcuts.
+;; (defun boogs/exwm-start (command)
+;;   (interactive (list (read-shell-command "$ ")))
+;;   (start-process-shell-command command nil command))
 (exwm-input-set-key (kbd "C-x SPC") #'boogs/exwm-start)
 
 (when (require 'helm-exwm nil t)
