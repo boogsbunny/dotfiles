@@ -1,0 +1,1023 @@
+#!/bin/sh
+
+#================================================================================
+# Environment Variables
+#================================================================================
+
+GPG_DEVICE=""
+DRY_RUN=false
+INTERACTIVE=true
+XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
+XDG_DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
+
+# Repository information
+readonly REPO_OWNER="boogsbunny"
+readonly REPO_NAME="dotfiles"
+readonly REPO_SSH="git@github.com:$REPO_OWNER/$REPO_NAME.git"
+readonly REPO_HTTPS="https://github.com/$REPO_OWNER/$REPO_NAME.git"
+
+# Paths
+readonly GPG_DIR="$HOME/.gnupg"
+readonly PASS_DIR="$HOME/.password-store"
+readonly GPG_MOUNT_DIR="/mnt"
+readonly GPG_MOUNT_NAME="gpg_backup"
+readonly GPG_SOURCE_DIR="$GPG_MOUNT_DIR/public"
+
+# Package lists
+readonly INITIAL_PACKAGES="git stow gnupg openssh password-store pinentry cryptsetup"
+
+#================================================================================
+# Usage and Help
+#================================================================================
+
+usage() {
+  cat <<EOF>&2
+Usage: ${0##*/} [options]
+
+Initialize system configuration: Set up GPG, dotfiles, Guix profiles, and services.
+
+Options:
+  -g DEVICE  : Device containing GPG keys (e.g., '/dev/sda1')
+  -n         : Dry run - show what would be done without doing it
+  -y         : Non-interactive mode, assume yes for all questions
+  -h         : Show this help message
+
+Environment variables:
+  XDG_CONFIG_HOME : Config directory (default: ~/.config)
+  XDG_DATA_HOME   : Data directory   (default: ~/.local/share)
+
+Structure:
+  ~/dotfiles/            : Main configuration directory
+  ├── .config/           : Application configurations
+  │   ├── guix/          : Guix system configurations
+  │   └── ...            : Other app configs
+  ├── .package-lists/    : Guix manifests
+  └── .local/            : User specific data
+
+Tips:
+  - Ensure Guix is installed and operational
+  - For GPG setup, specify device containing your keys
+  - Internet connection required for git operations
+  - Run with -n first to see what will happen
+
+Examples:
+  ${0##*/} -g /dev/sdaX          : Setup with GPG keys from device
+  ${0##*/} -n                    : Show what would be done
+  ${0##*/} -y                    : Non-interactive setup
+EOF
+  exit 1
+}
+
+#================================================================================
+# Command Line Options
+#================================================================================
+
+# Add option parsing
+while getopts "g:nyh" opt; do
+  case $opt in
+    g) GPG_DEVICE="$OPTARG" ;;
+    n) DRY_RUN=true ;;
+    y) INTERACTIVE=false ;;
+    h) usage ;;
+    \?) usage ;;
+  esac
+done
+shift $((OPTIND-1))
+
+#================================================================================
+# ANSI Color Definitions
+#================================================================================
+
+# ANSI Escape Code Reference
+# Format: \033[<style>;<color>m
+#
+# Style Codes:
+# 0 = Normal
+# 1 = Bold
+# 2 = Dim
+# 4 = Underlined
+# 5 = Blink
+# 7 = Reverse
+# 8 = Hidden
+#
+# Color Codes:
+# 30 = Black   90 = Bright Black (Gray)
+# 31 = Red     91 = Bright Red
+# 32 = Green   92 = Bright Green
+# 33 = Yellow  93 = Bright Yellow
+# 34 = Blue    94 = Bright Blue
+# 35 = Magenta 95 = Bright Magenta
+# 36 = Cyan    96 = Bright Cyan
+# 37 = White   97 = Bright White
+#
+# Background Colors:
+# Add 10 to color code (eg: 41 = red background)
+#
+# Reset: \033[0m
+
+# Format codes
+readonly FORMAT_NORMAL=0
+readonly FORMAT_BOLD=1
+readonly FORMAT_DIM=2
+readonly FORMAT_UNDERLINE=4
+readonly FORMAT_BLINK=5
+readonly FORMAT_REVERSE=7
+readonly FORMAT_HIDDEN=8
+
+# Color codes
+readonly COLOR_BLACK=30
+readonly COLOR_RED=31
+readonly COLOR_GREEN=32
+readonly COLOR_YELLOW=33
+readonly COLOR_BLUE=34
+readonly COLOR_MAGENTA=35
+readonly COLOR_CYAN=36
+readonly COLOR_WHITE=37
+
+# Reset code
+readonly RESET='\033[0m'
+
+# Function to generate color code
+make_color() {
+  local color=$1
+  local format=$2
+  echo -ne "\033[${format};${color}m"
+}
+
+# Color definitions
+readonly NORMAL="${RESET}"
+readonly BOLD=$(make_color $COLOR_WHITE $FORMAT_BOLD)
+readonly RED=$(make_color $COLOR_RED $FORMAT_BOLD)
+readonly GREEN=$(make_color $COLOR_GREEN $FORMAT_BOLD)
+readonly YELLOW=$(make_color $COLOR_YELLOW $FORMAT_BOLD)
+readonly BLUE=$(make_color $COLOR_BLUE $FORMAT_BOLD)
+readonly MAGENTA=$(make_color $COLOR_MAGENTA $FORMAT_BOLD)
+readonly CYAN=$(make_color $COLOR_CYAN $FORMAT_BOLD)
+readonly WHITE=$(make_color $COLOR_WHITE $FORMAT_BOLD)
+
+# Message prefixes
+readonly PREFIX_ERROR="ERROR::"
+readonly PREFIX_INFO=""
+readonly PREFIX_MESSAGE="::"
+readonly PREFIX_SECTION="==>"
+readonly PREFIX_WARNING="WARNING::"
+
+#================================================================================
+# Output Functions
+#================================================================================
+
+action() {
+  echo -e "${MAGENTA}${PREFIX_MESSAGE} $@${NORMAL}"
+}
+
+emphasis() {
+  echo -e "${WHITE}$@${NORMAL}"
+}
+
+error() {
+  # Send to stderr
+  echo -e "${RED}${PREFIX_ERROR} $@${NORMAL}" >&2
+  exit 1
+}
+
+highlight() {
+  echo -e "${BLUE}$@${NORMAL}"
+}
+
+info() {
+  echo -e "${PREFIX_INFO}$@"
+}
+
+message() {
+  echo -e "${YELLOW}${PREFIX_MESSAGE} $@${NORMAL}"
+}
+
+question() {
+  echo -e "${CYAN}${PREFIX_MESSAGE} $@${NORMAL}"
+}
+
+section() {
+  echo -e "${GREEN}${PREFIX_SECTION} $@${NORMAL}"
+}
+
+warning() {
+  echo -e "${YELLOW}${PREFIX_WARNING} $@${NORMAL}"
+}
+
+#================================================================================
+# Helper Functions
+#================================================================================
+
+confirm() {
+  local prompt="$1"
+  if [ "$INTERACTIVE" = false ]; then
+    return 0
+  fi
+
+  echo -en "${CYAN}${PREFIX_MESSAGE} $prompt [y/N] ${NORMAL}"
+  read -r answer
+  case "$answer" in
+    [yY][eE][sS]|[yY]) return 0 ;;
+    *) return 1 ;;
+  esac
+}
+
+skip_section() {
+  local section=$1
+  warning "Skipping $section configuration"
+  section_end
+}
+
+# Execute or simulate command based on DRY_RUN
+run_cmd() {
+  if [ "$DRY_RUN" = true ]; then
+    info "Would execute: $@"
+    return 0
+  else
+    "$@"
+    return $?
+  fi
+}
+
+# Convert seconds to human readable time
+human_time() {
+  local seconds=$1
+  local minutes=$((seconds / 60))
+  local hours=$((minutes / 60))
+  seconds=$((seconds % 60))
+  minutes=$((minutes % 60))
+
+  local result=""
+  [ $hours -gt 0 ] && result="${hours}h "
+  [ $minutes -gt 0 ] && result="${result}${minutes}m "
+  result="${result}${seconds}s"
+
+  echo "$result"
+}
+
+# Modified section function to handle timing
+section_start() {
+  section "$1"
+  section_start_time=$(date +%s)
+}
+
+section_end() {
+  local section_end_time=$(date +%s)
+  local section_duration=$((section_end_time - section_start_time))
+  section "Completed in $(human_time $section_duration)"
+}
+
+has_gpg_keys() {
+  [ -n "$(ls -1 ~/.gnupg/private-* 2>/dev/null)" ]
+}
+
+#================================================================================
+# Main Installation
+#================================================================================
+
+# Record total start time
+start_time=$(date +%s)
+
+section "Starting installation"
+
+#--------------------------------------------------
+# Initial Setup
+#--------------------------------------------------
+
+section_start "Initial Setup"
+
+# Create a temporary profile for initial packages
+readonly TEMP_PROFILE="/tmp/homestead-$USER/setup"
+
+# Check if we should proceed
+if ! confirm "Install initial packages?"; then
+  warning "Skipping initial setup"
+  section_end
+  return
+fi
+
+action "Creating temporary profile at $(highlight "$TEMP_PROFILE")"
+run_cmd mkdir -p "$(dirname "$TEMP_PROFILE")"
+
+action "Installing required packages:"
+for pkg in $INITIAL_PACKAGES; do
+  emphasis "  - $pkg"
+done
+
+if [ "$DRY_RUN" = true ]; then
+  info "Would install packages to: $(highlight "$TEMP_PROFILE")"
+else
+  # Install basic packages in a temporary profile
+  run_cmd guix package --profile="$TEMP_PROFILE" \
+       --install git \
+       --install stow \
+       --install gnupg \
+       --install openssh \
+       --install password-store \
+       --install pinentry || error "Failed to install initial packages"
+
+  action "Sourcing profile"
+  if [ -f "$TEMP_PROFILE/etc/profile" ]; then
+    . "$TEMP_PROFILE/etc/profile"
+    info "Profile sourced successfully"
+  else
+    error "Failed to create temporary profile"
+  fi
+fi
+
+section_end
+
+#--------------------------------------------------
+# GPG Configuration
+#--------------------------------------------------
+
+section_start "GPG"
+
+# Check if we should proceed
+if ! confirm "Configure GPG?"; then
+  warning "Skipping GPG configuration"
+  section_end
+  return
+fi
+
+sync_from_device() {
+  local device=$1
+  local mount_point="/mnt"
+  local mount_name="gpg_backup"
+
+  emphasis "Opening encrypted device..."
+  run_cmd sudo cryptsetup open "$device" "$mount_name" || \
+    error "Failed to open encrypted device"
+
+  emphasis "Mounting device..."
+  run_cmd sudo mount "/dev/mapper/$mount_name" "$mount_point" || \
+    error "Failed to mount device"
+
+  # GPG keys
+  emphasis "Looking for GPG keys..."
+  local gpg_source="$mount_point/public/.gnupg"
+  if [ -d "$gpg_source" ]; then
+    run_cmd cp -a "$gpg_source" "$HOME/" || \
+      error "Failed to copy GPG keys"
+    action "GPG keys imported successfully"
+  else
+    warning "GPG directory not found at: $gpg_source"
+    if confirm "Would you like to specify GPG directory location?"; then
+      question "Enter GPG directory path on device: "
+      read -r custom_gpg_path
+      if [ -d "$custom_gpg_path" ]; then
+        run_cmd cp -a "$custom_gpg_path" "$HOME/.gnupg" || \
+          error "Failed to copy GPG keys from custom location"
+        action "GPG keys imported successfully from custom location"
+      else
+        error "Invalid GPG directory path: $custom_gpg_path"
+      fi
+    fi
+  fi
+
+  # Password store
+  emphasis "Looking for password store..."
+  local pass_source="$mount_point/public/.password-store"
+  if [ -d "$pass_source" ]; then
+    run_cmd cp -a "$pass_source" "$HOME/" || \
+      error "Failed to copy password store"
+    action "Password store imported successfully"
+
+    if [ "$DRY_RUN" = false ]; then
+      emphasis "Initializing password store git repository"
+      (cd "$HOME/.password-store" && git init && \
+       git config --local diff.gpg.binary true && \
+       git config --local diff.gpg.textconv "gpg -d") || \
+        warning "Failed to initialize password store git repository"
+    fi
+  else
+    warning "Password store not found at: $pass_source"
+    if confirm "Would you like to specify password store location?"; then
+      question "Enter password store path on device: "
+      read -r custom_pass_path
+      if [ -d "$custom_pass_path" ]; then
+        run_cmd cp -a "$custom_pass_path" "$HOME/.password-store" || \
+          error "Failed to copy password store from custom location"
+        action "Password store imported successfully from custom location"
+      else
+        error "Invalid password store path: $custom_pass_path"
+      fi
+    fi
+  fi
+
+  # Cleanup
+  action "Cleaning up"
+  run_cmd sudo umount "$mount_point"
+  run_cmd sudo cryptsetup close "$mount_name"
+}
+
+# Import GPG keys and password store if needed
+if ! has_gpg_keys; then
+  action "Checking for existing GPG keys"
+  if [ -n "$GPG_DEVICE" ]; then
+    if confirm "Import secrets from $(highlight "$GPG_DEVICE")?"; then
+      action "Setting up secrets from device"
+      sync_from_device "$GPG_DEVICE"
+    else
+      warning "Skipping secrets import"
+    fi
+  else
+    warning "No device specified (use -g option)"
+    if confirm "Would you like to specify a device now?"; then
+      question "Enter device path (e.g., /dev/sda1): "
+      read -r custom_device
+      if [ -b "$custom_device" ]; then
+        GPG_DEVICE="$custom_device"
+        action "Setting up secrets from device"
+        sync_from_device "$GPG_DEVICE"
+      else
+        error "Invalid device: $custom_device"
+      fi
+    else
+      warning "Skipping secrets import"
+    fi
+  fi
+fi
+
+# Configure GPG if keys exist
+if has_gpg_keys; then
+  if confirm "Configure GPG agent?"; then
+    action "Setting up GPG agent"
+
+    # Permission setup
+    emphasis "Setting permissions..."
+    run_cmd chmod -R go-rwx ~/.gnupg
+
+    # GPG agent configuration
+    emphasis "Configuring GPG agent..."
+    if [ "$DRY_RUN" = true ]; then
+      info "Would set SSH_AUTH_SOCK to: $(highlight "$(gpgconf --list-dirs agent-ssh-socket)")"
+      info "Would create $(highlight "~/.gnupg/gpg-agent.conf")"
+    else
+      # Set up SSH authentication socket
+      export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
+
+      emphasis "Restarting GPG agent..."
+      run_cmd gpgconf --kill gpg-agent
+
+      emphasis "Creating agent configuration..."
+      cat > ~/.gnupg/gpg-agent.conf <<EOF
+# Cache settings (1-day timeout)
+default-cache-ttl 86400
+max-cache-ttl 86400
+
+# SSH support
+enable-ssh-support
+default-cache-ttl-ssh 86400
+max-cache-ttl-ssh 86400
+
+# Pinentry program
+pinentry-program $(which pinentry)
+EOF
+
+      emphasis "Starting agent..."
+      run_cmd gpg-agent --homedir ~/.gnupg --daemon
+      run_cmd gpg-connect-agent updatestartuptty /bye
+
+      action "GPG agent configured successfully"
+    fi
+  else
+    warning "Skipping GPG agent configuration"
+  fi
+else
+  warning "No GPG keys found. Skipping configuration."
+fi
+
+section_end
+
+#--------------------------------------------------
+# Dotfiles Setup
+#--------------------------------------------------
+
+section_start "dotfiles"
+
+# Check if we should proceed
+if ! confirm "Configure dotfiles?"; then
+  warning "Skipping dotfiles configuration"
+  section_end
+  return
+fi
+
+# Set Git URLs based on GPG/SSH availability
+if has_gpg_keys; then
+  REPO_URL="$REPO_SSH"
+  action "Using $(highlight "SSH") for Git operations"
+else
+  REPO_URL="$REPO_HTTPS"
+  action "Using $(highlight "HTTPS") for Git operations"
+fi
+
+# Setup or update dotfiles
+if [ -d ~/dotfiles ]; then
+  if confirm "Update existing dotfiles?"; then
+    action "Updating dotfiles repository"
+    run_cmd git -C ~/dotfiles pull || error "Failed to update dotfiles"
+  else
+    warning "Skipping dotfiles update"
+  fi
+else
+  if confirm "Clone dotfiles repository?"; then
+    action "Cloning dotfiles from $(highlight "$REPO_URL")"
+    run_cmd git clone "$REPO_URL" ~/dotfiles || error "Failed to clone dotfiles"
+  else
+    warning "Skipping dotfiles clone"
+    section_end
+    return
+  fi
+fi
+
+# Backup existing configurations
+action "Checking for existing configuration files"
+BACKUP_NEEDED=false
+for file in .bash_profile .bashrc .profile; do
+  if [ -f "$HOME/$file" ] && [ ! -h "$HOME/$file" ]; then
+    emphasis "Found existing $(highlight "$file")"
+    BACKUP_NEEDED=true
+  fi
+done
+
+if [ "$BACKUP_NEEDED" = true ]; then
+  if confirm "Backup existing configuration files?"; then
+    for file in .bash_profile .bashrc .profile; do
+      if [ -f "$HOME/$file" ] && [ ! -h "$HOME/$file" ]; then
+        action "Backing up $(highlight "$file")"
+        run_cmd mv "$HOME/$file" "$HOME/$file.backup" || \
+          error "Failed to backup $file"
+      fi
+    done
+  else
+    warning "Skipping backup of existing files"
+  fi
+fi
+
+# Show stow preview if in dry run mode
+if confirm "Create symlinks with stow?"; then
+  action "Previewing stow operations"
+  if [ "$DRY_RUN" = true ]; then
+    info "Would execute stow with these changes:"
+    if confirm "Adopt existing files?"; then
+      (cd ~/dotfiles && stow -nv --adopt --target="$HOME" . 2>&1 | sed 's/^/  /')
+    else
+      (cd ~/dotfiles && stow -nv --target="$HOME" . 2>&1 | sed 's/^/  /')
+    fi
+  else
+    emphasis "Creating symlinks..."
+    if confirm "Adopt existing files?"; then
+      run_cmd sh -c 'cd ~/dotfiles && stow -v --adopt --target="$HOME" .' || \
+        error "Failed to stow dotfiles"
+    else
+      run_cmd sh -c 'cd ~/dotfiles && stow -v --target="$HOME" .' || \
+        error "Failed to stow dotfiles"
+    fi
+    action "Dotfiles symlinked successfully"
+  fi
+else
+  warning "Skipping stow operation"
+fi
+
+section_end
+
+#--------------------------------------------------
+# Guix Package Installation
+#--------------------------------------------------
+
+section_start "Guix packages"
+
+# Check if we should proceed
+if ! confirm "Configure Guix packages?"; then
+  warning "Skipping Guix package installation"
+  section_end
+  return
+fi
+
+# Check if guix is available
+command -v guix >/dev/null 2>&1 || error "Guix is not installed"
+
+action "Checking Guix configuration"
+
+# First ensure channels.scm is available (after stow)
+if [ ! -f "$HOME/.config/guix/channels.scm" ]; then
+  error "$(highlight "channels.scm") not found in $(highlight "$HOME/.config/guix/")"
+fi
+
+# Perform initial guix pull with channels configuration
+if confirm "Update Guix from channels?"; then
+  action "Updating Guix from $(highlight "$HOME/.config/guix/channels.scm")"
+  run_cmd guix pull -C "$HOME/.config/guix/channels.scm" || error "Failed to update Guix"
+
+  # Ensure new guix is in path
+  if [ "$DRY_RUN" = false ]; then
+    hash guix
+  fi
+else
+  warning "Skipping Guix update"
+fi
+
+# Create directory for extra profiles
+action "Setting up profile directories"
+run_cmd mkdir -p "$HOME/.guix-extra-profiles"
+
+# Helper function for profile installation
+install_profile() {
+  local name=$1
+  local manifest="$HOME/.package-lists/guix-${name}-manifest.scm"
+
+  if [ ! -f "$manifest" ]; then
+    warning "Skipping $(highlight "$name"): manifest not found"
+    return 1
+  fi
+
+  if ! confirm "Install profile: $(highlight "$name")?"; then
+    warning "Skipping profile: $name"
+    return 0
+  fi
+
+  action "Setting up profile: $(highlight "$name")"
+
+  if [ "$name" = "default" ]; then
+    emphasis "Installing to default profile"
+    run_cmd guix package --manifest="$manifest" || error "Failed to install default profile"
+    if [ "$DRY_RUN" = false ]; then
+      . "$HOME/.guix-profile/etc/profile"
+    fi
+  else
+    local profile="$HOME/.guix-extra-profiles/$name/$name"
+    emphasis "Installing to $(highlight "$profile")"
+    run_cmd mkdir -p "$(dirname "$profile")"
+    run_cmd guix package --manifest="$manifest" --profile="$profile" || \
+      error "Failed to install $name profile"
+
+    if [ "$DRY_RUN" = false ] && [ -f "$profile/etc/profile" ]; then
+      . "$profile/etc/profile"
+    fi
+  fi
+
+  action "Profile $(highlight "$name") installed successfully"
+}
+
+# List available profiles
+action "Available profiles:"
+for manifest in "$HOME/.package-lists"/guix-*-manifest.scm; do
+  name=$(basename "$manifest" | sed 's/guix-\(.*\)-manifest.scm/\1/')
+  emphasis "  - $name"
+done
+
+if confirm "Install profiles?"; then
+  # Install default profile first
+  install_profile "default"
+
+  # Install remaining profiles
+  for manifest in "$HOME/.package-lists"/guix-*-manifest.scm; do
+    name=$(basename "$manifest" | sed 's/guix-\(.*\)-manifest.scm/\1/')
+    [ "$name" = "default" ] && continue
+    install_profile "$name"
+  done
+else
+  warning "Skipping profile installation"
+fi
+
+# Show installation summary
+action "Guix profile installation summary"
+emphasis "Installed profiles:"
+for profile in "$HOME/.guix-extra-profiles"/*; do
+  if [ -d "$profile" ]; then
+    highlight "  - $(basename "$profile")"
+  fi
+done
+
+if [ "$DRY_RUN" = false ]; then
+  action "All profiles have been installed and sourced"
+else
+  action "Dry run complete - no profiles were actually installed"
+fi
+
+section_end
+
+#--------------------------------------------------
+# Emacs Configuration
+#--------------------------------------------------
+
+section_start "Emacs packages"
+
+# Check if we should proceed
+if ! confirm "Configure Emacs?"; then
+  warning "Skipping Emacs configuration"
+  section_end
+  return
+fi
+
+# Check if Emacs is available
+command -v emacs >/dev/null 2>&1 || {
+  error "Emacs not found. Please install Emacs first."
+}
+
+action "Setting up Emacs directories"
+
+# Create required directories
+for dir in "$HOME/.cache/emacs" "$XDG_DATA_HOME/emacs/site-lisp"; do
+  if [ -d "$dir" ]; then
+    emphasis "Directory exists: $(highlight "$dir")"
+  else
+    emphasis "Creating directory: $(highlight "$dir")"
+    run_cmd mkdir -p "$dir"
+  fi
+done
+
+# Install ELPA packages
+if [ ! -f "$HOME/.emacs.d/lisp/init-packages.el" ]; then
+  warning "$(highlight "init-packages.el") not found in $(highlight "$HOME/.emacs.d/lisp/")"
+  warning "Skipping package installation"
+else
+  if confirm "Install ELPA packages?"; then
+    action "Preparing package installation"
+
+    if [ "$DRY_RUN" = true ]; then
+      # First show the command that would run
+      emphasis "Would execute:"
+      info "  emacs --batch --eval '(progn"
+      info "                          (load \"$HOME/.emacs.d/lisp/init-packages.el\")"
+      info "                          (package-refresh-contents)"
+      info "                          (package-install-selected-packages))'"
+
+      # Then show what packages would be installed
+      action "Packages that would be installed:"
+      packages=$(emacs --batch \
+                      --eval "(progn
+                               (load \"$HOME/.emacs.d/lisp/init-packages.el\")
+                               (prin1 package-selected-packages))" 2>/dev/null)
+
+      # Convert Lisp list to shell array and display
+      packages=${packages#(}   # Remove leading paren
+      packages=${packages%)}   # Remove trailing paren
+      for pkg in $packages; do
+        emphasis "  ✓ $pkg"
+      done
+    else
+      action "Installing packages from $(highlight "init-packages.el")"
+      emphasis "This may take a while..."
+
+      run_cmd emacs --batch \
+            --eval "(progn
+                     (load \"$HOME/.emacs.d/lisp/init-packages.el\")
+                     (package-refresh-contents)
+                     (package-install-selected-packages))" || \
+        error "Failed to install ELPA packages"
+
+      action "Package installation completed successfully"
+    fi
+  else
+    warning "Skipping ELPA package installation"
+  fi
+fi
+
+# Show configuration summary
+action "Emacs configuration summary"
+emphasis "Directories:"
+for dir in "$HOME/.cache/emacs" "$XDG_DATA_HOME/emacs/site-lisp"; do
+  if [ -d "$dir" ]; then
+    highlight "  ✓ $dir"
+  else
+    highlight "  ✗ $dir"
+  fi
+done
+
+emphasis "Init file:"
+if [ -f "$HOME/.emacs.d/init.el" ]; then
+  highlight "  ✓ ~/.emacs.d/init.el"
+else
+  highlight "  ✗ ~/.emacs.d/init.el"
+fi
+
+if [ "$DRY_RUN" = true ]; then
+  action "Dry run complete - no changes were made"
+else
+  action "Emacs setup completed successfully"
+fi
+
+section_end
+
+#--------------------------------------------------
+# Email Setup
+#--------------------------------------------------
+
+section_start "Email"
+
+# Check if we should proceed
+if ! confirm "Configure email?"; then
+  warning "Skipping email configuration"
+  section_end
+  return
+fi
+
+# Setup root media directories
+action "Setting up media directories"
+
+# Setup base directories with single confirmation
+if confirm "Create or update media directories?"; then
+  # Check and create /media
+  if [ ! -d "/media" ]; then
+    action "Setting up root media directory"
+    if [ "$DRY_RUN" = true ]; then
+      emphasis "Would create: $(highlight "/media")"
+    else
+      run_cmd sudo mkdir -p /media || error "Failed to create /media directory"
+    fi
+  else
+    emphasis "Root media directory exists: $(highlight "/media")"
+  fi
+
+  # Create and set permissions for subdirectories
+  for dir in "/media/personal" "/media/home"; do
+    if [ -d "$dir" ]; then
+      emphasis "Directory exists: $(highlight "$dir")"
+    else
+      action "Creating directory: $(highlight "$dir")"
+      if [ "$DRY_RUN" = true ]; then
+        emphasis "Would create: $(highlight "$dir")"
+        emphasis "Would set ownership to $USER:$USER"
+      else
+        run_cmd sudo mkdir -p "$dir" || error "Failed to create $dir"
+        run_cmd sudo chown "$USER:$USER" "$dir" || error "Failed to set ownership of $dir"
+        emphasis "Created with correct permissions"
+      fi
+    fi
+  done
+else
+  error "Media directories are required for email setup"
+fi
+
+# Create mail directory structure
+MAIL_ROOT="/media/personal/mail"
+MAIL_CACHE="$MAIL_ROOT/.cache"
+
+action "Setting up mail directory structure"
+for dir in "$MAIL_ROOT" "$MAIL_CACHE"; do
+  if [ -d "$dir" ]; then
+    emphasis "Directory exists: $(highlight "$dir")"
+  else
+    emphasis "Creating directory: $(highlight "$dir")"
+    run_cmd mkdir -p "$dir" || error "Failed to create $dir"
+  fi
+done
+
+# Check if mbsync configuration exists
+if [ ! -f "$HOME/.mbsyncrc" ]; then
+  error "$(highlight ".mbsyncrc") not found in $(highlight "$HOME")"
+fi
+
+# Create mail directories from mbsyncrc
+action "Creating mail directories from mbsyncrc configuration"
+while IFS= read -r maildir; do
+  # Expand path (safely handling ~)
+  expanded_path=$(echo "$maildir" | sed "s|$HOME/.cache/mail|$MAIL_ROOT|")
+  if [ "$DRY_RUN" = true ]; then
+    emphasis "Would create: $(highlight "$expanded_path")"
+  else
+    emphasis "Creating: $(highlight "$expanded_path")"
+    run_cmd mkdir -p "$expanded_path" || error "Failed to create mail directory: $expanded_path"
+  fi
+done <<EOF
+$(awk '/^Path/ {print $2}' "$HOME/.mbsyncrc")
+EOF
+
+# Initialize email if tools are available
+action "Checking available email tools"
+EMAIL_TOOLS_MISSING=false
+
+# Check for required tools
+for tool in mbsync notmuch; do
+  if ! command -v "$tool" >/dev/null 2>&1; then
+    warning "Tool not found: $tool"
+    EMAIL_TOOLS_MISSING=true
+  else
+    emphasis "Found tool: $(highlight "$tool")"
+  fi
+done
+
+if [ "$EMAIL_TOOLS_MISSING" = true ]; then
+  warning "Some email tools are missing. Full functionality may not be available."
+fi
+
+# Sync emails if mbsync is available
+if command -v mbsync >/dev/null 2>&1; then
+  if confirm "Synchronize emails with mbsync?"; then
+    action "Running initial email synchronization"
+    if [ "$DRY_RUN" = true ]; then
+      emphasis "Would run: mbsync -aV"
+    else
+      run_cmd mbsync -aV || warning "Email synchronization failed"
+    fi
+  else
+    warning "Skipping email synchronization"
+  fi
+fi
+
+# Initialize notmuch if available
+if command -v notmuch >/dev/null 2>&1; then
+  if confirm "Initialize notmuch database?"; then
+    action "Setting up notmuch"
+
+    if [ ! -f "$HOME/.notmuch-config" ]; then
+      action "Initializing new notmuch database"
+      if [ "$DRY_RUN" = true ]; then
+        emphasis "Would initialize new notmuch database"
+      else
+        run_cmd notmuch new || warning "Notmuch initialization failed"
+      fi
+    else
+      action "Updating existing notmuch database"
+      if [ "$DRY_RUN" = true ]; then
+        emphasis "Would update notmuch database"
+      else
+        run_cmd notmuch new || warning "Notmuch update failed"
+      fi
+    fi
+  else
+    warning "Skipping notmuch initialization"
+  fi
+fi
+
+# Show email setup summary
+action "Email Setup Summary"
+
+emphasis "Directory Structure:"
+for dir in "/media" "/media/personal" "/media/home" "$MAIL_ROOT" "$MAIL_CACHE"; do
+  if [ -d "$dir" ]; then
+    highlight "  ✓ $dir"
+  else
+    highlight "  ✗ $dir"
+  fi
+done
+
+emphasis "Mail Directories:"
+while IFS= read -r maildir; do
+  expanded_path=$(echo "$maildir" | sed "s|$HOME/.cache/mail|$MAIL_ROOT|")
+  if [ -d "$expanded_path" ]; then
+    highlight "  ✓ $expanded_path"
+  else
+    highlight "  ✗ $expanded_path"
+  fi
+done <<EOF
+$(awk '/^Path/ {print $2}' "$HOME/.mbsyncrc" 2>/dev/null)
+EOF
+
+emphasis "Required Tools:"
+for tool in mbsync notmuch; do
+  if command -v "$tool" >/dev/null 2>&1; then
+    highlight "  ✓ $tool"
+  else
+    highlight "  ✗ $tool"
+  fi
+done
+
+if [ "$DRY_RUN" = true ]; then
+  action "Dry run complete - no changes were made"
+else
+  action "Email setup completed"
+fi
+
+section_end
+
+#================================================================================
+# Cleanup and Summary
+#================================================================================
+
+# Calculate and display total time
+end_time=$(date +%s)
+duration=$((end_time - start_time))
+section "Installation Summary"
+
+# TODO:
+# Show completion status for each major component
+# emphasis "Component Status:"
+# for component in "GPG" "Dotfiles" "Guix Packages" "Emacs" "Email"; do
+#   highlight "  - $component"
+# done
+
+# Show important directories
+emphasis "Directory Structure:"
+highlight "  - /media"
+highlight "    ├── personal"
+highlight "    │   └── mail"
+highlight "    └── home"
+
+# Cleanup temporary files
+action "Cleaning up temporary files"
+if [ "$DRY_RUN" = true ]; then
+  emphasis "Would remove: $(highlight "$(dirname "$TEMP_PROFILE")")"
+else
+  run_cmd rm -rf "$(dirname "$TEMP_PROFILE")"
+fi
+
+# Show final completion message
+section "Total installation completed in $(human_time $duration)"
+if [ "$DRY_RUN" = true ]; then
+  emphasis "Dry run completed - no changes were made"
+else
+  emphasis "Installation completed successfully"
+fi
