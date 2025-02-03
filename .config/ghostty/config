@@ -14,7 +14,7 @@ keybind = ctrl+d=new_split:right
 
 # Empty values reset the configuration to the default value
 font-family = Iosevka Term Nerd Font
-font-size = 14
+font-size = 16
 theme = dark:modus-vivendi-tinted, light:modus-operandi-tinted
 adjust-cell-height = 5%
 
@@ -28,11 +28,9 @@ title = ghostty
 
 window-padding-balance = false
 window-decoration = false
+keybind = ctrl+o=toggle_window_decorations
 window-save-state = always
 
 # actions
-keybind = ctrl+shift+k=scroll_page_up
-keybind = ctrl+b=scroll_page_up
-
-keybind = ctrl+shift+j=scroll_page_down
-keybind = ctrl+d=scroll_page_down
+keybind = ctrl+u=scroll_page_up
+keybind = ctrl+n=scroll_page_down
