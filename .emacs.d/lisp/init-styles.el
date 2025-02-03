@@ -8,8 +8,10 @@
 (defun boogs/get-face-attribute-height ()
   (if (laptop-screen-p)
       ;; 120
-      140
-    120))
+      ;; 150
+      ;; 250
+      300
+    250))
 
 (set-face-attribute 'default nil
                     :font "Iosevka Term"
@@ -167,8 +169,8 @@
      `(org-level-2 ((t (,@headline ,@variable-tuple :height 1.5))))
      `(org-level-1 ((t (,@headline ,@variable-tuple :height 1.75))))
      `(org-document-title ((t (,@headline ,@variable-tuple :height 2.0 :underline nil))))
-     `(variable-pitch ((t (:family "Iosevka Comfy" :height 130 :weight thin))))
-     `(fixed-pitch ((t (:family "Fira Code Retina" :height 110))))
+     `(variable-pitch ((t (:family "Iosevka Comfy" :height 280 :weight thin))))
+     `(fixed-pitch ((t (:family "Fira Code Retina" :height 250))))
      `(org-block ((t (:inherit fixed-pitch :background ,(cdr (assoc 'background-dim colors))))))
      `(org-code ((t (:inherit (shadow fixed-pitch) :background ,(cdr (assoc 'background-dim colors))))))
      `(org-document-info ((t (:foreground ,(cdr (assoc 'foreground-dim colors))))))
