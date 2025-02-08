@@ -13,9 +13,10 @@
 (define (home-udiskie-shepherd-service config)
   (list
    (shepherd-service
+    (requirement '(dbus))
     (provision '(udiskie))
     (documentation "Run and control udiskie.")
-    (start #~(make-forkexec-constructor '("udiskie" "-t")))
+    (start #~(make-forkexec-constructor '("udiskie")))
     (stop #~(make-kill-destructor)))))
 
 (define home-udiskie-service-type

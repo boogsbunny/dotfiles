@@ -94,6 +94,7 @@
    "virt-manager"
    "wget"
    "xclip"
+   "xdg-utils"
    "xdotool"
    "xdpyinfo"
    "xrandr"
