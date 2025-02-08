@@ -7,6 +7,7 @@
   #:use-module (gnu packages cups)
   #:use-module (gnu packages display-managers)
   #:use-module (gnu packages fontutils)
+  #:use-module (gnu packages suckless)
   #:use-module (gnu packages syncthing)
   #:use-module (backup)
   #:use-module (keyboard))
@@ -33,6 +34,7 @@
  gnome
  linux
  rsync
+ suckless
  vim
  vpn
  virtualization)
@@ -64,6 +66,7 @@
          neovim
          pipewire
          rsync
+         slock
          syncthing
          tlp
          wireplumber
@@ -88,16 +91,54 @@
                   (unix-sock-group "libvirt")
                   (tls-port "16555")))
         (service openssh-service-type)
+        (service screen-locker-service-type
+                 (screen-locker-configuration
+                  (name "slock")
+                  (program (file-append slock "/bin/slock"))))
         (service syncthing-service-type
                  (syncthing-configuration
                   (user "boogs")))
-        (service thermald-service-type)
+        (service thermald-service-type
+                 (thermald-configuration
+                  (adaptive? #t)))
         (service tlp-service-type
                  (tlp-configuration
-                  (cpu-scaling-governor-on-ac (list "performance"))
+                  ;; Force powersave governor always
+                  (cpu-scaling-governor-on-ac (list "powersave"))
+                  (cpu-scaling-governor-on-bat (list "powersave"))
+
+                  ;; Limit CPU performance
+                  (cpu-max-perf-on-ac 60) ;; Limit to 60% on AC
+                  (cpu-max-perf-on-bat 30) ;; Limit to 30% on battery
+                  (cpu-boost-on-ac? #f)    ;; Disable turbo boost
+                  (cpu-boost-on-bat? #f)
+
+                  ;; Aggressive scheduler power saving
+                  (sched-powersave-on-ac? #t)
                   (sched-powersave-on-bat? #t)
-                  (usb-autosuspend? #f)
-                  (wifi-pwr-on-bat? #f)))
+
+                  ;; Maximize power management
+                  (runtime-pm-on-ac "auto")
+                  (runtime-pm-on-bat "auto")
+                  (runtime-pm-all? #t)
+
+                  ;; Aggressive disk power saving
+                  (disk-idle-secs-on-ac 5)
+                  (disk-idle-secs-on-bat 2)
+                  (disk-spindown-timeout-on-ac (list "120"))
+                  (disk-spindown-timeout-on-bat (list "60"))
+
+                  ;; PCIe power saving
+                  (pcie-aspm-on-ac "powersave")
+                  (pcie-aspm-on-bat "powersave")
+
+                  ;; Other power savings
+                  (wifi-pwr-on-ac? #t)
+                  (wifi-pwr-on-bat? #t)
+                  (nmi-watchdog? #f)
+
+                  ;; Misc
+                  (usb-autosuspend? #f)))
         (service virtlog-service-type
                  (virtlog-configuration
                   (max-clients 1000)))))
@@ -166,19 +207,21 @@
           (needed-for-boot? #t))
          %base-file-systems))
 
+(define-public %boogs/bootloader-configuration
+  (bootloader-configuration
+   (bootloader grub-efi-removable-bootloader)
+   (targets '("/boot/efi"))
+   (theme (grub-theme
+          (image (local-file "grub-theme/aot.png"))))
+   (timeout 3)))
+
 (define-public %boogs/os
   (operating-system
    (host-name "guixbook")
    (timezone "America/New_York")
    (locale "en_US.utf8")
 
-   (bootloader
-    (bootloader-configuration
-     (bootloader grub-efi-removable-bootloader)
-     (targets '("/boot/efi"))
-     (theme (grub-theme
-             (image (local-file "grub-theme/aot.png"))))
-     (timeout 3)))
+   (bootloader %boogs/bootloader-configuration)
 
    (firmware %boogs/firmware)
 
