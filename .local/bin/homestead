@@ -357,6 +357,12 @@ sync_from_device() {
   if [ -d "$gpg_source" ]; then
     run_cmd sudo cp -a "$gpg_source" "$HOME/" || \
       error "Failed to copy GPG keys"
+    # Fix ownership
+    run_cmd sudo chown -R "$USER:$USER" "$HOME/.gnupg" || \
+      error "Failed to set GPG directory ownership"
+    # Fix permissions
+    run_cmd chmod 700 "$HOME/.gnupg" || \
+      error "Failed to set GPG directory permissions"
     action "GPG keys imported successfully"
   else
     warning "GPG directory not found at: $gpg_source"
@@ -366,6 +372,12 @@ sync_from_device() {
       if [ -d "$custom_gpg_path" ]; then
         run_cmd sudo cp -a "$custom_gpg_path" "$HOME/.gnupg" || \
           error "Failed to copy GPG keys from custom location"
+        # Fix ownership
+        run_cmd sudo chown -R "$USER:$USER" "$HOME/.gnupg" || \
+          error "Failed to set GPG directory ownership"
+        # Fix permissions
+        run_cmd chmod 700 "$HOME/.gnupg" || \
+          error "Failed to set GPG directory permissions"
         action "GPG keys imported successfully from custom location"
       else
         error "Invalid GPG directory path: $custom_gpg_path"
