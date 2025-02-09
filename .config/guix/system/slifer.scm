@@ -28,7 +28,7 @@
 (define %slifer/mapped-devices
   (list (mapped-device
          (source
-          (uuid "a102af1a-5500-4ed1-adfa-49457eb7fbf9"))
+          (uuid "25b63bb4-872a-4620-8f92-77896392bc1d"))
          (target "cryptroot")
          (type luks-device-mapping))))
 
