@@ -9,6 +9,7 @@ DRY_RUN=false
 INTERACTIVE=true
 XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 XDG_DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
+PRIMARY_GROUP=$(id -gn)
 
 # Repository information
 readonly REPO_OWNER="boogsbunny"
@@ -358,7 +359,7 @@ sync_from_device() {
     run_cmd sudo cp -a "$gpg_source" "$HOME/" || \
       error "Failed to copy GPG keys"
     # Fix ownership
-    run_cmd sudo chown -R "$USER:$USER" "$HOME/.gnupg" || \
+    run_cmd sudo chown -R "$USER:$PRIMARY_GROUP" "$HOME/.gnupg" || \
       error "Failed to set GPG directory ownership"
     # Fix permissions
     run_cmd chmod 700 "$HOME/.gnupg" || \
@@ -373,7 +374,7 @@ sync_from_device() {
         run_cmd sudo cp -a "$custom_gpg_path" "$HOME/.gnupg" || \
           error "Failed to copy GPG keys from custom location"
         # Fix ownership
-        run_cmd sudo chown -R "$USER:$USER" "$HOME/.gnupg" || \
+        run_cmd sudo chown -R "$USER:$PRIMARY_GROUP" "$HOME/.gnupg" || \
           error "Failed to set GPG directory ownership"
         # Fix permissions
         run_cmd chmod 700 "$HOME/.gnupg" || \
@@ -392,7 +393,7 @@ sync_from_device() {
     run_cmd sudo cp -a "$pass_source" "$HOME/" || \
       error "Failed to copy password store"
     # Fix ownership
-    run_cmd sudo chown -R "$USER:$USER" "$HOME/.password-store" || \
+    run_cmd sudo chown -R "$USER:$PRIMARY_GROUP" "$HOME/.password-store" || \
       error "Failed to set password store ownership"
     # Fix permissions
     run_cmd chmod 700 "$HOME/.password-store" || \
@@ -407,7 +408,7 @@ sync_from_device() {
         run_cmd sudo cp -a "$custom_pass_path" "$HOME/.password-store" || \
           error "Failed to copy password store from custom location"
         # Fix ownership
-        run_cmd sudo chown -R "$USER:$USER" "$HOME/.password-store" || \
+        run_cmd sudo chown -R "$USER:$PRIMARY_GROUP" "$HOME/.password-store" || \
           error "Failed to set password store ownership"
         # Fix permissions
         run_cmd chmod 700 "$HOME/.password-store" || \
@@ -856,7 +857,7 @@ if confirm "Create or update media directories?"; then
         emphasis "Would set ownership to $USER:$USER"
       else
         run_cmd sudo mkdir -p "$dir" || error "Failed to create $dir"
-        run_cmd sudo chown "$USER:$USER" "$dir" || error "Failed to set ownership of $dir"
+        run_cmd sudo chown "$USER:$PRIMARY_GROUP" "$dir" || error "Failed to set ownership of $dir"
         emphasis "Created with correct permissions"
       fi
     fi
