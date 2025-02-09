@@ -391,8 +391,13 @@ sync_from_device() {
   if [ -d "$pass_source" ]; then
     run_cmd sudo cp -a "$pass_source" "$HOME/" || \
       error "Failed to copy password store"
+    # Fix ownership
+    run_cmd sudo chown -R "$USER:$USER" "$HOME/.password-store" || \
+      error "Failed to set password store ownership"
+    # Fix permissions
+    run_cmd chmod 700 "$HOME/.password-store" || \
+      error "Failed to set password store permissions"
     action "Password store imported successfully"
-
   else
     warning "Password store not found at: $pass_source"
     if confirm "Would you like to specify password store location?"; then
@@ -401,6 +406,12 @@ sync_from_device() {
       if [ -d "$custom_pass_path" ]; then
         run_cmd sudo cp -a "$custom_pass_path" "$HOME/.password-store" || \
           error "Failed to copy password store from custom location"
+        # Fix ownership
+        run_cmd sudo chown -R "$USER:$USER" "$HOME/.password-store" || \
+          error "Failed to set password store ownership"
+        # Fix permissions
+        run_cmd chmod 700 "$HOME/.password-store" || \
+          error "Failed to set password store permissions"
         action "Password store imported successfully from custom location"
       else
         error "Invalid password store path: $custom_pass_path"
