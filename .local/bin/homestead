@@ -24,7 +24,7 @@ readonly GPG_MOUNT_NAME="gpg_backup"
 readonly GPG_SOURCE_DIR="$GPG_MOUNT_DIR/public"
 
 # Package lists
-readonly INITIAL_PACKAGES="git stow gnupg openssh password-store pinentry cryptsetup"
+readonly INITIAL_PACKAGES="cryptsetup git gnupg openssh password-store pinentry stow"
 
 #================================================================================
 # Usage and Help
@@ -308,13 +308,11 @@ if [ "$DRY_RUN" = true ]; then
   info "Would install packages to: $(highlight "$TEMP_PROFILE")"
 else
   # Install basic packages in a temporary profile
-  run_cmd guix package --profile="$TEMP_PROFILE" \
-       --install git \
-       --install stow \
-       --install gnupg \
-       --install openssh \
-       --install password-store \
-       --install pinentry || error "Failed to install initial packages"
+  cmd="guix package --profile=$TEMP_PROFILE"
+  for pkg in $INITIAL_PACKAGES; do
+    cmd="$cmd --install $pkg"
+  done
+  run_cmd $cmd || error "Failed to install initial packages"
 
   action "Sourcing profile"
   if [ -f "$TEMP_PROFILE/etc/profile" ]; then
