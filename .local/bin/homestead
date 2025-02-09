@@ -854,7 +854,7 @@ if confirm "Create or update media directories?"; then
       action "Creating directory: $(highlight "$dir")"
       if [ "$DRY_RUN" = true ]; then
         emphasis "Would create: $(highlight "$dir")"
-        emphasis "Would set ownership to $USER:$USER"
+        emphasis "Would set ownership to $USER:$PRIMARY_GROUP"
       else
         run_cmd sudo mkdir -p "$dir" || error "Failed to create $dir"
         run_cmd sudo chown "$USER:$PRIMARY_GROUP" "$dir" || error "Failed to set ownership of $dir"
