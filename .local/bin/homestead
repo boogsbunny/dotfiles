@@ -355,7 +355,7 @@ sync_from_device() {
   emphasis "Looking for GPG keys..."
   local gpg_source="$mount_point/public/.gnupg"
   if [ -d "$gpg_source" ]; then
-    run_cmd cp -a "$gpg_source" "$HOME/" || \
+    run_cmd sudo cp -a "$gpg_source" "$HOME/" || \
       error "Failed to copy GPG keys"
     action "GPG keys imported successfully"
   else
@@ -364,7 +364,7 @@ sync_from_device() {
       question "Enter GPG directory path on device: "
       read -r custom_gpg_path
       if [ -d "$custom_gpg_path" ]; then
-        run_cmd cp -a "$custom_gpg_path" "$HOME/.gnupg" || \
+        run_cmd sudo cp -a "$custom_gpg_path" "$HOME/.gnupg" || \
           error "Failed to copy GPG keys from custom location"
         action "GPG keys imported successfully from custom location"
       else
@@ -377,24 +377,17 @@ sync_from_device() {
   emphasis "Looking for password store..."
   local pass_source="$mount_point/public/.password-store"
   if [ -d "$pass_source" ]; then
-    run_cmd cp -a "$pass_source" "$HOME/" || \
+    run_cmd sudo cp -a "$pass_source" "$HOME/" || \
       error "Failed to copy password store"
     action "Password store imported successfully"
 
-    if [ "$DRY_RUN" = false ]; then
-      emphasis "Initializing password store git repository"
-      (cd "$HOME/.password-store" && git init && \
-       git config --local diff.gpg.binary true && \
-       git config --local diff.gpg.textconv "gpg -d") || \
-        warning "Failed to initialize password store git repository"
-    fi
   else
     warning "Password store not found at: $pass_source"
     if confirm "Would you like to specify password store location?"; then
       question "Enter password store path on device: "
       read -r custom_pass_path
       if [ -d "$custom_pass_path" ]; then
-        run_cmd cp -a "$custom_pass_path" "$HOME/.password-store" || \
+        run_cmd sudo cp -a "$custom_pass_path" "$HOME/.password-store" || \
           error "Failed to copy password store from custom location"
         action "Password store imported successfully from custom location"
       else
