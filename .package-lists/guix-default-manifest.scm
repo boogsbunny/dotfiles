@@ -86,6 +86,7 @@
    "sqlite@3.39.3"
    "stow"
    "tmux"
+   "tokei"
    "transmission"
    "tree"
    "udiskie"
