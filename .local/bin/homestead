@@ -598,6 +598,96 @@ fi
 section_end
 
 #--------------------------------------------------
+# Directory Setup
+#--------------------------------------------------
+
+section_start "Directory Setup"
+
+setup_directories() {
+  # Check if root filesystem is btrfs
+  local is_btrfs=false
+  if df -T / | grep -q btrfs; then
+    is_btrfs=true
+    action "Detected btrfs filesystem"
+  fi
+
+  # Setup media directories if /media exists
+  if [ -d "/media" ]; then
+    action "Setting up /media structure"
+
+    # Create btrfs subvolumes if applicable
+    if [ "$is_btrfs" = true ]; then
+      action "Creating btrfs subvolumes"
+      for subvol in "personal" "home"; do
+        if [ ! -d "/media/$subvol" ]; then
+          if [ "$DRY_RUN" = true ]; then
+            emphasis "Would create btrfs subvolume: $(highlight "/media/$subvol")"
+          else
+            run_cmd sudo btrfs subvolume create "/media/$subvol" || \
+              error "Failed to create subvolume: $subvol"
+          fi
+          run_cmd sudo chown "$USER:$PRIMARY_GROUP" "/media/$subvol"
+        else
+          emphasis "Subvolume exists: $(highlight "/media/$subvol")"
+        fi
+      done
+    else
+      # Create regular directories
+      for dir in "personal" "home"; do
+        if [ ! -d "/media/$dir" ]; then
+          if [ "$DRY_RUN" = true ]; then
+            emphasis "Would create directory: $(highlight "/media/$dir")"
+            emphasis "Would set ownership to $USER:$PRIMARY_GROUP"
+          else
+            run_cmd sudo mkdir -p "/media/$dir" || \
+              error "Failed to create directory: $dir"
+            run_cmd sudo chown "$USER:$PRIMARY_GROUP" "/media/$dir"
+          fi
+        else
+          emphasis "Directory exists: $(highlight "/media/$dir")"
+        fi
+      done
+    fi
+
+    # Create org-roam directory in /media
+    action "Creating org-roam directory in /media"
+    if [ ! -d "/media/personal/org/roam" ]; then
+      if [ "$DRY_RUN" = true ]; then
+        emphasis "Would create directory: $(highlight "/media/personal/org/roam")"
+      else
+        run_cmd mkdir -p "/media/personal/org/roam" || \
+          error "Failed to create org-roam directory in /media"
+      fi
+    else
+      emphasis "Directory exists: $(highlight "/media/personal/org/roam")"
+    fi
+  else
+    # Fallback to home directory
+    action "Creating org-roam directory in home"
+    if [ ! -d "$HOME/org/roam" ]; then
+      if [ "$DRY_RUN" = true ]; then
+        emphasis "Would create directory: $(highlight "$HOME/org/roam")"
+      else
+        run_cmd mkdir -p "$HOME/org/roam" || \
+          error "Failed to create org-roam directory in home"
+      fi
+    else
+      emphasis "Directory exists: $(highlight "$HOME/org/roam")"
+    fi
+  fi
+}
+
+# Check if we should proceed
+if ! confirm "Setup directories?"; then
+  warning "Skipping directory setup"
+  section_end
+  return
+fi
+
+setup_directories
+section_end
+
+#--------------------------------------------------
 # Guix Package Installation
 #--------------------------------------------------
 
@@ -776,12 +866,33 @@ else
       action "Installing packages from $(highlight "init-packages.el")"
       emphasis "This may take a while..."
 
-      run_cmd emacs --batch \
+      if [ "$INTERACTIVE" = false ]; then
+        run_cmd yes | emacs --batch \
+      else
+        run_cmd emacs --batch \
+      fi \
             --eval "(progn
                      (load \"$HOME/.emacs.d/lisp/init-packages.el\")
                      (package-refresh-contents)
                      (package-install-selected-packages))" || \
         error "Failed to install ELPA packages"
+
+      # Compile vterm module if needed
+      if [ -d "$HOME/.emacs.d/elpa/vterm-"* ]; then
+        action "Compiling vterm module"
+        vterm_dir=$(ls -d "$HOME/.emacs.d/elpa/vterm-"* | head -n1)
+        if [ "$DRY_RUN" = true ]; then
+          emphasis "Would compile vterm module in: $(highlight "$vterm_dir")"
+        else
+          if [ "$INTERACTIVE" = false ]; then
+            (cd "$vterm_dir" && run_cmd yes | cmake -S . -B build && run_cmd yes | cmake --build build) || \
+              warning "Failed to compile vterm module"
+          else
+            (cd "$vterm_dir" && run_cmd cmake -S . -B build && run_cmd cmake --build build) || \
+              warning "Failed to compile vterm module"
+          fi
+        fi
+      fi
 
       action "Package installation completed successfully"
     fi
@@ -829,46 +940,13 @@ if ! confirm "Configure email?"; then
   return
 fi
 
-# Setup root media directories
-action "Setting up media directories"
-
-# Setup base directories with single confirmation
-if confirm "Create or update media directories?"; then
-  # Check and create /media
-  if [ ! -d "/media" ]; then
-    action "Setting up root media directory"
-    if [ "$DRY_RUN" = true ]; then
-      emphasis "Would create: $(highlight "/media")"
-    else
-      run_cmd sudo mkdir -p /media || error "Failed to create /media directory"
-    fi
-  else
-    emphasis "Root media directory exists: $(highlight "/media")"
-  fi
-
-  # Create and set permissions for subdirectories
-  for dir in "/media/personal" "/media/home"; do
-    if [ -d "$dir" ]; then
-      emphasis "Directory exists: $(highlight "$dir")"
-    else
-      action "Creating directory: $(highlight "$dir")"
-      if [ "$DRY_RUN" = true ]; then
-        emphasis "Would create: $(highlight "$dir")"
-        emphasis "Would set ownership to $USER:$PRIMARY_GROUP"
-      else
-        run_cmd sudo mkdir -p "$dir" || error "Failed to create $dir"
-        run_cmd sudo chown "$USER:$PRIMARY_GROUP" "$dir" || error "Failed to set ownership of $dir"
-        emphasis "Created with correct permissions"
-      fi
-    fi
-  done
-else
-  error "Media directories are required for email setup"
-fi
-
 # Create mail directory structure
 MAIL_ROOT="/media/personal/mail"
 MAIL_CACHE="$MAIL_ROOT/.cache"
+
+if [ ! -d "/media" ]; then
+  error "Media directory not found. Please run directory setup first."
+if
 
 action "Setting up mail directory structure"
 for dir in "$MAIL_ROOT" "$MAIL_CACHE"; do
