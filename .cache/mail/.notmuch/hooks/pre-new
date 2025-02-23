@@ -1,2 +1,8 @@
 #!/bin/sh
-mbsync -a
+# Run mbsync and continue even if it fails but still show errors for debugging.
+# Prevents pre-new hook failure when mbsync encounters duplicate UIDs.
+mbsync -a || {
+    error_code=$?
+    echo "mbsync encountered errors (code: $error_code) but continuing with notmuch new..."
+    true
+}
