@@ -10,6 +10,8 @@ INTERACTIVE=true
 XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 XDG_DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
 PRIMARY_GROUP=$(id -gn)
+SUBSTITUTE_URLS=https://ci.guix.gnu.org
+EXTRA_SUBSTITUTE_URLS=
 
 # Repository information
 readonly REPO_OWNER="boogsbunny"
@@ -209,6 +211,22 @@ warning() {
 # Helper Functions
 #================================================================================
 
+run_guix() {
+  if [ -z "$EXTRA_SUBSTITUTE_URLS" ]; then
+    guix "$@"
+  else
+    guix --substitute-urls="$EXTRA_SUBSTITUTE_URLS $SUBSTITUTE_URLS" "$@"
+  fi
+}
+
+run_current_guix() {
+  if [ -z "$EXTRA_SUBSTITUTE_URLS" ]; then
+    ~/.config/guix/current/bin/guix "$@"
+  else
+    ~/.config/guix/current/bin/guix --substitute-urls="$EXTRA_SUBSTITUTE_URLS $SUBSTITUTE_URLS" "$@"
+  fi
+}
+
 confirm() {
   local prompt="$1"
   if [ "$INTERACTIVE" = false ]; then
@@ -309,7 +327,7 @@ if [ "$DRY_RUN" = true ]; then
   info "Would install packages to: $(highlight "$TEMP_PROFILE")"
 else
   # Install basic packages in a temporary profile
-  cmd="guix package --profile=$TEMP_PROFILE"
+  cmd="run_guix package --profile=$TEMP_PROFILE"
   for pkg in $INITIAL_PACKAGES; do
     cmd="$cmd --install $pkg"
   done
@@ -713,7 +731,7 @@ fi
 # Perform initial guix pull with channels configuration
 if confirm "Update Guix from channels?"; then
   action "Updating Guix from $(highlight "$HOME/.config/guix/channels.scm")"
-  run_cmd guix pull -C "$HOME/.config/guix/channels.scm" || error "Failed to update Guix"
+  run_cmd run_guix pull -C "$HOME/.config/guix/channels.scm" || error "Failed to update Guix"
 
   # Ensure new guix is in path
   if [ "$DRY_RUN" = false ]; then
@@ -746,7 +764,7 @@ install_profile() {
 
   if [ "$name" = "default" ]; then
     emphasis "Installing to default profile"
-    run_cmd guix package --manifest="$manifest" || error "Failed to install default profile"
+    run_cmd run_current_guix package --manifest="$manifest" || error "Failed to install default profile"
     if [ "$DRY_RUN" = false ]; then
       . "$HOME/.guix-profile/etc/profile"
     fi
@@ -754,7 +772,7 @@ install_profile() {
     local profile="$HOME/.guix-extra-profiles/$name/$name"
     emphasis "Installing to $(highlight "$profile")"
     run_cmd mkdir -p "$(dirname "$profile")"
-    run_cmd guix package --manifest="$manifest" --profile="$profile" || \
+    run_cmd run_current_guix package --manifest="$manifest" --profile="$profile" || \
       error "Failed to install $name profile"
 
     if [ "$DRY_RUN" = false ] && [ -f "$profile/etc/profile" ]; then
