@@ -868,14 +868,19 @@ else
 
       if [ "$INTERACTIVE" = false ]; then
         run_cmd yes | emacs --batch \
-      else
-        run_cmd emacs --batch \
-      fi \
             --eval "(progn
                      (load \"$HOME/.emacs.d/lisp/init-packages.el\")
                      (package-refresh-contents)
                      (package-install-selected-packages))" || \
         error "Failed to install ELPA packages"
+      else
+        run_cmd emacs --batch \
+            --eval "(progn
+                     (load \"$HOME/.emacs.d/lisp/init-packages.el\")
+                     (package-refresh-contents)
+                     (package-install-selected-packages))" || \
+        error "Failed to install ELPA packages"
+      fi
 
       # Compile vterm module if needed
       if [ -d "$HOME/.emacs.d/elpa/vterm-"* ]; then
