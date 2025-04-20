@@ -476,6 +476,8 @@ Useful for Guix."
           (lambda ()
             (local-set-key (kbd "M-s i") #'boogs/helm-imenu-in-all-buffers)))
 
+(global-set-key (kbd "s-SPC") 'helm-rg)
+
 (require 'patch-helm)
 (require 'patch-helm-comint)
 (require 'patch-helm-file-name-completion)
