@@ -163,7 +163,7 @@
   esc  mute vold volu                          prnt slck pause ins del  home pgup
        f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11   f12      end  pgdn
   XX   XX   XX   XX   @lsn XX   XX   XX   XX   @lsn XX   XX    XX       bspc
-  XX   XX   XX   XX   tab  XX   XX   XX   XX   ret  XX   XX    XX       ret
+  XX   :    ,    .    tab  XX   XX   XX   XX   ret  XX   XX    XX       ret
   XX   @t1h @t2h @t3h @t4h @t5h XX   @t6h @t7h @t8h @t9h @t0h  \_
   XX   XX   XX   XX   -    /    "    &    =    XX   XX   XX             rsft
   wkup lctl lmet lalt           @tdv           ralt cmps rctl      back up   fwd
