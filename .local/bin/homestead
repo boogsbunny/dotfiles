@@ -969,7 +969,7 @@ MAIL_CACHE="$MAIL_ROOT/.cache"
 
 if [ ! -d "/media" ]; then
   error "Media directory not found. Please run directory setup first."
-if
+fi
 
 action "Setting up mail directory structure"
 for dir in "$MAIL_ROOT" "$MAIL_CACHE"; do
