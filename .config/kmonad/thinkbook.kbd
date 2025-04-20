@@ -120,7 +120,7 @@
        f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11   f12      end  pgdn
   $    +    [    {    \(   !    XX   |    *    \)   }     ]    &        bspc
   tab  ;    ,    .    @tpd y    XX   f    g    @tcd r    q     /        ret
-  caps @tad @tod @ted @tud @tid XX   @tdd @thd @ttd @tnd @tsd  @
+  XX   @tad @tod @ted @tud @tid XX   @tdd @thd @ttd @tnd @tsd  @
   lsft 102d '    x    j    k    b    z    l    m    w    v              rsft
   wkup lctl lmet lalt            @tdl           ralt cmps rctl      back up   fwd
                                                                     left down rght
