@@ -151,7 +151,7 @@
         (service docker-service-type)
         (service postgresql-service-type
                  (postgresql-configuration
-                  (postgresql postgresql-16)
+                  (postgresql postgresql-14)
                   (extension-packages (list postgis))))
         (service redis-service-type)))
 

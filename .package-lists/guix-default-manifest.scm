@@ -73,7 +73,7 @@
    "pinentry"
    "pinentry-emacs"
    "poppler"
-   "postgresql"
+   "postgresql@14.13"
    "privoxy"
    "python"
    "python-black"
