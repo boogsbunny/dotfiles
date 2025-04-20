@@ -186,16 +186,17 @@
   (user-account
    (name "boogs")
    (group "users")
-   (supplementary-groups '("wheel"
-                           "netdev"
-                           "audio"
+   (supplementary-groups '("audio"
+                           "docker"
+                           "input"
                            "kvm"
                            "libvirt"
                            "lp"
+                           "netdev"
+                           "postgres"
+                           "realtime"
                            "video"
-                           "input"
-                           "docker"
-                           "postgres"))
+                           "wheel"))
    (home-directory "/home/boogs")))
 
 (define-public %boogs/file-systems
@@ -226,6 +227,9 @@
    (firmware %boogs/firmware)
 
    (file-systems (cons* %boogs/file-systems))
+
+   (groups (cons (user-group (system? #t) (name "realtime"))
+                 %base-groups))
 
    (users (cons* %boogs/user
                  %base-user-accounts))
