@@ -337,6 +337,7 @@ With prefix argument, UPDATE the databases with custom uptions thanks to the
 (define-key helm-map (kbd "S-SPC") 'boogs/helm-toggle-visible-mark-backwards)
 
 (defun boogs/evil-helm-set-keys ()
+  (define-key evil-insert-state-map (kbd "C-k") nil)
   (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
   (define-key helm-map (kbd "C-j") 'helm-next-line)
   (define-key helm-map (kbd "C-k") 'helm-previous-line))
