@@ -334,6 +334,8 @@
 (customize-set-variable 'persp-mode-prefix-key (kbd "C-M-w"))
 (customize-set-variable 'persp-initial-frame-name "work")
 (customize-set-variable 'persp-state-default-file "~/.emacs.d/lisp/persp-state")
+
+(add-hook 'kill-emacs-hook #'persp-state-save)
 (persp-mode)
 
 ;; Add advice to stop hangs on EXWM
