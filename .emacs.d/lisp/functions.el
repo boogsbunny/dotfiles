@@ -48,4 +48,12 @@ Require `boogs/tabify-leading'."
       (narrow-to-region start end)
       (delete-trailing-whitespace))))
 
+(defun boogs/define-keys (map key def &rest bindings)
+  "Like `define-key' but allow for defining several bindings at once.
+`KEY' must be acceptable for `kbd'."
+  (while key
+    (define-key map (kbd key) def)
+    (setq key (pop bindings)
+          def (pop bindings))))
+
 (provide 'functions)
