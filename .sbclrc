@@ -1,12 +1,4 @@
 ;; -*- mode: common-lisp; -*-
-(load "~/quicklisp/setup.lisp")
-;;; The following lines added by ql:add-to-init-file:
-
-#-quicklisp
-(let ((quicklisp-init (merge-pathnames ".quicklisp/setup.lisp"
-                                       (user-homedir-pathname))))
-  (when (probe-file quicklisp-init)
-    (load quicklisp-init)))
 
 ;; Some OSes package Lisp compilers in a way that ASDF is not automatically loaded.
 (require "asdf")
@@ -55,3 +47,9 @@ The actual profiles are in the subsubdirectories.")
 
 ;; Uncomment to enable full type checks (should be the default).
 ;; (declaim (optimize (or (>= safety 2) (>= safety speed 1))))
+
+#-ocicl
+(when (probe-file #P"/home/boogs/.local/share/ocicl/ocicl-runtime.lisp")
+  (load #P"/home/boogs/.local/share/ocicl/ocicl-runtime.lisp"))
+(asdf:initialize-source-registry
+  (list :source-registry (list :directory (uiop:getcwd)) :inherit-configuration))
