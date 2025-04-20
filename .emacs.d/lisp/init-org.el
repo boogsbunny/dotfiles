@@ -120,7 +120,8 @@
 
 (setq org-list-indent-offset 4)
 
-(define-key org-mode-map (kbd "s-<tab>") 'org-global-cycle)
+(define-key org-mode-map (kbd "C-<tab>") 'org-global-cycle)
+(define-key org-mode-map (kbd "s-<tab>") 'evil-switch-to-windows-last-buffer)
 
 (defun org-open-at-point-with-firefox ()
   (interactive)
