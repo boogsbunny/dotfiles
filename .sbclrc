@@ -3,11 +3,32 @@
 ;; Some OSes package Lisp compilers in a way that ASDF is not automatically loaded.
 (require "asdf")
 
+(defun load-sbcl-contribs ()
+  (dolist (contrib '(:sb-cltl2
+                     :sb-posix
+                     :sb-bsd-sockets
+                     :sb-rotate-byte
+                     :sb-introspect
+                     :sb-concurrency))
+    (require contrib)))
+
+(load-sbcl-contribs)
+
+(let ((guix-profile (format nil "~a/.guix-profile/lib/" (uiop:getenv "HOME"))))
+  (when (and (probe-file guix-profile)
+             (ignore-errors (asdf:load-system "cffi")))
+    (push guix-profile
+          (symbol-value (find-symbol (string '*foreign-library-directories*)
+                                     (find-package 'cffi))))))
+
 (uiop:define-package #:guix
   (:use :common-lisp))
 (in-package #:guix)
 
 (export '*guix-profiles-dir*)
+;; (defvar *guix-profiles-dir* "~/.guix-profile/"
+;;   "Directory in which Guix profiles are stored.
+;; The actual profiles are in the subsubdirectories.")
 (defvar *guix-profiles-dir* "~/.guix-extra-profiles/"
   "Directory in which Guix profiles are stored.
 The actual profiles are in the subsubdirectories.")
