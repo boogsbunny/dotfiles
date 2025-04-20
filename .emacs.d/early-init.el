@@ -8,6 +8,8 @@
 ;; site-lisp folder for local packages on MacOSX
 ;; (add-to-list 'load-path (expand-file-name "site-lisp/" user-emacs-directory))
 
+(add-to-list 'exec-path "~/.npm-packages/bin")
+
 ;; separate user files with cache files
 (setq user-emacs-directory "~/.cache/emacs/")
 
