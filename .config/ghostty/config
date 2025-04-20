@@ -32,5 +32,7 @@ keybind = ctrl+o=toggle_window_decorations
 window-save-state = always
 
 # actions
-keybind = ctrl+u=scroll_page_up
-keybind = ctrl+n=scroll_page_down
+keybind = ctrl+b=scroll_to_top
+keybind = ctrl+f=scroll_to_bottom
+keybind = ctrl+y=scroll_page_up
+keybind = ctrl+e=scroll_page_down
