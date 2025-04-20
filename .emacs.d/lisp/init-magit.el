@@ -20,6 +20,7 @@
 
 (setq magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1)
 
+(setq forge-add-default-bindings nil)
 (require 'forge nil 'noerror)
 (when (fboundp 'magit-status)
   (global-set-key (kbd "C-x g") 'magit-status))
