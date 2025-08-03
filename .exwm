@@ -1,5 +1,5 @@
 ;;; -*- mode: emacs-lisp; -*-
 
 (require 'exwm)
-(exwm-enable)
+(exwm-wm-mode)
 (server-start)
