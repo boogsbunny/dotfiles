@@ -38,6 +38,7 @@
          "SOMEDAY(s/!)"
          "|"
          "DONE(d@)"
+         "UNFINISHED(u@)"
          "CANCELED(c@)")))
 
 ;; don't show trailing whitespace in calendar mode

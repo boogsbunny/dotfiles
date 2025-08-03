@@ -190,6 +190,7 @@
             ("DELEGATED" . (:foreground ,(cdr (assoc 'blue colors)) :weight bold))
             ("SOMEDAY" . (:foreground ,(cdr (assoc 'cyan colors)) :weight bold))
             ("DONE" . (:foreground ,(cdr (assoc 'green colors)) :weight bold))
+            ("UNFINISHED" . (:foreground ,(cdr (assoc 'magenta colors)) :weight bold))
             ("CANCELED" . (:foreground ,(cdr (assoc 'magenta colors)) :weight bold))))
     (setf org-modern-todo-faces
           `(("TODO" . (:background ,(cdr (assoc 'red colors)) :foreground "white" :weight bold))
@@ -198,6 +199,7 @@
             ("DELEGATED" . (:background ,(cdr (assoc 'blue colors)) :foreground "white" :weight bold))
             ("SOMEDAY" . (:background ,(cdr (assoc 'cyan colors)) :foreground "white" :weight bold))
             ("DONE" . (:background ,(cdr (assoc 'green colors)) :foreground "white" :weight bold))
+            ("UNFINISHED" . (:background ,(cdr (assoc 'magenta colors)) :foreground "white" :weight bold))
             ("CANCELED" . (:background ,(cdr (assoc 'magenta colors)) :foreground "white" :weight bold))))))
 
 (defun set-org-faces-for-modus-operandi-tinted ()
