@@ -478,6 +478,13 @@ Useful for Guix."
 
 (global-set-key (kbd "s-SPC") 'helm-rg)
 
+(setq helm-boring-buffer-regexp-list (list
+                                      (rx "*helm")
+                                      (rx "*Minibuf")
+                                      (rx "*Echo")
+                                      (rx "*boogs/helm-sly-mini*")
+                                      (rx "*string-pixel-width*")))
+
 (require 'patch-helm)
 (require 'patch-helm-comint)
 (require 'patch-helm-file-name-completion)
