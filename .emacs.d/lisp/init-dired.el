@@ -28,6 +28,7 @@
 ;;; omit-mode needs to be started _after_ omit-files redefinition.
 (require 'dired-x)
 (setq dired-omit-files "^\\.")
+(remove-hook 'dired-mode-hook 'dired-omit-mode)
 
 (setq dired-guess-shell-alist-user
       (list
