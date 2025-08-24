@@ -40,7 +40,8 @@ alias \
 # enable the `pauseallmpv` command
 alias mpv="mpv --input-ipc-server=/tmp/mpvsoc$(date +%s)"
 
-# dictionary
-alias ger="sdcv -u \"English-German\""
+alias wifilist="sudo nmcli device wifi list"
+alias wificonnect="sudo nmcli device wifi connect"
 
-alias cat="bat"
+alias python="python3"
+
