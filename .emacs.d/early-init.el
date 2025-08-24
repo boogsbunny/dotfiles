@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t -*-
 ;;--------------------------------------------------------------------
 ;; early-init
 ;;--------------------------------------------------------------------
@@ -45,17 +46,18 @@
 (put 'kill-ring 'history-length 25)
 
 (setq max-lisp-eval-depth 10000)
-
 (setq xref-search-program 'ripgrep)
 
-(defun fixed-native-compile-async-skip-p (native-compile-async-skip-p file load selector)
-  (let* ((naive-elc-file (file-name-with-extension file "elc"))
-         (elc-file       (replace-regexp-in-string
-                          "\\.el\\el.gz\\.elc$" ".elc" naive-elc-file)))
-    (or (gethash elc-file comp--no-native-compile)
-        (funcall native-compile-async-skip-p file load selector))))
+(defvar hash-table-contains-p--sentinel
+  (make-symbol "hash-table-contains-p--missing")
+  "Sentinel used internally by `hash-table-contains-p'.")
 
-(advice-add 'native-compile-async-skip-p
-            :around 'fixed-native-compile-async-skip-p)
+(fset
+ 'hash-table-contains-p
+ (lambda (key table)
+   "Return non-nil if TABLE has an element with KEY."
+   (declare (side-effect-free t) (important-return-value t))
+   (not (eq (gethash key table hash-table-contains-p--sentinel)
+            hash-table-contains-p--sentinel))))
 
 (require 'init-packages)
