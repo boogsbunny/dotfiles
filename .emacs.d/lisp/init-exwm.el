@@ -115,13 +115,13 @@ CLASS-NAME is used for matching instead of PROGRAM name if provided."
  "s-y"
  (lambda ()
    (interactive)
-   (boogs/switch-to-or-start "ghostty")))
+   (boogs/switch-to-or-start "alacritty")))
 
 (boogs/exwm-global-set-key
  "s-Y"
  (lambda ()
    (interactive)
-   (boogs/start-new "ghostty")))
+   (boogs/start-new "alacritty")))
 
 ;; Browser
 (boogs/exwm-global-set-key
