@@ -10,8 +10,10 @@
       ;; 120
       ;; 150
       ;; 250
-      300
-    250))
+      ;; 200
+      250
+    200
+    ))
 
 (set-face-attribute 'default nil
                     :font "Iosevka Term"
