@@ -1,0 +1,6 @@
+[commit]
+ gpgsign = false
+
+[user]
+ name = Boogs
+ email = ba2ra@virginia.edu

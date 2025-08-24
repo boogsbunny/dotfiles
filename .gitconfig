@@ -5,8 +5,10 @@
 [diff "elisp"]
     xfuncname="^\\((((def\\S+)|use-package)\\s+\\S+)"
 [includeIf "gitdir:~/dotfiles/"]
-  path = ~/.gitconfig-gitlab
+  path = ~/.gitconfig-github
 [includeIf "gitdir:~/common-lisp/"]
+  path = ~/.gitconfig-github
+[includeIf "gitdir:~/projects/personal/boogs.gitlab.io"]
   path = ~/.gitconfig-gitlab
 [includeIf "gitdir:~/projects/"]
   path = ~/.gitconfig-github
