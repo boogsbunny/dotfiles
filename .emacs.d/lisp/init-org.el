@@ -133,8 +133,9 @@
 
 ;; maintain visible empty lines while toggling heading contents
 (customize-set-variable 'org-blank-before-new-entry
-                        '((heading . nil)
-                          (plain-list-item . nil)))
+                        '((heading . always)
+                          (plain-list-item . always)))
+
 (setq org-cycle-separator-lines 1)
 
 ;;--------------------------------------------------------------------;
