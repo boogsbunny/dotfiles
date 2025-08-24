@@ -175,7 +175,9 @@ CLASS-NAME is used for matching instead of PROGRAM name if provided."
   (exwm-input-set-key (kbd "C-6") #'evil-switch-to-windows-last-buffer))
 
 (when (require 'perspective nil t)
-  (boogs/exwm-global-set-key "s-s" #'persp-switch)
+  (boogs/exwm-global-set-key "s-S" #'persp-switch)
+  (boogs/exwm-global-set-key "s-s" #'persp-switch-quick)
+  (boogs/exwm-global-set-key "s-'" #'persp-switch-last)
   (exwm-input-set-key (kbd "s-,") #'persp-prev)
   (exwm-input-set-key (kbd "s-.") #'persp-next)
   (exwm-input-set-key (kbd "s-[") #'perspective-exwm-cycle-exwm-buffers-backward)
