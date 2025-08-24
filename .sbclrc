@@ -26,9 +26,6 @@
 (in-package #:guix)
 
 (export '*guix-profiles-dir*)
-;; (defvar *guix-profiles-dir* "~/.guix-profile/"
-;;   "Directory in which Guix profiles are stored.
-;; The actual profiles are in the subsubdirectories.")
 (defvar *guix-profiles-dir* "~/.guix-extra-profiles/"
   "Directory in which Guix profiles are stored.
 The actual profiles are in the subsubdirectories.")
@@ -61,6 +58,18 @@ The actual profiles are in the subsubdirectories.")
 (set-cffi-library-dirs)
 
 (in-package :cl-user)
+
+(defun mark-guix-packages-as-immutable ()
+  (asdf:map-systems
+   (lambda (system)
+     (when (and (asdf:system-source-file system)
+                (= (length #1="/gnu/store")
+                   (mismatch #1#
+                             (namestring (asdf:system-source-file system)))))
+       (format *debug-io* "~&System ~a is located in guix's store.~%" system)
+       (asdf:register-immutable-system system)))))
+
+(pushnew 'mark-guix-packages-as-immutable asdf/driver:*clear-configuration-hook*)
 
 ;; Uncomment the following to increase the debug details.
 ;; It's often better to do this from the REPL.
