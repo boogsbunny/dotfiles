@@ -7,24 +7,24 @@ image_path=""
 case "$(printf "a selected area\\ncurrent window\\nfull screen\\na selected area (copy)\\ncurrent window (copy)\\nfull screen (copy)" | dmenu -l 6 -i -p "Screenshot which area?")" in
     "a selected area")
         image_path="${dir}"pic-selected-"${output}"
-        maim -u -s "${image_path}"
+        maim -m 10 --format=png -u -s "${image_path}"
         ;;
     "current window")
         image_path="${dir}"pic-window-"${output}"
-        maim -q -d 0.2 -i "$(xdotool getactivewindow)" "${image_path}"
+        maim -m 10 --format=png -q -d 0.2 -i "$(xdotool getactivewindow)" "${image_path}"
         ;;
     "full screen")
         image_path="${dir}"pic-full-"${output}"
-        maim -q -d 0.2 "${image_path}"
+        maim -m 10 --format=png -q -d 0.2 "${image_path}"
         ;;
     "a selected area (copy)")
-        maim -u -s | ${xclip_cmd}
+        maim -m 10 --format=png -u -s | ${xclip_cmd}
         ;;
     "current window (copy)")
-        maim -q -d 0.2 -i "$(xdotool getactivewindow)" | ${xclip_cmd}
+        maim -m 10 --format=png -q -d 0.2 -i "$(xdotool getactivewindow)" | ${xclip_cmd}
         ;;
     "full screen (copy)")
-        maim -q -d 0.2 | ${xclip_cmd}
+        maim -m 10 --format=png -q -d 0.2 | ${xclip_cmd}
         ;;
 esac
 
