@@ -1,5 +1,36 @@
 ;;; -*- mode: emacs-lisp; -*-
 
+(require 'perspective-exwm)
+(perspective-exwm-mode)
+(setq perspective-exwm-override-initial-name
+      '((0 . "boogs")
+        (1 . "shukaku")
+        (2 . "matatabi")
+        (3 . "isobu")
+        (4 . "son-goku")
+        (5 . "kokuo")
+        (6 . "saiken")
+        (7 . "chomei")
+        (8 . "gyuki")
+        (9 . "kurama")))
+
+(require 'slack)
+(slack-start)
+
 (require 'exwm)
+(setq exwm-workspace-number 10)
+
+(setq exwm-input-global-keys
+      `(
+        ;; Switch workspace
+        ([?\s-w] . exwm-workspace-switch)
+        ;; 's-N': Switch to certain workspace with Super (Win) plus a number key (0 - 9)
+        ,@(mapcar (lambda (i)
+                    `(,(kbd (format "s-%d" i)) .
+                      (lambda ()
+                        (interactive)
+                        (exwm-workspace-switch-create ,i))))
+                  (number-sequence 0 9))))
+
 (exwm-wm-mode)
 (server-start)
