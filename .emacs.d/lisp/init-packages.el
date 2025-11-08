@@ -11,7 +11,11 @@
 
 (setq package-selected-packages
       '(add-node-modules-path
+        all-the-icons
+        all-the-icons-completion
+        all-the-icons-dired
         alert
+        async
         auth-source-pass
         auto-complete
         bui
@@ -23,8 +27,13 @@
         company-box
         company-go
         company-restclient
+        consult
+        consult-ls-git
+        corfu
+        corfu-prescient
         dap-mode
         dash
+        difftastic
         disk-usage
         dired-du
         dmenu
@@ -39,6 +48,8 @@
         eldoc-box
         elfeed
         elpy
+        embark
+        embark-consult
         emms
         emojify
         erc-hl-nicks
@@ -87,6 +98,7 @@
         hydra
         json-mode
         js2-mode
+        kind-icon
         kubernetes
         kubernetes-evil
         kubernetes-helm
@@ -103,6 +115,7 @@
         oauth2
         olivetti
         ol-notmuch
+        orderless
         org
         org-alert
         org-contrib
@@ -120,6 +133,7 @@
         perspective
         perspective-exwm
         pinentry
+        prescient
         prettier
         prettier-js
         projectile
@@ -138,16 +152,21 @@
         sly-quicklisp
         sly-named-readtables
         smart-mode-line
+        svg-lib
         svg-tag-mode
         transmission
+        treesit-auto
         tree-sitter
         tree-sitter-langs
         typescript-mode
+        vertico
+        vertico-prescient
         websocket
         web-mode
         which-key
         windower
         xelb
+        yaml-mode
         yasnippet
         youtube-dl))
 
