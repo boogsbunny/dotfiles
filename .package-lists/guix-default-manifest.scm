@@ -17,6 +17,7 @@
    "conky"
    "cryptsetup"
    "curl"
+   "difftastic"
    "dmenu"
    "docker"
    ;; "docker-compose"
