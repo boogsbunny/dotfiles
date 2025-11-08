@@ -118,66 +118,66 @@
 (deflayer dvorak
   esc  mute vold volu                          prnt slck pause ins del  home pgup
        f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11   f12      end  pgdn
-  $    +    [    {    \(   !    XX   |    *    \)   }     ]    &        bspc
-  tab  ;    ,    .    @tpd y    XX   f    g    @tcd r    q     /        ret
-  XX   @tad @tod @ted @tud @tid XX   @tdd @thd @ttd @tnd @tsd  @
-  lsft 102d '    x    j    k    b    z    l    m    w    v              rsft
-  wkup lctl lmet lalt            @tdl           ralt cmps rctl      back up   fwd
+  grv  =    1    2    3    4    5    6    7    8    9    0     -        bspc
+  tab  ;    ,    .    @tpd y    XX   XX   f    g    @tcd r     q        @tsd
+  XX   @tad @tod @ted @tud @tid XX   XX   @tdd @thd @ttd @tnd  XX
+  lsft 102d '    x    j    k    b    XX   z    l    m    w              v
+  wkup @tdl @tdl @tdl            @tdl           @tdl @tdl @tdl      back up   fwd
                                                                     left down rght
 )
 
 (deflayer layers
   esc  mute vold volu                          prnt slck pause ins del  home pgup
        f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11   f12      end  pgdn
-  ~    1    2    3    4    5    XX   6    7    8    9    0     %        bspc
-  tab  :    <    >    @tPd Y    XX   F    G    @tCd R    Q     ?        ret
-  bspc @cad @cod @ned @sud @tId XX   @tDd @shd @ntd @cnd @csd  \_
-  lsft 102d  "   X    J    K    B    Z    L    M    W    V              rsft
-  wkup lctl lmet lalt          @tdv            ralt  cmps rctl     back up   fwd
+  ~    %    1    2    3    4    5    6    7    8    9    0     XX       bspc
+  tab  :    <    >    @tPd Y    XX   XX   F    G    @tCd R     Q        @csd
+  bspc @cad @cod @ned @sud @tId XX   XX   @tDd @shd @ntd @cnd  XX
+  lsft 102d  "   X    J    K    B    XX   Z    L    M    W              V
+  wkup @tdv @tdv @tdv          @tdv            @tdv  @tdv @tdv     back up   fwd
                                                                    left down rght
 )
 
 (deflayer caps
   esc  mute vold volu                          prnt slck pause ins del  home pgup
        f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11   f12      end  pgdn
-  ~    1    2    3    @lsc 5    XX   6    7    @lsc 9    0     %        bspc
-  tab  :    <    >    @tPd Y    XX   F    G    @tCd R    Q     ?        ret
-  bspc @tAd @tOd @tEd @tUd @tId XX   @tDd @tHd @tTd @tNd @tSd  \_
-  lsft 102d "    X    J    K    B    Z    L    M    W    V              rsft
-  wkup lctl lmet lalt           @tdv           ralt cmps rctl      back up   fwd
+  ~    %    1    2    3    @lsc 5    6    7    8    @lsc 9     0        bspc
+  tab  :    <    >    @tPd Y    XX   XX   F    G    @tCd R     Q        @tSd
+  bspc @tAd @tOd @tEd @tUd @tId XX   XX   @tDd @tHd @tTd @tNd  XX
+  lsft 102d "    X    J    K    B    XX   Z    L    M    W              V
+  wkup @tdv @tdv @tdv           @tdv           @tdv @tdv @tdv      back up   fwd
                                                                    left down rght
 )
 
 (deflayer specials
   esc  mute vold volu                           prnt slck pause ins del  home pgup
        f1   f2   f3   f4    f5   f6   f7   f8   f9   f10  f11   f12      end  pgdn
-  ~    1    2    3    @lss  5    XX   6    7    @lss 9    0     %        bspc
-  tab  :    ^    =    @tok  *    XX   &    %    @tik @    |     ?        ret
-  bspc @t$h @t[h @t{h @t/h  bspc XX   bspc @t\h @t}h @t]h @t+h  \_
-  lsft <    |    >    -     /    ~    !    #   \\    ;    ,              rsft
-  wkup lctl lmet lalt           @tdv           ralt cmps rctl       back up   fwd
+  ~    %    1    2    3     @lss 5    6    7    8    @lss 9     0        bspc
+  tab  :    ^    =    @tok  *    XX   &    %    @tik @    |     ?        @t+h
+  bspc @t$h @t[h @t{h @t/h  bspc XX   XX   bspc @t\h @t}h @t]h  \_
+  lsft <    |    >    -     /    ~    XX   !    #    \\   ;              ,
+  wkup @tdv @tdv @tdv           @tdv           @tdv @tdv @tdv       back up   fwd
                                                                     left down rght
 )
 
 (deflayer numbers
   esc  mute vold volu                          prnt slck pause ins del  home pgup
        f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11   f12      end  pgdn
-  XX   XX   XX   XX   @lsn XX   XX   XX   XX   @lsn XX   XX    XX       bspc
-  XX   :    ,    .    tab  XX   XX   XX   XX   ret  XX   XX    XX       ret
-  XX   @t1h @t2h @t3h @t4h @t5h XX   @t6h @t7h @t8h @t9h @t0h  \_
+  XX   XX   XX   XX   XX   @lsn XX   XX   XX   XX   @lsn XX    XX       bspc
+  XX   :    ,    .    tab  XX   XX   XX   XX   ret  XX   XX    XX       @t0h
+  XX   @t1h @t2h @t3h @t4h @t5h XX   XX   @t6h @t7h @t8h @t9h  \_
   XX   XX   XX   XX   -    /    "    &    =    XX   XX   XX             rsft
-  wkup lctl lmet lalt           @tdv           ralt cmps rctl      back up   fwd
+  wkup @tdv @tdv @tdv           @tdv           @tdv @tdv @tdv      back up   fwd
                                                                    left down rght
 )
 
 (deflayer cursor
   esc  mute vold volu                          prnt slck pause ins del  home pgup
        f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11   f12      end  pgdn
-  XX   XX   XX   XX   @lcc XX   XX   XX   XX   @lcc XX   XX    XX       bspc
+  XX   XX   XX   XX   XX   @lcc XX   XX   XX   XX   @lcc XX    XX       bspc
   XX   XX   XX   XX   @lpd XX   XX   XX   XX   @lcd XX   XX    XX       ret
   XX   @lad @lod @led @lud bspc XX   bspc @lhd @ltd @lnd @lsd  XX
   XX   XX   XX   pgdn pgup XX   XX   XX   XX   XX   XX   XX             rsft
-  wkup lctl lmet lalt           @tdv           ralt cmps rctl      back up   fwd
+  wkup @tdv @tdv @tdv           @tdv           @tdv @tdv @tdv      back up   fwd
                                                                    left down rght
 )
 
