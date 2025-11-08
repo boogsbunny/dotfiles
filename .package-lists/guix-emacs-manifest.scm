@@ -76,6 +76,7 @@
    ;; "emacs-leetcode"
    ;; "emacs-lispy"
    ;; "emacs-lispyville"
+   "emacs-lsp-booster"
    ;; "emacs-macrostep"
    ;; "emacs-magit"
    ;; "emacs-magit-todos"
