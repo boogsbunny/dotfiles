@@ -1,5 +1,7 @@
 (specifications->manifest
- '("emacs-no-x-toolkit"
+ '(;;"emacs"
+   "emacs-no-x-toolkit"
+   "emacs-exwm-no-x-toolkit"
    ;; "emacs-add-node-modules-path"
    ;; "emacs-alert"
    ;; "emacs-auth-source-pass"
