@@ -31,3 +31,5 @@
 	directory = *
 [commit]
 	gpgsign = true
+[diff]
+  external = difft --display inline
