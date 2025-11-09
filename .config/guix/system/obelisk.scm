@@ -22,11 +22,12 @@
 
 (define linux-obelisk
   (package
-   (inherit linux-6.6)
+   (inherit linux-6.12)
    (name "linux-obelisk")
-   (native-inputs
-    `(("kconfig" ,(local-file "./kernel.conf"))
-      ,@(alist-delete "kconfig" (package-native-inputs linux-6.6))))))
+   ;; (native-inputs
+   ;;  `(("kconfig" ,(local-file "./kernel.conf"))
+   ;;    ,@(alist-delete "kconfig" (package-native-inputs linux-6.12))))
+   ))
 
 (define %obelisk/mapped-devices
   (list (mapped-device
