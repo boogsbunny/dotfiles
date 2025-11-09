@@ -152,8 +152,32 @@
         (service docker-service-type)
         (service postgresql-service-type
                  (postgresql-configuration
-                  (postgresql postgresql-14)
-                  (extension-packages (list postgis))))
+                  (postgresql postgresql-16)
+                  ;; (extension-packages (list postgis))
+                  (config-file
+                   (postgresql-config-file
+                    (log-destination "stderr")
+                    (hba-file
+                     (plain-file "pg_hba.conf"
+                                 "
+local	all	all			trust
+host	all	all	127.0.0.1/32 	md5
+host	all	all	::1/128 	md5"))))))
+        (service postgresql-role-service-type
+                 (postgresql-role-configuration
+                  (roles (list (postgresql-role
+                                (name "boogs")
+                                (create-database? #t))
+                               (postgresql-role
+                                (name "postgres")
+                                (permissions
+                                 '(bypassrls
+                                   createdb
+                                   createrole
+                                   login
+                                   replication
+                                   superuser))
+                                (create-database? #t))))))
         (service redis-service-type)))
 
 (define %desktop-services-customization
