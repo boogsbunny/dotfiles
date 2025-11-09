@@ -6,12 +6,6 @@
 ;;; force-kill Emacs before it can run through `kill-emacs-hook'.
 (global-set-key (kbd "C-x C-c") 'save-buffers-kill-emacs)
 
-;;; See https://github.com/ch11ng/exwm/issues/285
-;;; and https://gitlab.com/interception/linux/plugins/caps2esc/issues/2.
-
-;; Looks like there is a bug between Helm and EXWM global keys which leads Helm
-;; to display nothing when only `exwm-input-set-key' is used.
-;; https://github.com/ch11ng/exwm/issues/816
 (defun boogs/exwm-global-set-key (keys command)
   "Bind KEYS to COMMAND.
 KEYS is passed to `kbd'."
@@ -128,13 +122,16 @@ CLASS-NAME is used for matching instead of PROGRAM name if provided."
  "s-i"
  (lambda ()
    (interactive)
-   (boogs/switch-to-or-start "firefox" "Nightly")))
+   (boogs/switch-to-or-start "zen")))
 
 (boogs/exwm-global-set-key
  "s-I"
  (lambda ()
    (interactive)
-   (boogs/start-new "firefox")))
+   (boogs/start-new "zen")))
+
+(global-set-key (kbd "s-d") 'sql-connect)
+(boogs/exwm-global-set-key "s-d" 'sql-connect)
 
 (when (require 'windower nil 'noerror)
   (exwm-input-set-key (kbd "s-<tab>") 'windower-switch-to-last-buffer)
@@ -145,38 +142,56 @@ CLASS-NAME is used for matching instead of PROGRAM name if provided."
   (exwm-input-set-key (kbd "s-K") 'windower-swap-above)
   (exwm-input-set-key (kbd "s-L") 'windower-swap-right))
 
-;(exwm-input-set-key (kbd "s-i") #'follow-delete-other-windows-and-split)
 (exwm-input-set-key (kbd "s-O") #'exwm-layout-toggle-fullscreen)
 
-(with-eval-after-load 'helm
-  (boogs/exwm-global-set-key "s-b" #'helm-mini)
-  (boogs/exwm-global-set-key "s-z" #'helm-mini)
-  (boogs/exwm-global-set-key "M-x" #'helm-M-x)
-  (boogs/exwm-global-set-key "\C-x\C-m" #'helm-M-x)
-  (boogs/exwm-global-set-key "C-c t" #'helm-tramp)
-  (boogs/exwm-global-set-key "C-x b" #'helm-mini)
-  (boogs/exwm-global-set-key "s-f" #'helm-find-files)
-  (boogs/exwm-global-set-key "C-x f" #'helm-find-files)
-  (boogs/exwm-global-set-key "C-x r g" #'helm-ls-git)
-  (boogs/exwm-global-set-key "C-x C-d" #'helm-browse-project)
-  (boogs/exwm-global-set-key "C-x r p" #'helm-projects-history)
-  ;; (push `(,(kbd "s-f") . helm-find-files) exwm-input-global-keys)
-  ;; (exwm-input-set-key (kbd "s-F") #'helm-locate)
-  (exwm-input-set-key (kbd "s-F") #'find-file-literally)
-  ;; (when (fboundp 'boogs/helm-locate-meta)
-  ;;   (boogs/exwm-global-set-key "s-F" #'boogs/helm-locate-meta))
-  (boogs/exwm-global-set-key "s-g" 'boogs/helm-grep-git-or-ag)
-  (boogs/exwm-global-set-key "s-G" 'boogs/helm-grep-git-all-or-ag)
-  ;; Launcher
-  (boogs/exwm-global-set-key "s-r" 'helm-run-external-command))
+(boogs/exwm-global-set-key "s-f" 'find-file)
+(boogs/exwm-global-set-key "C-x p p" 'project-switch-project)
+
+(defun boogs/consult--buffer-source-exwm ()
+  "Consult source listing EXWM X application buffers (narrow key: x)."
+  `(:name     "X Applications"
+    :narrow   ?x
+    :category buffer
+    :face     consult-buffer
+    :history  buffer-name-history
+    :items    ,(lambda ()
+                 (mapcar #'buffer-name
+                         (seq-filter
+                          (lambda (b)
+                            (with-current-buffer b
+                              (eq major-mode 'exwm-mode)))
+                          (buffer-list))))
+    :action   ,#'switch-to-buffer
+    :state    ,#'consult--buffer-state))
+
+(defun boogs/consult-exwm-buffers ()
+  "Consult buffers limited to EXWM (X application) buffers."
+  (interactive)
+  (let* ((local-sources (list (boogs/consult--buffer-source-exwm)))
+         (consult-buffer-sources local-sources))
+    (consult-buffer)))
+
+(when (require 'consult nil 'noerror)
+  (global-set-key (kbd "C-x C-b") #'consult-buffer)
+  (boogs/exwm-global-set-key "s-m" #'consult-notmuch-inbox)
+  (boogs/exwm-global-set-key "s-M" #'consult-notmuch-tree)
+  (boogs/exwm-global-set-key "s-b" #'consult-buffer)
+  (boogs/exwm-global-set-key "s-e" #'boogs/consult-exwm-buffers)
+  (boogs/exwm-global-set-key "C-c t" #'boogs/consult-tramp)
+  (boogs/exwm-global-set-key "s-g" #'consult-ripgrep)
+  (boogs/exwm-global-set-key "s-G" #'consult-git-grep)
+  (boogs/exwm-global-set-key "C-x c i" #'consult-imenu)
+  (boogs/exwm-global-set-key "C-x r g" #'consult-ls-git))
+
+(boogs/exwm-global-set-key "M-i" #'embark-act)
 
 (when (require 'evil nil t)
   (exwm-input-set-key (kbd "s-<tab>") #'evil-switch-to-windows-last-buffer)
   (exwm-input-set-key (kbd "C-6") #'evil-switch-to-windows-last-buffer))
 
 (when (require 'perspective nil t)
+  (boogs/exwm-global-set-key "s-s" #'perspective-exwm-switch-perspective)
   (boogs/exwm-global-set-key "s-S" #'persp-switch)
-  (boogs/exwm-global-set-key "s-s" #'persp-switch-quick)
   (boogs/exwm-global-set-key "s-'" #'persp-switch-last)
   (exwm-input-set-key (kbd "s-,") #'persp-prev)
   (exwm-input-set-key (kbd "s-.") #'persp-next)
@@ -189,19 +204,14 @@ CLASS-NAME is used for matching instead of PROGRAM name if provided."
     (progn
       (exwm-input-set-key (kbd "s-t") (lambda ()
                                         (interactive)
-                                        (find-file (car org-agenda-files))))
-      (exwm-input-set-key (kbd "s-m") #'notmuch-hello)
-      (exwm-input-set-key (kbd "s-e") #'helm-exwm))
+                                        (find-file (car org-agenda-files)))))
   (boogs/exwm-global-set-key "s-t" 'gptel)
   (boogs/exwm-global-set-key "s-T" 'gptel-menu)
   (boogs/exwm-global-set-key "s-<return>" 'boogs/helm-selector-sly)
   (boogs/exwm-global-set-key "s-<backspace>" 'boogs/sly-start-new-connection)
   (boogs/exwm-global-set-key "S-s-<return>" 'boogs/helm-selector-sly-other-window)
-  (boogs/exwm-global-set-key "s-m" #'helm-selector-notmuch)
-  (boogs/exwm-global-set-key "s-M" #'helm-selector-notmuch-other-window)
   (boogs/exwm-global-set-key "s-n" #'helm-selector-elfeed)
   (boogs/exwm-global-set-key "s-N" #'helm-selector-elfeed-other-window) ; "n" for "news"
-  (boogs/exwm-global-set-key "s-e" #'helm-exwm)
   (boogs/exwm-global-set-key "s-v" #'helm-selector-magit)
   (boogs/exwm-global-set-key "s-u" #'helm-switch-shell)
   (boogs/exwm-global-set-key "s-E" #'helm-selector-eww-other-window))
@@ -221,9 +231,11 @@ CLASS-NAME is used for matching instead of PROGRAM name if provided."
       (boogs/exwm-global-set-key "s-A" #'helm-emms)
     (exwm-input-set-key (kbd "s-A") #'emms))))
 
-(when (fboundp 'helm-pass)
-  (boogs/exwm-global-set-key "s-P" #'password-store-otp-token-copy)
-  (boogs/exwm-global-set-key "s-p" #'helm-pass))
+(when (fboundp 'password-store-copy)
+  (boogs/exwm-global-set-key "s-p" #'password-store-copy))
+
+(when (fboundp 'password-store-otp-token-copy)
+  (boogs/exwm-global-set-key "s-P" #'password-store-otp-token-copy))
 
 (autoload 'boogs/slime-to-repl "lisp")
 (autoload 'boogs/helm-selector-sly-non-boogs "init-sly")
@@ -292,14 +304,45 @@ CLASS-NAME is used for matching instead of PROGRAM name if provided."
   (call-process "loginctl" nil nil nil "suspend"))
 (exwm-input-set-key (kbd "s-Z") #'boogs/suspend-to-sleep)
 
-;;; Volume control
-(when (require 'pulseaudio-control nil t)
-  (exwm-input-set-key (kbd "s-<kp-subtract>") #'pulseaudio-control-decrease-volume)
-  (exwm-input-set-key (kbd "s-<kp-add>") #'pulseaudio-control-increase-volume)
-  (exwm-input-set-key (kbd "s-<kp-enter>") #'pulseaudio-control-toggle-current-sink-mute)
-  (exwm-input-set-key (kbd "s--") #'pulseaudio-control-decrease-volume)
-  (exwm-input-set-key (kbd "s-=") #'pulseaudio-control-increase-volume)
-  (exwm-input-set-key (kbd "s-0") #'pulseaudio-control-toggle-current-sink-mute))
+(defun boogs/volume-up ()
+  "Increase the system master volume."
+  (interactive)
+  (start-process-shell-command "vol-up" nil "amixer set Master 5%+"))
+
+(defun boogs/volume-down ()
+  "Decrease the system master volume."
+  (interactive)
+  (start-process-shell-command "vol-down" nil "amixer set Master 5%-"))
+
+(defun boogs/volume-mute ()
+  "Toggle the system master volume mute."
+  (interactive)
+  (start-process-shell-command "vol-mute" nil "amixer set Master toggle"))
+
+;; (exwm-input-set-key (kbd "<XF86AudioLowerVolume>") #'boogs/volume-down)
+;; (exwm-input-set-key (kbd "<XF86AudioRaiseVolume>") #'boogs/volume-up)
+;; (exwm-input-set-key (kbd "<XF86AudioMute>") #'boogs/volume-mute)
+
+(exwm-input-set-key (kbd "<XF86AudioLowerVolume>")
+                    (lambda () (interactive)
+                      (shell-command "amixer set Master 5%-" nil)))
+
+(exwm-input-set-key (kbd "<XF86AudioRaiseVolume>")
+                    (lambda () (interactive)
+                      (shell-command "amixer set Master 5%+" nil)))
+
+(exwm-input-set-key (kbd "<XF86AudioMute>")
+                    (lambda () (interactive)
+                      (shell-command "amixer set Master toggle" nil)))
+
+;;;
+;; (when (require 'pulseaudio-control nil t)
+;;   (exwm-input-set-key (kbd "s-<kp-subtract>") #'pulseaudio-control-decrease-volume)
+;;   (exwm-input-set-key (kbd "s-<kp-add>") #'pulseaudio-control-increase-volume)
+;;   (exwm-input-set-key (kbd "s-<kp-enter>") #'pulseaudio-control-toggle-current-sink-mute)
+;;   (exwm-input-set-key (kbd "s--") #'pulseaudio-control-decrease-volume)
+;;   (exwm-input-set-key (kbd "s-=") #'pulseaudio-control-increase-volume)
+;;   (exwm-input-set-key (kbd "s-0") #'pulseaudio-control-toggle-current-sink-mute))
 
 ;;; Check for start-up errors. See ~/.profile.
 (let ((error-logs (directory-files "~" t "errors.*log$")))

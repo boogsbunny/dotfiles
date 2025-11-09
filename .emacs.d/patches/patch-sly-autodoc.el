@@ -107,7 +107,7 @@
                                 highlight)))
     (buffer-substring (point-min) (point-max))))
 
-
+
 ;;;; Autodocs (automatic context-sensitive help)
 
 (defun sly-autodoc (&optional force-multiline)
@@ -158,7 +158,7 @@ If it's not in the cache, the cache will be updated asynchronously."
       (when (eldoc-display-message-p)
 	(eldoc-message (format "%s" (sly-autodoc--format doc multilinep)))))))
 
-
+
 ;;; Minor mode definition
 (defvar sly-autodoc-mode-map
   (let ((map (make-sparse-keymap)))

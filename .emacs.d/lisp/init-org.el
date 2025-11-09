@@ -174,7 +174,13 @@
 (defun boogs/org-path (path)
   (expand-file-name path org-roam-directory))
 
-(setq org-agenda-files (list org-roam-dir))
+(setq org-agenda-files
+      (let ((dailies-dir (expand-file-name
+                          org-roam-dailies-directory
+                          org-roam-directory)))
+        (when (and (file-directory-p org-roam-directory)
+                   (file-directory-p dailies-dir))
+          (list org-roam-directory dailies-dir))))
 
 (setq org-default-notes-file (boogs/org-path "inbox.org"))
 
@@ -484,7 +490,8 @@
           (org-agenda-max-todos 20)
           (org-agenda-files org-agenda-files)))))
 
-(add-hook 'org-timer-set-hook #'org-clock-in)
+(add-hook 'org-clock-in-hook 'org-timer-start)
+(add-hook 'org-clock-out-hook 'org-timer-stop)
 
 ;; org capture templates
 (setq org-capture-templates

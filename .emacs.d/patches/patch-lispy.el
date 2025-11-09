@@ -1,10 +1,10 @@
 ;; REVIEW: Remove once merged upstream:
-;; https://github.com/abo-abo/lispy/pull/574.
+;; https://github.com/abo-abo/lispy/pull/574
 (dolist (mode '(slime-repl-mode slime-mrepl-mode sly-mrepl-mode))
   (push `(,mode le-lisp lispy--eval-lisp) lispy-eval-alist))
 
-;; REVIEW: Remove this workaround when upstream has fixed
-;; https://github.com/abo-abo/lispy/pull/575.
+;; REVIEW: Remove this workaround when upstream has fixed:
+;; https://github.com/abo-abo/lispy/pull/575
 (push '(sly-mrepl-mode . ("[[:space:]]" "[#`',.@]+" "#[0-9]*" "#[.,Ss+-]" "#[0-9]+[=Aa]"))
       lispy-parens-preceding-syntax-alist)
 

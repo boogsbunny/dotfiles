@@ -91,6 +91,9 @@
         "⏻%b%p%% ")))
 (display-battery-mode 1)
 
+(require 'async)
+(async-bytecomp-package-mode 1)
+
 (setq rm-excluded-modes
       (mapconcat
        'identity
@@ -125,7 +128,13 @@
 ;; delete trailing whitespace on save
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
-(setq whitespace-style '(face empty indentation space-after-tab space-before-tab tab-mark trailing))
+(setq whitespace-style
+      '(face
+        empty
+        indentation
+        space-after-tab
+        space-before-tab
+        tab-mark trailing))
 
 ;; remove the GUI Emacs clutter
 (setq inhibit-startup-message t)
@@ -154,6 +163,10 @@
 (add-hook 'before-save-hook 'save-place-kill-emacs-hook)
 ;;  save M-: history
 (savehist-mode)
+
+(setq enable-recursive-minibuffers t)
+
+(setq read-extended-command-predicate #'command-completion-default-include-p)
 
 ;; default mode
 (setq-default major-mode 'text-mode)
@@ -191,41 +204,8 @@
 (put 'erase-buffer 'disabled nil)
 (put 'set-goal-column 'disabled nil)
 
-(defun single-buffer-visible-p ()
-  "Check if only a single buffer is visible in the current frame."
-  (<= (length (window-list)) 1))
-
-(defun laptop-screen-p ()
-  (and
-   (= (x-display-pixel-width) 3000)
-   (= (x-display-pixel-height) 2000)))
-
-(defun maybe-enable-olivetti-mode ()
-  "Enable olivetti mode if on monitor and only a single buffer is visible."
-  (if (and (not (laptop-screen-p))
-           (or (and (derived-mode-p 'prog-mode) (single-buffer-visible-p))
-               (and (derived-mode-p 'json-mode) (single-buffer-visible-p))
-               (and (derived-mode-p 'org-mode) (single-buffer-visible-p))
-               (and (derived-mode-p 'yaml-mode) (single-buffer-visible-p))
-               (and (derived-mode-p 'eww-mode) (single-buffer-visible-p))
-               (and (derived-mode-p 'slack-mode) (single-buffer-visible-p))
-               (and (derived-mode-p 'magit-status-mode) (single-buffer-visible-p))
-               (and (derived-mode-p 'comint-mode) (single-buffer-visible-p))
-               (and (derived-mode-p 'notmuch-show-mode) (single-buffer-visible-p))
-               (and (derived-mode-p 'erc-mode) (single-buffer-visible-p))))
-      (olivetti-mode 1)
-    (olivetti-mode -1)))
-
-(add-hook 'window-configuration-change-hook 'maybe-enable-olivetti-mode)
-(add-hook 'kill-buffer-hook 'maybe-enable-olivetti-mode)
-(add-hook 'after-change-major-mode-hook 'maybe-enable-olivetti-mode)
-
-(setq olivetti-body-width 0.65
-      olivetti-minimum-body-width 72
-      olivetti-recall-visual-line-mode-entry-state t)
-
 ;; kill this buffer
-(global-set-key (kbd "C-x C-k") 'kill-this-buffer)
+(global-set-key (kbd "C-x C-k") 'kill-current-buffer)
 ;; cycle buffers
 (global-set-key (kbd "C-x C-n") 'next-buffer)
 (global-set-key (kbd "C-x C-p") 'previous-buffer)
@@ -243,26 +223,29 @@
 
 (advice-add 'geiser-impl--set-buffer-implementation :after #'guix-geiser--set-project)
 
-;; REVIEW: If xdg-open is not found, set Emacs URL browser to the environment browser,
-;; or w3m if BROWSER is not set.
+;; REVIEW: If xdg-open is not found, set Emacs URL browser to the
+;; environment browser, or w3m if BROWSER is not set.
 ;; See https://debbugs.gnu.org/cgi/bugreport.cgi?bug=18986.
 ;; In Emacs 27, the BROWSER variable is still not checked.
 (require 'browse-url)
-(setq browse-url-generic-program (or
-                                  (executable-find (or (getenv "BROWSER") ""))
-                                  (when (executable-find "xdg-mime")
-                                    (let ((desktop-browser (boogs/call-process-to-string
-                                                            "xdg-mime" "query" "default" "text/html")))
-                                      (substring desktop-browser 0 (string-match "\\.desktop" desktop-browser))))
-                                  (executable-find browse-url-mozilla-program)
-                                  (executable-find browse-url-firefox-program)
-                                  (executable-find browse-url-chromium-program)
-                                  (executable-find browse-url-kde-program)
-                                  (executable-find browse-url-conkeror-program)
-                                  (executable-find browse-url-chrome-program)))
-(setq browse-url-handlers '(("http://www.lispworks.com/reference/HyperSpec/.*" . eww-browse-url)
-                            ("file:///.*HyperSpec.*" . eww-browse-url)
-                            ("." . browse-url-default-browser)))
+(setq browse-url-generic-program
+      (or
+       (executable-find (or (getenv "BROWSER") ""))
+       (when (executable-find "xdg-mime")
+         (let ((desktop-browser (boogs/call-process-to-string
+                                 "xdg-mime" "query" "default" "text/html")))
+           (substring desktop-browser 0 (string-match "\\.desktop" desktop-browser))))
+       (executable-find browse-url-mozilla-program)
+       (executable-find browse-url-firefox-program)
+       (executable-find browse-url-chromium-program)
+       (executable-find browse-url-kde-program)
+       (executable-find browse-url-conkeror-program)
+       (executable-find browse-url-chrome-program)))
+
+(setq browse-url-handlers
+      '(("http://www.lispworks.com/reference/HyperSpec/.*" . eww-browse-url)
+        ("file:///.*HyperSpec.*" . eww-browse-url)
+        ("." . browse-url-default-browser)))
 
 (require 'yasnippet)
 (setq yas-snippet-dirs '("~/dotfiles/.emacs.d/lisp/snippets"))
@@ -272,59 +255,20 @@
 (setq warning-suppress-types
       '((yasnippet backquote-change)))
 
-(setq company-minimum-prefix-length 2
-      company-idle-delay 0.2
-      company-show-numbers nil
-      company-require-match nil
-      company-dabbrev-ignore-case t
-      company-dabbrev-code-ignore-case t
-      completion-ignore-case t)
-;; (add-hook 'after-init-hook 'global-company-mode)
+(setq tab-always-indent 'complete)
 
-(require 'company-box)
-(add-hook 'company-mode-hook 'company-box-mode)
-
-;;;###autoload
-(defun boogs/project-vc-dir ()
-  "Run `magit-status' in the current project's root."
-  (interactive)
-  (magit-status (project-root (project-current t))))
-
-(define-key project-prefix-map (kbd "m") 'boogs/project-vc-dir)
-
-(setq project-switch-commands '((project-find-file "Find file")
-                                (project-find-regexp "Find regexp")
-                                (project-find-dir "Find directory")
-                                (boogs/project-vc-dir "Magit")
-                                (project-eshell "Eshell")))
-
-(setq project--list
-      '(("~/projects/drumkit/drumkit/branches/main/")
-       ("~/projects/drumkit/drumkit-portal/branches/main/")
-       ("~/projects/drumkit/mercury/branches/main/")
-       ("~/projects/drumkit/parthenon/branches/main/")
-       ("~/projects/drumkit/vesta/branches/main/")
-       ("~/projects/drumkit/vulcan/branches/main/")
-       ("~/dotfiles/")
-       ("~/projects/boogs.gitlab.io/branches/master/")
-       ("~/common-lisp/shosha/")))
-
-(require 'perspective)
-(customize-set-variable 'persp-mode-prefix-key (kbd "C-M-w"))
-(customize-set-variable 'persp-initial-frame-name "work")
-(customize-set-variable 'persp-state-default-file "~/.emacs.d/lisp/persp-state")
-
-(add-hook 'kill-emacs-hook #'persp-state-save)
-(persp-mode)
-
-;; Add advice to stop hangs on EXWM
-;; The problem happens with floating windows that disappear - like open file dialog or a Zoom dialog when starting a meeting
-;; The solution is to assure all frames in winner-modified-list pass the frame-live-p test
+;; Add advice to stop hangs on EXWM.
+;; The problem happens with floating windows that disappear - like open
+;; file dialog or a Zoom dialog when starting a meeting. The solution
+;; is to assure all frames in winner-modified-list pass the
+;; frame-live-p test.
 (defun boogs/winner-clean-up-modified-list ()
   "Remove dead frames from `winner-modified-list`"
   (dolist (frame winner-modified-list)
     (unless (frame-live-p frame)
       (delete frame winner-modified-list))))
-(advice-add 'winner-save-old-configurations :before #'boogs/winner-clean-up-modified-list)
+
+(advice-add 'winner-save-old-configurations
+            :before #'boogs/winner-clean-up-modified-list)
 
 (provide 'init-defaults)

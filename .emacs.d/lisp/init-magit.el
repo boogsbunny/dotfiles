@@ -1,8 +1,11 @@
 ;;--------------------------------------------------------------------;
 ;; version control
 ;;--------------------------------------------------------------------;
+(require 'difftastic)
+(require 'difftastic-bindings)
+(difftastic-bindings-mode)
 
-(setq magit-todos-exclude-globs '("*.har"))
+
 (setq auto-revert-mode-text "")
 ;; (set-face-foreground 'magit-branch-remote "orange red")
 (setq git-commit-summary-max-length fill-column)
@@ -11,12 +14,33 @@
 (setq magit-repository-directories '(("~/.password-store")
                                      ("~/common-lisp" . 1)
                                      ("~/repos" . 1)
-                                     ("~/projects" . 5)))
+                                     ("~/projects" . 9)))
+
+(setq magit-log-margin '(t age magit-log-margin-width t 18))
 
 (when (require 'magit-todos nil 'noerror)
   (magit-todos-mode))
 
-(setq magit-todos-exclude-globs '("*.map" "*.html"))
+(setq magit-todos-exclude-globs '(".git/" "*.har" "*.map" "*.html"))
+
+(setq magit-todos-keywords-list
+      '("BUG"
+        "DEPRECATED"
+        "DONT"
+        "FAIL"
+        "FIXME"
+        "HACK"
+        "HOLD"
+        "KLUDGE"
+        "NEXT"
+        "NOTE"
+        "OKAY"
+        "PROG"
+        "REVIEW"
+        "TEMP"
+        "THEM"
+        "TODO"
+        "XXX+"))
 
 (setq magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1)
 

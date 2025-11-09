@@ -143,7 +143,6 @@
 
 (setq helm-split-window-preferred-function 'boogs/helm-split-window-combined-fn)
 
-(setq enable-recursive-minibuffers t)
 (minibuffer-depth-indicate-mode 1)
 
 ;;; Add bindings to `helm-apropos`. See

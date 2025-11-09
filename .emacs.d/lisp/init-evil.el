@@ -4,6 +4,8 @@
 
 (evil-mode 1)
 
+(define-key evil-insert-state-map (kbd "C-k") nil)
+
 (evil-select-search-module 'evil-search-module 'evil-search)
 
 (remove-hook 'evil-insert-state-exit-hook 'expand-abbrev)
@@ -35,9 +37,10 @@
 (define-key evil-normal-state-map (kbd "C-u") 'evil-scroll-up)
 (define-key evil-visual-state-map (kbd "C-u") 'evil-scroll-up)
 
-(define-key evil-insert-state-map (kbd "C-u") (lambda ()
-                                                (interactive)
-                                                (evil-delete (point-at-bol) (point))))
+(define-key evil-insert-state-map
+            (kbd "C-u") (lambda ()
+                          (interactive)
+                          (evil-delete (point-at-bol) (point))))
 
 (setq evil-insert-state-message nil
       evil-visual-state-message nil
@@ -62,11 +65,11 @@
 (defun boogs/evil-notmuch (mode _mode-keymaps &rest _rest)
   (when (eq mode 'notmuch)
     (evil-define-key 'normal notmuch-hello-mode-map
-      "s" 'helm-notmuch)
+      "s" 'consult-notmuch)
     (evil-define-key 'normal notmuch-search-mode-map
-      "s" 'helm-notmuch)
+      "s" 'consult-notmuch)
     (evil-define-key 'normal notmuch-show-mode-map
-      "s" 'helm-notmuch)))
+      "s" 'consult-notmuch)))
 (add-hook 'evil-collection-setup-hook 'boogs/evil-notmuch)
 
 (with-eval-after-load 'magit

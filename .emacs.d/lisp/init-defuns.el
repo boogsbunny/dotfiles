@@ -7,7 +7,7 @@
 ;; (defun reset-gc-cons-threshold ()
 ;;   (setq gc-cons-threshold (car (get 'gc-cons-threshold 'standard-value))))
 ;; (add-hook 'after-init-hook 'reset-gc-cons-threshold)
-(setq gc-cons-threshold (* 100 1024 1024))
+(setq gc-cons-threshold most-positive-fixnum)
 (setq read-process-output-max (* 1024 1024))
 
 ;;; Temporarily disable the file name handler.

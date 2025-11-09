@@ -38,8 +38,14 @@ Work on buffer or region.
 
 Require `boogs/tabify-leading'."
   (interactive)
-  (let ((start (set-marker (make-marker) (if (use-region-p) (region-beginning) (point-min))))
-        (end (set-marker (make-marker) (if (use-region-p) (region-end) (point-max)))))
+  (let ((start (set-marker (make-marker)
+                           (if (use-region-p)
+                               (region-beginning)
+                             (point-min))))
+        (end (set-marker (make-marker)
+                         (if (use-region-p)
+                             (region-end)
+                           (point-max)))))
     (if indent-tabs-mode
         (boogs/tabify-leading)
       (untabify start end))
@@ -55,5 +61,26 @@ Require `boogs/tabify-leading'."
     (define-key map (kbd key) def)
     (setq key (pop bindings)
           def (pop bindings))))
+
+(defun boogs/ring-delete-first-item-duplicates (ring)
+  "Remove duplicates of last command in history.
+Return RING.
+
+This should be faster then `seq-uniq'.  Unlike
+`eshell-hist-ignoredups' or `comint-input-ignoredups', it does
+not allow duplicates ever.
+Surrounding spaces are ignored when comparing."
+  (let ((first (ring-ref ring 0))
+        (index 1))
+    (while (<= index (1- (ring-length ring)))
+      (if (string= (string-trim first)
+                   (string-trim (ring-ref ring index)))
+          ;; REVIEW: We could stop at the first match, it would be
+          ;; faster and it would eliminate duplicates if we started
+          ;; from a fresh history. From an existing history that would
+          ;; not clean up existing duplicates beyond the first one.
+          (ring-remove ring index)
+        (setq index (1+ index))))
+    ring))
 
 (provide 'functions)

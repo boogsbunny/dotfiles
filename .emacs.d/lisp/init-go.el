@@ -2,17 +2,22 @@
 ;; golang
 ;;--------------------------------------------------------------------
 
+;; (add-to-list 'auto-mode-alist '("\\.go\\'" . go-mode))
+;; (add-to-list 'auto-mode-alist '("\\.go\\.mod\\'" . go-mod-ts-mode))
+;; (add-hook 'go-ts-mode-hook #'gofmt-before-save)
+
 (add-to-list 'exec-path "~/go/bin")
 (setq gofmt-command "goimports")
 
 (add-hook 'go-mode-hook (function (lambda () (setq olivetti-body-width 140))))
 (add-hook 'go-mode-hook (function (lambda () (setq fill-column 120))))
 
-(add-hook 'before-save-hook #'gofmt-before-save)
-(add-hook 'go-mode-hook #'tree-sitter-hl-mode)
+;; (add-hook 'go-mode-hook #'tree-sitter-mode)
+;; (add-hook 'go-mode-hook #'tree-sitter-hl-mode)
+(add-hook 'before-save-hook 'gofmt-before-save)
 
 ;; eglot
-(add-hook 'go-mode-hook 'eglot-ensure)
+;; (add-hook 'go-mode-hook 'eglot-ensure)
 
 (defun boogs/go-setup ()
   (setq tab-width 8))
@@ -30,9 +35,6 @@
   "}" > \n)
 
 (boogs/local-set-keys "C-c m" 'boogs/go-main)
-
-(when (require 'helm-go-package nil t)
-  (local-set-key (kbd "C-c D") 'helm-go-package))
 
 (flycheck-define-checker go-build-escape
   "A Go escape checker using `go build -gcflags -m'."

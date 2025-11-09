@@ -8,6 +8,9 @@
 ;; Emacs pinentry for GPG.
 (require 'init-defaults)
 
+;; (setq-default dired-hide-details-mode t)
+(add-hook 'dired-mode-hook #'dired-hide-details-mode)
+
 (when (require 'dired+ nil t)
   (toggle-diredp-find-file-reuse-dir 1))
 
@@ -26,9 +29,9 @@
 (setq wdired-allow-to-change-permissions t)
 
 ;;; omit-mode needs to be started _after_ omit-files redefinition.
-(require 'dired-x)
-(setq dired-omit-files "^\\.")
-(remove-hook 'dired-mode-hook 'dired-omit-mode)
+;; (require 'dired-x)
+;; (setq dired-omit-files "^\\.")
+;; (remove-hook 'dired-mode-hook 'dired-omit-mode)
 
 (setq dired-guess-shell-alist-user
       (list

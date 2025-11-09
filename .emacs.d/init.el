@@ -3,20 +3,35 @@
 ;;--------------------------------------------------------------------
 
 (require 'init-modeline)
+(require 'init-perspective)
 (require 'init-defaults)
+(require 'init-olivetti)
 (require 'init-styles)
 (require 'init-defuns)
+(require 'init-projectile)
+(require 'init-projectile-perspective)
+(require 'init-marginalia)
+(require 'init-icons)
+(require 'init-orderless)
+(require 'init-vertico)
+(require 'init-embark)
+(require 'init-consult)
+(require 'init-consult-notmuch)
+(require 'init-corfu)
+(require 'init-prescient)
 (require 'init-web)
 (require 'init-pdf)
 (require 'functions)
 
 (with-eval-after-load 'dired (require 'init-dired))
 (with-eval-after-load 'eshell (require 'init-eshell))
+(with-eval-after-load 'shell (require 'init-shell))
 (with-eval-after-load 'elfeed (require 'init-elfeed))
 (with-eval-after-load 'erc (require 'init-erc))
 (with-eval-after-load 'tramp (require 'init-tramp))
 
 (when (require 'evil nil t) (require 'init-evil))
+(with-eval-after-load 'magit (require 'init-magit))
 
 (when (fboundp 'rainbow-delimiters-mode)
   (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
@@ -28,35 +43,19 @@
 
 (setq org-roam-v2-ack t)
 (with-eval-after-load 'org (require 'init-org))
-(autoload 'helm-org-switch "org")
 
 (with-eval-after-load 'exwm
   (require 'init-exwm))
 
-(with-eval-after-load 'magit (require 'init-magit))
 (with-eval-after-load 'eww (require 'init-eww))
 
-(with-eval-after-load 'helm (require 'init-helm))
+(when (executable-find "guix")
+  (require 'init-guix))
 
 (with-eval-after-load 'notmuch (require 'init-notmuch))
-(autoload 'helm-notmuch-switch "notmuch")
-
-(when (require 'helm-selector nil :noerror)
-  (global-set-key (kbd "C-h i") 'helm-selector-info))
-
-(with-eval-after-load 'restclient
-  (define-key restclient-mode-map (kbd "M-s f") 'helm-restclient)
-  (add-to-list 'helm-source-names-using-follow "Sources")
-  (with-eval-after-load 'company-restclient
-    (add-to-list 'company-backends 'company-restclient)
-    (add-hook 'restclient-mode-hook 'company-mode)
-    (define-key restclient-mode-map (kbd "M-<tab>") (if (require 'helm-company nil t)
-                                                       'helm-company
-                                                     'company-complete))))
-;; System packages
-(global-set-key (kbd "C-x c #") 'helm-system-packages)
 
 (with-eval-after-load 'lisp-mode (require 'init-lisp))
+(with-eval-after-load 'scheme (require 'init-scheme))
 (add-hook 'emacs-lisp-mode-hook 'boogs/init-lispy)
 
 (with-eval-after-load 'eglot (require 'init-eglot))
@@ -64,6 +63,7 @@
 (with-eval-after-load 'rust-mode (require 'init-rust))
 (defvaralias 'rust-indent-offset 'tab-width)
 
+(with-eval-after-load 'zig-mode (require 'init-zig))
 (with-eval-after-load 'python-mode (require 'init-python))
 (with-eval-after-load 'go-mode (require 'init-go))
 

@@ -2,11 +2,12 @@
 ;; eshell
 ;;--------------------------------------------------------------------
 
-;; ;;; Eshell gets initialized differently.  When eshell.el first gets loaded, only
-;; ;;; the core is defined and `eshell-load-hook' is called. For every Eshell
-;; ;;; session, `eshell-mode' is run: it resets `eshell-mode-map', it loads
-;; ;;; modules, runs their hooks and concludes with `eshell-first-time-mode-hook'
-;; ;;; (for the first session only) and `eshell-mode-hook'.
+;;; Eshell gets initialized differently.  When eshell.el first gets
+;;; loaded, only the core is defined and `eshell-load-hook' is called.
+;;; For every Eshell session, `eshell-mode' is run: it resets
+;;; `eshell-mode-map', it loads modules, runs their hooks and concludes
+;;; with `eshell-first-time-mode-hook'(for the first session only) and
+;;; `eshell-mode-hook'.
 
 (add-hook 'eshell-mode-hook #'eat-eshell-mode)
 (add-hook 'eshell-mode-hook #'eat-eshell-visual-command-mode)
@@ -19,14 +20,11 @@
 (setq password-cache t)
 (setq password-cache-expiry 3600)
 
-(setq
- eshell-ls-use-colors t
- ;; ffap-shell-prompt-regexp changes the behaviour of `helm-find-files' when
- ;; point is on prompt. I find this disturbing.
- ffap-shell-prompt-regexp nil
- eshell-history-size 1024
- eshell-hist-ignoredups t
- eshell-destroy-buffer-when-process-dies t)
+(setq eshell-ls-use-colors t
+      ffap-shell-prompt-regexp nil
+      eshell-history-size 1024
+      eshell-hist-ignoredups t
+      eshell-destroy-buffer-when-process-dies t)
 
 ;; ;;; Alias management possibilities:
 ;; ;;; - Version eshell-alias and store it in user-emacs-directory. Simplest and
@@ -93,10 +91,10 @@
 ;;   (setq eshell-history-ring boogs/eshell-history-global-ring))
 ;; (add-hook 'eshell-mode-hook 'boogs/eshell-hist-use-global-history)
 
-;; ;; (defun boogs/eshell-history-remove-duplicates ()
-;; ;;   (require 'functions) ; For `boogs/ring-delete-first-item-duplicates'.
-;; ;;   (boogs/ring-delete-first-item-duplicates eshell-history-ring))
-;; ;; (add-hook 'eshell-pre-command-hook 'boogs/eshell-history-remove-duplicates)
+(defun boogs/eshell-history-remove-duplicates ()
+  (require 'functions) ; For `boogs/ring-delete-first-item-duplicates'.
+  (boogs/ring-delete-first-item-duplicates eshell-history-ring))
+(add-hook 'eshell-pre-command-hook 'boogs/eshell-history-remove-duplicates)
 
 ;; ;; Always save history
 ;; (add-hook 'eshell-pre-command-hook 'eshell-save-some-history)
