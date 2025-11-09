@@ -54,6 +54,7 @@
          font-dejavu
          font-fira-code
          font-fira-mono
+         font-aporetic
          font-iosevka
          font-iosevka-comfy
          font-iosevka-term
