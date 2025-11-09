@@ -13,6 +13,4 @@
 
 (global-set-key (kbd "<f-9>") 'boogs/flycheck-and-whitespace-mode)
 
-(define-key flycheck-mode-map (kbd "C-c ! h") 'helm-flycheck)
-
 (provide 'init-flycheck)

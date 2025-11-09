@@ -42,15 +42,6 @@
   (message-remove-header "Fcc")
   (notmuch-fcc-header-setup))
 
-(when (require 'helm-notmuch nil t)
-  (setq helm-notmuch-match-incomplete-words t)
-  (dolist (map (list notmuch-search-mode-map
-                     notmuch-hello-mode-map
-                     notmuch-show-mode-map
-                     notmuch-tree-mode-map))
-    (define-key map "s" 'helm-notmuch))
-  (define-key notmuch-show-mode-map (kbd "M-s f") #'helm-imenu))
-
 (defun notmuch-show-bounce (&optional address)
   "Bounce the current message."
   (interactive "sBounce To: ")

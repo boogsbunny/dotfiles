@@ -54,14 +54,10 @@
 (when (require 'evil-collection nil t)
   (evil-collection-init))
 
-;; (with-eval-after-load 'helm
-;;   (define-key evil-motion-state-map "'" 'helm-all-mark-rings)
-;;   (global-set-key (kbd "M-y") 'helm-show-kill-ring)
-;;   (dolist (map (list helm-find-files-map helm-read-file-map))
-;;     (boogs/define-keys map
-;;                        "M-." 'helm-end-of-buffer
-;;                        "M-," 'helm-beginning-of-buffer))
-;;   (global-set-key (kbd "C-x C-x") 'helm-all-mark-rings))
+(with-eval-after-load 'consult
+  (define-key evil-motion-state-map "'" 'consult-global-mark)
+  (define-key evil-motion-state-map (kbd "M-n") 'consult-mark)
+  (global-set-key (kbd "M-y") 'consult-yank-from-kill-ring))
 
 (defun boogs/evil-notmuch (mode _mode-keymaps &rest _rest)
   (when (eq mode 'notmuch)
