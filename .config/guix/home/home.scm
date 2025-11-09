@@ -22,6 +22,6 @@
                            (daytime-temperature 3500)
                            (nighttime-temperature 2000)
                            (location-provider 'manual)
-                           (latitude 38.87)
-                           (longitude -77.42)))
+                           (latitude 48.13)
+                           (longitude 11.57)))
                  (service home-udiskie-service-type))))
