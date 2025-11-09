@@ -182,19 +182,19 @@ host	all	all	::1/128 	md5"))))))
 
 (define %desktop-services-customization
   (modify-services %desktop-services
-                   (console-font-service-type
-                    config =>
-                    (map (lambda (tty)
-                           (cons tty
-                                 (file-append
-                                  font-terminus
-                                  "/share/consolefonts/ter-132n")))
-                         '("tty1"
-                           "tty2"
-                           "tty3"
-                           "tty4"
-                           "tty5"
-                           "tty6")))))
+    (console-font-service-type
+     config =>
+     (map (lambda (tty)
+            (cons tty
+                  (file-append
+                   font-terminus
+                   "/share/consolefonts/ter-132n")))
+          '("tty1"
+            "tty2"
+            "tty3"
+            "tty4"
+            "tty5"
+            "tty6")))))
 
 (define-public %boogs/services
   (append (list (kmonad-service "/home/boogs/.config/kmonad/thinkbook.kbd"))
