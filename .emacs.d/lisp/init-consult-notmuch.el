@@ -40,7 +40,7 @@ Supported fields are: date, authors, subject, count and tags."
 
 (defcustom consult-notmuch-default-inbox-query
   "tag:inbox AND NOT tag:trash AND NOT tag:spam AND date:1w.."
-  "Default query used by `consult-notmuch-inbox`"
+  "Default query used by `consult-notmuch-inbox'"
   :type 'string)
 
 (defvar consult-notmuch-tag-history nil
@@ -372,7 +372,7 @@ If given, use INITIAL as the starting point of the query."
        (mapconcat (lambda (t) (format "NOT tag:%s" t)) tags " AND ")))))
 
 ;;;###autoload
-(defun consult-notmuch ()
+(defun consult-notmuch (&optional initial)
   "Search for your email in notmuch, showing single messages.
 If given, use INITIAL as the starting point of the query."
   (interactive)
