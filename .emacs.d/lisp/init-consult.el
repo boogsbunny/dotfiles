@@ -2,12 +2,15 @@
 ;; consult
 ;;--------------------------------------------------------------------
 
+(require 'seq)
+(require 'patch-consult-comint)
 (require 'consult)
 (require 'consult-imenu)
 
 (defun consult-ripgrep-up-directory ()
   (interactive)
-  (let ((parent-dir (file-name-directory (directory-file-name default-directory))))
+  (let ((parent-dir (file-name-directory
+                     (directory-file-name default-directory))))
     (when parent-dir
         (run-at-time 0 nil
                      #'consult-ripgrep
@@ -23,12 +26,27 @@
            (define-key map (kbd "M-l") #'consult-ripgrep-up-directory)
            map))
 
+(consult-customize
+ consult-bookmark
+ consult-buffer
+ consult-git-grep
+ consult-grep
+ consult-man
+ consult-recent-file
+ consult-ripgrep
+ consult-xref
+ :preview-key '(:debounce 0.2 any))
+
 (defun boogs/consult-grep-git-or-rg (arg)
   (interactive "P")
   (require 'vc)
   (require 'functions)
   (if (and (vc-find-root default-directory ".git")
-           (or arg (split-string (boogs/call-process-to-string "git" "ls-files" "-z") "\0" t)))
+           (or arg
+               (split-string
+                (boogs/call-process-to-string "git" "ls-files" "-z")
+                "\0"
+                t)))
       (consult-ripgrep arg)
     (consult-ripgrep)))
 
@@ -43,8 +61,6 @@
 
 (setq xref-show-xrefs-function #'consult-xref
       xref-show-definitions-function #'consult-xref)
-
-(setq consult-narrow-key "<")
 
 (define-key minibuffer-mode-map (kbd "M-p") 'consult-history)
 
@@ -65,52 +81,61 @@
 
 (define-key vertico-map (kbd "C-c C-f") #'consult-toggle-preview)
 
-(defun consult-exwm-preview-fix (&rest _args)
-  "Kludge to stop EXWM buffers from stealing focus during Consult previews."
-  (when (derived-mode-p 'exwm-mode)
-    (when-let ((mini (active-minibuffer-window)))
-      (select-window (active-minibuffer-window)))))
+(defun boogs/consult--name-allowed-p (name)
+  (not (seq-some (lambda (rx) (string-match-p rx name))
+                 consult-buffer-filter)))
 
-(advice-add
-    #'consult--buffer-preview :after #'consult-exwm-preview-fix)
+(defun boogs/consult--not-exwm-buffer-p (buf)
+  (and (buffer-live-p buf)
+       (not (eq (buffer-local-value 'major-mode buf) 'exwm-mode))))
 
-;; (setq consult-preview-excluded-buffers '(major-mode . exwm-mode))
+(defun boogs/consult-perspective-items ()
+  "Current perspective buffer names (EXWM excluded, name-filtered)."
+  (let* ((bufs (cond
+                ((and (fboundp 'persp-buffers) (fboundp 'persp-curr))
+                 (ignore-errors (persp-buffers (persp-curr))))
+                ((fboundp 'persp-get-buffer-names)
+                 (mapcar #'get-buffer (persp-get-buffer-names)))
+                (t nil))))
+    (->> bufs
+         (seq-filter #'boogs/consult--not-exwm-buffer-p)
+         (seq-map #'buffer-name)
+         (seq-filter #'boogs/consult--name-allowed-p))))
 
-(defvar +consult-exwm-filter "\\`\\*EXWM")
-(add-to-list 'consult-buffer-filter +consult-exwm-filter)
+(defvar boogs/consult-source-perspective
+  `(:name "Perspective"
+    :narrow ?s
+    :category buffer
+    :face consult-buffer
+    :default t
+    ;; :action ,#'consult--buffer-action
+    :state ,#'consult--buffer-state
+    :items ,#'boogs/consult-perspective-items)
+  "Current perspective buffers only (EXWM excluded).")
 
-(defvar +consult-source-exwm
-  `(:name      "EXWM"
-    :narrow    ?x
-    ;; :hidden t
-    :category  buffer
-    :face      consult-buffer
-    :history   buffer-name-history
-    ;; Specify either :action or :state
-    ;; :action    ,#'consult--buffer-action ;; No preview
-    :state  ,#'consult--buffer-state  ;; Preview
-    :items
-    ,(lambda () (consult--buffer-query
-                 :sort 'visibility
-                 :as #'buffer-name
-                 :exclude (remq +consult-exwm-filter consult-buffer-filter)
-                 :mode 'exwm-mode)))
-  "EXWM buffer source.")
+(defun boogs/consult-exwm-items ()
+  (->> (buffer-list)
+       (seq-filter (lambda (b)
+                     (eq (buffer-local-value 'major-mode b)
+                         'exwm-mode)))
+       (seq-map #'buffer-name)
+       (seq-filter #'boogs/consult--name-allowed-p)))
 
-(add-to-list 'consult-buffer-sources '+consult-source-exwm 'append)
+(defvar boogs/consult-source-exwm
+  `(:name "EXWM"
+    :narrow ?x
+    :category buffer
+    :face consult-buffer
+    ;; :action ,#'consult--buffer-action
+    :state ,#'consult--buffer-state
+    :items ,#'boogs/consult-exwm-items)
+  "EXWM buffers in a separate group, no preview.")
+
+(when (fboundp 'persp-mode)
+  (setq consult-buffer-sources '(boogs/consult-source-perspective
+                                 boogs/consult-source-exwm)))
 
 (consult-customize consult--source-buffer :hidden t :default nil)
-
-(defvar consult--source-perspective
-  (list :name     "Perspective"
-        :narrow   ?s
-        :category 'buffer
-        :state    #'consult--buffer-state
-        :default  t
-        :items    #'persp-get-buffer-names))
-
-;; (push consult--source-perspective consult-buffer-sources)
-;; (add-to-list 'consult-buffer-sources 'consult--source-perspective 'append)
 
 (defcustom boogs/consult-ripgrep-or-line-limit 300000
   "Buffer size threshold for `boogs/consult-ripgrep-or-line'.
@@ -119,7 +144,8 @@ When the number of characters in a buffer exceeds this threshold,
   :type 'integer)
 
 (defun boogs/consult-ripgrep-or-line ()
-  "Call `consult-line' for small buffers or `consult-ripgrep' for large files."
+  "Call `consult-line' for small buffers or `consult-ripgrep' for
+large files."
   (interactive)
   (if (or (not buffer-file-name)
           (buffer-narrowed-p)
@@ -136,11 +162,17 @@ When the number of characters in a buffer exceeds this threshold,
            (concat consult-ripgrep-args
                    ;; filter to desired filename
                    " -g "
-                   (shell-quote-argument (file-name-nondirectory buffer-file-name))
+                   (shell-quote-argument
+                    (file-name-nondirectory buffer-file-name))
                    " ")))
       (consult-ripgrep))))
 
-(defun boogs/consult-find-file-with-preview (prompt &optional dir default mustmatch initial pred)
+(defun boogs/consult-find-file-with-preview (prompt &optional
+                                                    dir
+                                                    default
+                                                    mustmatch
+                                                    initial
+                                                    pred)
   (interactive)
   (let ((default-directory (or dir default-directory))
         (minibuffer-completing-file-name t))
@@ -172,6 +204,13 @@ When the number of characters in a buffer exceeds this threshold,
                    :category 'file
                    :predicate pred)))
 
-(setq project-read-file-name-function #'boogs/consult-project-find-file-with-preview)
+(setq project-read-file-name-function
+      #'boogs/consult-project-find-file-with-preview)
+
+;;; Comint
+(defun boogs/comint-set-keys ()
+  (define-key comint-mode-map (kbd "M-p") 'consult-history))
+
+(add-hook 'comint-mode-hook 'boogs/comint-set-keys)
 
 (provide 'init-consult)

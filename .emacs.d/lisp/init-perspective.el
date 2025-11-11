@@ -13,10 +13,6 @@
       persp-show-modestring 'modeline
       persp-sort 'created)
 
-(require 'consult)
-(consult-customize consult--source-buffer :hidden t :default nil)
-(add-to-list 'consult-buffer-sources persp-consult-source)
-
 (persp-mode)
 
 (provide 'init-perspective)
