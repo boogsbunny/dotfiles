@@ -59,7 +59,8 @@
 
 (with-eval-after-load 'consult
   (define-key evil-motion-state-map "'" 'consult-global-mark)
-  (define-key evil-motion-state-map (kbd "M-n") 'consult-mark)
+  (define-key evil-motion-state-map (kbd "M-s n") 'consult-mark)
+  (define-key evil-motion-state-map (kbd "M-n") 'boogs/consult-ripgrep-or-line)
   (global-set-key (kbd "M-y") 'consult-yank-from-kill-ring))
 
 (defun boogs/evil-notmuch (mode _mode-keymaps &rest _rest)
