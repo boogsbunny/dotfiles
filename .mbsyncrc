@@ -12,8 +12,8 @@ Account gmail
 
 MaildirStore gmail-local
 # The trailing "/" is important
-Path /media/personal/mail-archive/gmail/
-Inbox /media/personal/mail-archive/gmail/inbox
+Path /media/personal/mail/personal-gmail/
+Inbox /media/personal/mail/personal-gmail/inbox
 SubFolders Verbatim
 
 Channel gmail-all
