@@ -22,6 +22,7 @@
                (and (derived-mode-p 'magit-status-mode) (single-buffer-visible-p))
                (and (derived-mode-p 'markdown-mode) (single-buffer-visible-p))
                (and (derived-mode-p 'text-mode) (single-buffer-visible-p))
+               (and (derived-mode-p 'elfeed-show-mode) (single-buffer-visible-p))
                ;; (and (derived-mode-p 'notmuch-show-mode) (single-buffer-visible-p))
                (and (derived-mode-p 'org-mode) (single-buffer-visible-p))
                (and (derived-mode-p 'slack-mode) (single-buffer-visible-p))
