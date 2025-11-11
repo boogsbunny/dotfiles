@@ -36,7 +36,7 @@
 (add-hook 'after-change-major-mode-hook 'maybe-enable-olivetti-mode)
 
 (setq olivetti-body-width 0.65
-      olivetti-minimum-body-width 72
+      olivetti-minimum-body-width 140
       olivetti-recall-visual-line-mode-entry-state t)
 
 (provide 'init-olivetti)
