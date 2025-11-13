@@ -21,7 +21,16 @@
 (when (require 'magit-todos nil 'noerror)
   (magit-todos-mode))
 
-(setq magit-todos-exclude-globs '(".git/" "*.har" "*.map" "*.html"))
+;; Permit searching hidden files e.g., dotfiles.
+(setq magit-todos-rg-extra-args '("--hidden"))
+
+(setq magit-todos-exclude-globs
+      '("*.har"
+        "*.html"
+        "*.map"
+        ".cache/*"
+        ".git/"
+        ".local/*"))
 
 (setq magit-todos-keywords-list
       '("BUG"
