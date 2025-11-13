@@ -4,6 +4,10 @@
 
 (require 'olivetti)
 
+(setq olivetti-body-width 0.65
+      olivetti-minimum-body-width 140
+      olivetti-recall-visual-line-mode-entry-state t)
+
 (defun single-buffer-visible-p ()
   "Non-nil if only a single window is visible in the selected frame."
   (<= (length (window-list (selected-frame))) 1))
@@ -45,9 +49,5 @@
 
 ;; Avoid expensive margin work during buffer kills.
 (remove-hook 'kill-buffer-hook #'maybe-enable-olivetti-mode)
-
-(setq olivetti-body-width 0.65
-      olivetti-minimum-body-width 140
-      olivetti-recall-visual-line-mode-entry-state t)
 
 (provide 'init-olivetti)
