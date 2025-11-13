@@ -18,6 +18,7 @@
         async
         auth-source-pass
         auto-complete
+        avy
         bui
         cargo
         circe
