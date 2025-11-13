@@ -15,4 +15,11 @@
 
 (persp-mode)
 
+(defun boogs/disable-persp-kill-advice (&rest _)
+  (when (advice-member-p #'persp-maybe-kill-buffer 'kill-current-buffer)
+    (advice-remove 'kill-current-buffer #'persp-maybe-kill-buffer)))
+
+(add-hook 'persp-mode-hook #'boogs/disable-persp-kill-advice)
+(boogs/disable-persp-kill-advice)
+
 (provide 'init-perspective)
