@@ -53,7 +53,7 @@ the symbol `mode-line-format-right-align' is processed by
 ;;;###autoload
 (put 'mode-line-format-right-align 'risky-local-variable t)
 
-(setq mode-line-right-align-edge 'right-margin)
+(setq mode-line-right-align-edge 'window)
 
 ;;
 (defgroup modeline nil
