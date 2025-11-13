@@ -19,6 +19,7 @@
 (require 'init-consult-notmuch)
 (require 'init-corfu)
 (require 'init-prescient)
+(require 'init-avy)
 (require 'init-web)
 (require 'init-pdf)
 (require 'functions)
