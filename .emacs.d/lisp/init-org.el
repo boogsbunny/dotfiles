@@ -6,8 +6,8 @@
 (require 'patch-org)
 
 (add-to-list 'org-modules 'org-habit t)
-(add-hook 'org-mode-hook
-          (function (lambda () (setq fill-column (string-to-number "70")))))
+
+(add-hook 'org-mode-hook (lambda () (setq-local fill-column 70)))
 
 ;; sane indentation
 (setq org-indent-indentation-per-level 1)
