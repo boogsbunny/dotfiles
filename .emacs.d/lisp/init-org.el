@@ -118,6 +118,14 @@
 
 (add-hook 'org-mode-hook 'variable-pitch-mode)
 
+(defun boogs/maybe-disable-variable-pitch ()
+  ;; Disable variable-pitch in very large files to speed redisplay
+  (when (> (buffer-size) 300000)
+    (when (bound-and-true-p variable-pitch-mode)
+      (variable-pitch-mode -1))))
+
+(add-hook 'org-mode-hook #'boogs/maybe-disable-variable-pitch)
+
 (setq org-list-indent-offset 4)
 
 (define-key org-mode-map (kbd "C-<tab>") 'org-global-cycle)
@@ -145,6 +153,9 @@
       org-roam-dailies-directory "journal/")
 (setq boogs/daily-note-filename "%<%Y-%m-%d>.org"
       boogs/daily-note-header "#+title: %<%Y-%m-%d %a>\n\n[[roam:%<%Y-%B>]]\n\n")
+
+(setq org-roam-db-gc-threshold most-positive-fixnum)
+(setq org-roam-link-auto-replace nil)
 
 (org-roam-db-autosync-mode)
 
@@ -352,7 +363,7 @@
 
       org-log-done 'time
       org-log-into-drawer t
-      )
+      org-clock-out-remove-zero-time-clocks t)
 
 (setq org-agenda-sorting-strategy
       '(((agenda habit-down time-up priority-down category-keep)
