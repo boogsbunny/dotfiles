@@ -24,6 +24,7 @@
     json-mode
     magit-status-mode
     markdown-mode
+    org-agenda-mode
     org-mode
     prog-mode
     slack-mode
