@@ -4,9 +4,7 @@
 
 (require 'olivetti)
 
-(setq olivetti-body-width 0.65
-      olivetti-minimum-body-width 140
-      olivetti-recall-visual-line-mode-entry-state t)
+(setq olivetti-recall-visual-line-mode-entry-state t)
 
 (defun single-buffer-visible-p ()
   "Non-nil if only a single window is visible in the selected frame."
@@ -39,9 +37,13 @@
        (apply #'derived-mode-p boogs/olivetti-eligible-modes)))
 
 (defun maybe-enable-olivetti-mode ()
-  "Enable/disable Olivetti only when the desired state changes."
+  "Enable/disable Olivetti only when the desired state changes,
+preserving width."
   (let ((want (boogs/olivetti-should-enable-p)))
     (unless (eq want olivetti-mode)
+      (when want
+        (setq-local olivetti-body-width 0.65)
+        (setq-local olivetti-minimum-body-width 140))
       (olivetti-mode (if want 1 -1)))))
 
 (add-hook 'window-configuration-change-hook #'maybe-enable-olivetti-mode)
