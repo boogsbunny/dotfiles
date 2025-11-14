@@ -25,10 +25,6 @@
 
 (setq org-clock-clocked-in-display nil)
 
-(setq org-blank-before-new-entry
-      '((heading . t)
-        (plain-list-item . auto)))
-
 (setq org-todo-keywords
       '((sequence
          "TODO(t@/!)"
