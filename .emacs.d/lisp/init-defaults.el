@@ -71,7 +71,7 @@
 ;; set tabs to 2 spaces
 (setq-default tab-width 2)
 ;; (defvaralias 'standard-indent 'tab-width)
-(setq-default indent-tabs-mode nil)
+(setq-default indent-tabs-mode t)
 (add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
 (setq highlight-indent-guides-method 'character)
 
@@ -191,6 +191,8 @@
 
 (setq fill-column (string-to-number "140"))
 (add-hook 'prog-mode-hook #'display-fill-column-indicator-mode)
+
+(electric-pair-mode 1)
 
 (require 'auth-source-pass)
 (setq auth-sources '("~/.authinfo.gpg" "~/.authinfo" "~/.netrc"))
