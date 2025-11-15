@@ -1,10 +1,10 @@
 ;;--------------------------------------------------------------------;
 ;; version control
 ;;--------------------------------------------------------------------;
+
 (require 'difftastic)
 (require 'difftastic-bindings)
 (difftastic-bindings-mode)
-
 
 (setq auto-revert-mode-text "")
 ;; (set-face-foreground 'magit-branch-remote "orange red")
@@ -21,9 +21,6 @@
 (when (require 'magit-todos nil 'noerror)
   (magit-todos-mode))
 
-;; Permit searching hidden files e.g., dotfiles.
-(setq magit-todos-rg-extra-args '("--hidden"))
-
 (setq magit-todos-exclude-globs
       '("*.har"
         "*.html"
@@ -31,6 +28,15 @@
         ".cache/*"
         ".git/"
         ".local/*"))
+
+;; Permit searching hidden files e.g., dotfiles.
+(setq magit-todos-rg-extra-args
+			'("--hidden"
+				"--glob=!.cache/*"
+				"--glob=!.git/*"
+				"--glob=!build/*"
+				"--glob=!node_modules/*"
+				"--glob=!target/*"))
 
 (setq magit-todos-keywords-list
       '("BUG"
