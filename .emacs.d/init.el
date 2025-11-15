@@ -53,7 +53,8 @@
 (when (executable-find "guix")
   (require 'init-guix))
 
-(with-eval-after-load 'notmuch (require 'init-notmuch))
+(when (executable-find "notmuch")
+	(with-eval-after-load 'notmuch (require 'init-notmuch)))
 
 (with-eval-after-load 'lisp-mode (require 'init-lisp))
 (with-eval-after-load 'scheme (require 'init-scheme))

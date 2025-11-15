@@ -473,7 +473,6 @@ is an empty input."
                                    ", ")))
     (consult-notmuch-address-compose (consult-notmuch--address-prompt))))
 
-
 (defun consult-notmuch--interesting-buffers ()
   "Return a list of names of buffers with interesting notmuch data."
   (consult--buffer-query
