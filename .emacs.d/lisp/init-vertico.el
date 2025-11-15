@@ -5,7 +5,7 @@
 (require 'vertico)
 (require 'vertico-buffer)
 
-(setq vertico-cyling t
+(setq vertico-cycle t
       vertico-buffer-display-action '(display-buffer-reuse-window))
 
 (define-key vertico-map (kbd "M-TAB") 'vertico-quick-insert)
