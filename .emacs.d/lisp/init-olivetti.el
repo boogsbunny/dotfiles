@@ -24,6 +24,8 @@
     json-mode
     magit-status-mode
     markdown-mode
+		notmuch-message-mode
+		notmuch-show-mode
     org-agenda-mode
     org-mode
     prog-mode
