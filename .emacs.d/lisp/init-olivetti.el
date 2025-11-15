@@ -12,8 +12,8 @@
 
 (defun laptop-screen-p ()
   (and
-   (<= (x-display-pixel-width) 3000)
-   (<= (x-display-pixel-height) 2000)))
+   (<= (display-pixel-width) 3000)
+   (<= (display-pixel-height) 2000)))
 
 (defconst boogs/olivetti-eligible-modes
   '(comint-mode

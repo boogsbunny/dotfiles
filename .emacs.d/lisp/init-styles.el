@@ -155,10 +155,18 @@
 
 ;;; org
 (defun set-org-faces (colors)
-  (let* ((variable-tuple
-          (cond ((x-list-fonts "Iosevka Comfy") '(:font "Iosevka Comfy"))
-                ((x-family-fonts "Sans Serif")   '(:family "Sans Serif"))
-                (nil (warn "Cannot find a Sans Serif Font. Install Source Sans Pro."))))
+	(let* ((has-iosevka
+					(and (display-graphic-p)
+							 (fboundp 'font-family-list)
+							 (member "Iosevka Comfy" (font-family-list))))
+				 (has-sans
+					(and (display-graphic-p)
+							 (fboundp 'font-family-list)
+							 (member "Sans Serif" (font-family-list))))
+				 (variable-tuple
+					(cond (has-iosevka '(:family "Iosevka Comfy"))
+								(has-sans '(:family "Sans Serif"))
+								(nil (warn "Cannot find a Sans Serif Font. Install Source Sans Pro."))))
          (base-font-color     (face-foreground 'default nil 'default))
          (headline           `(:inherit default :weight bold :foreground ,base-font-color)))
     (custom-set-faces
