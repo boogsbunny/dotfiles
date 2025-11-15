@@ -4,7 +4,10 @@
 
 (require 'projectile)
 
-(add-to-list 'projectile-globally-ignored-directories "*node_modules")
+(dolist (dir '(".git" "node_modules" "dist" "build" "target" ".cache"))
+	(add-to-list 'projectile-globally-ignored-directories dir))
+
+(setq projectile-enable-caching t)
 
 (projectile-mode)
 
