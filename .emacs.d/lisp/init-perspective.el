@@ -13,13 +13,16 @@
       persp-show-modestring 'modeline
       persp-sort 'created)
 
+(defun boogs/persp-unadvise-kill-buffer (&rest _)
+	"Remove Perspective's heavy kill-buffer advice.
+This prevents expensive window reconfiguration during cleanup
+and normal buffer kills."
+	(dolist (fn '(kill-buffer kill-current-buffer))
+		(when (advice-member-p #'persp-maybe-kill-buffer fn)
+			(advice-remove fn #'persp-maybe-kill-buffer))))
+
+(add-hook 'persp-mode-hook #'boogs/persp-unadvise-kill-buffer)
+
 (persp-mode)
-
-(defun boogs/disable-persp-kill-advice (&rest _)
-  (when (advice-member-p #'persp-maybe-kill-buffer 'kill-current-buffer)
-    (advice-remove 'kill-current-buffer #'persp-maybe-kill-buffer)))
-
-(add-hook 'persp-mode-hook #'boogs/disable-persp-kill-advice)
-(boogs/disable-persp-kill-advice)
 
 (provide 'init-perspective)
