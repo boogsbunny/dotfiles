@@ -21,7 +21,6 @@
 (require 'init-prescient)
 (require 'init-avy)
 (require 'init-web)
-(require 'init-pdf)
 (require 'functions)
 
 (with-eval-after-load 'dired (require 'init-dired))
@@ -33,6 +32,9 @@
 
 (when (require 'evil nil t) (require 'init-evil))
 (with-eval-after-load 'magit (require 'init-magit))
+
+(when (display-graphic-p)
+	(require 'init-pdf))
 
 (when (fboundp 'rainbow-delimiters-mode)
   (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
