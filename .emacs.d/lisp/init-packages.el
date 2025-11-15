@@ -122,7 +122,6 @@
         org-alert
         org-contrib
         org-caldav
-        org-gcal
         org-journal
         org-modern
         orgit
