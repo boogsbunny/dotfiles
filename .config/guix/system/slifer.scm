@@ -19,11 +19,11 @@
 
 (define linux-slifer
   (package
-   (inherit linux-6.6)
-   (name "linux-slifer")
-   (native-inputs
-    `(("kconfig" ,(local-file "./kernel.conf"))
-      ,@(alist-delete "kconfig" (package-native-inputs linux-6.6))))))
+    (inherit linux-6.6)
+    (name "linux-slifer")
+    (native-inputs
+     `(("kconfig" ,(local-file "./kernel.conf"))
+       ,@(alist-delete "kconfig" (package-native-inputs linux-6.6))))))
 
 (define %slifer/mapped-devices
   (list (mapped-device
@@ -37,34 +37,35 @@
    (bootloader grub-bootloader)
    (targets '("/dev/sda"))
    (theme (grub-theme
-          (image (local-file "grub-theme/aot.png"))))
+           (image (local-file "grub-theme/aot.png"))))
    (timeout 3)))
 
 (define-public %boogs/slifer
   (operating-system
-   (inherit %boogs/os)
-   (host-name "slifer")
+    (inherit %boogs/os)
+    (host-name "slifer")
+    (bootloader %slifer/bootloader-configuration)
+    (kernel linux-slifer)
+    (initrd microcode-initrd)
+    (firmware (append (list linux-firmware)
+                      %boogs/firmware))
 
-   (bootloader %slifer/bootloader-configuration)
+    (packages (cons* intel-media-driver/nonfree
+                     %boogs/packages))
 
-   (kernel linux-slifer)
-   (initrd microcode-initrd)
-   (firmware (append (list linux-firmware)
-                     %boogs/firmware))
+    (services (cons*
+               (simple-service
+                'config-file
+                etc-service-type
+                `(("config.scm" ,this-file)))
+               %boogs/services))
 
-   (packages (cons* intel-media-driver/nonfree
-                    %boogs/packages))
-   (services (cons*
-              (simple-service 'config-file etc-service-type
-                              `(("config.scm" ,this-file)))
-              %boogs/services))
-
-   (mapped-devices %slifer/mapped-devices)
-   (file-systems (cons* (file-system
-                         (mount-point "/")
-                         (device "/dev/mapper/cryptroot")
-                         (type "btrfs")
-                         (dependencies %slifer/mapped-devices))
-                        %boogs/file-systems))))
+    (mapped-devices %slifer/mapped-devices)
+    (file-systems (cons* (file-system
+                           (mount-point "/")
+                           (device "/dev/mapper/cryptroot")
+                           (type "btrfs")
+                           (dependencies %slifer/mapped-devices))
+                         %boogs/file-systems))))
 
 %boogs/slifer
