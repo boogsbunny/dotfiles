@@ -279,4 +279,13 @@
 (advice-add 'winner-save-old-configurations
             :before #'boogs/winner-clean-up-modified-list)
 
+(defhydra hydra (global-map "C-c w")
+  "Navigate the time machine of the window layout"
+  ("p" winner-undo "Previous layout")
+  ("n" winner-redo "Next layout"))
+
+(winner-mode 1)
+
+(require 'wgrep)
+
 (provide 'init-defaults)

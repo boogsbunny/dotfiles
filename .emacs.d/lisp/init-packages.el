@@ -161,6 +161,7 @@
         vertico-prescient
         websocket
         web-mode
+        wgrep
         which-key
         windower
         xelb
