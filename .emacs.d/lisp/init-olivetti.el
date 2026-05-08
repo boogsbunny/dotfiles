@@ -10,6 +10,10 @@
   "Non-nil if only a single window is visible in the selected frame."
   (<= (length (window-list (selected-frame))) 1))
 
+(defun boogs/single-window-visible-p (&optional frame)
+  "Non-nil if FRAME has exactly one live non-minibuffer window."
+  (= (length (window-list frame 'no-minibuffer)) 1))
+
 (defun laptop-screen-p ()
   (and
    (<= (display-pixel-width) 3000)
@@ -34,25 +38,36 @@
     yaml-mode)
   "Major modes in which Olivetti may be auto-enabled.")
 
-(defun boogs/olivetti-should-enable-p ()
-  (and (not (laptop-screen-p))
-       (single-buffer-visible-p)
-       (apply #'derived-mode-p boogs/olivetti-eligible-modes)))
 
-(defun maybe-enable-olivetti-mode ()
-  "Enable/disable Olivetti only when the desired state changes,
-preserving width."
-  (let ((want (boogs/olivetti-should-enable-p)))
-    (unless (eq want olivetti-mode)
-      (when want
-        (setq-local olivetti-body-width 0.65)
-        (setq-local olivetti-minimum-body-width 140))
-      (olivetti-mode (if want 1 -1)))))
+(defun boogs/olivetti-eligible-buffer-p (&optional buffer)
+  "Return non-nil if BUFFER's major mode is eligible for Olivetti."
+  (with-current-buffer (or buffer (current-buffer))
+    (apply #'derived-mode-p boogs/olivetti-eligible-modes)))
 
-(add-hook 'window-configuration-change-hook #'maybe-enable-olivetti-mode)
-(add-hook 'after-change-major-mode-hook #'maybe-enable-olivetti-mode)
+(defun boogs/olivetti-should-enable-p (&optional buffer)
+  "Return non-nil if Olivetti should be enabled in BUFFER."
+  (with-current-buffer (or buffer (current-buffer))
+    (and
+     (boogs/single-window-visible-p (selected-frame))
+     (boogs/olivetti-eligible-buffer-p))))
 
-;; Avoid expensive margin work during buffer kills.
-(remove-hook 'kill-buffer-hook #'maybe-enable-olivetti-mode)
+(defun boogs/olivetti-apply-current-buffer ()
+  "Lazily enable or disable Olivetti in the current buffer only."
+  (unless (minibufferp)
+    (let ((want (boogs/olivetti-should-enable-p)))
+      (unless (eq want (bound-and-true-p olivetti-mode))
+        (when want
+          (setq-local olivetti-body-width 0.65)
+          (setq-local olivetti-minimum-body-width 140))
+        (olivetti-mode (if want 1 -1))))))
+
+(defun boogs/olivetti-apply-on-window-selection-change (&rest _)
+  (boogs/olivetti-apply-current-buffer))
+
+(add-hook 'window-selection-change-functions
+          #'boogs/olivetti-apply-on-window-selection-change)
+
+(add-hook 'after-change-major-mode-hook
+          #'boogs/olivetti-apply-current-buffer)
 
 (provide 'init-olivetti)
