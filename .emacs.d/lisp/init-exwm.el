@@ -72,26 +72,39 @@ KEYS is passed to `kbd'."
 (exwm-input-set-key (kbd "s-w") #'exwm-workspace-switch)
 (exwm-input-set-key (kbd "s-W") #'exwm-workspace-switch-create)
 
+(defvar boogs/switch-to-or-start-double-tap-threshold 0.3
+  "Max time (in seconds) between two invocations to count as a double tap.")
+
+(defvar boogs/switch-to-or-start--last-invocation 0)
+
+(defun boogs/exwm-buffer-class-match (class)
+  (seq-filter
+   (lambda (buf)
+     (with-current-buffer buf
+       (and (eq major-mode 'exwm-mode)
+            (string=
+             (downcase exwm-class-name)
+             (downcase class)))))
+   (buffer-list)))
+
 (defun boogs/switch-to-or-start (program &optional class-name)
-  "Switch to existing buffer of PROGRAM or start a new instance.
-CLASS-NAME is used for matching instead of PROGRAM name if provided."
+  "Switch to existing EXWM buffer or start PROGRAM.
+Double-tap quickly to force a new instance."
   (interactive)
-  (let* ((class-to-match (or class-name (capitalize program)))
-         (program-buffer (seq-find
-                          (lambda (buf)
-                            (let ((buf-name (buffer-name buf)))
-                              (and (eq
-                                    (buffer-local-value 'major-mode buf)
-                                    'exwm-mode)
-                                   (string-match-p
-                                    (concat
-                                     ".*"
-                                     (regexp-quote class-to-match) ".*")
-                                    buf-name))))
-                          (buffer-list))))
-    (if program-buffer
-        (switch-to-buffer program-buffer)
-      (start-process program nil program))))
+  (let* ((now (float-time))
+         (delta (- now boogs/switch-to-or-start--last-invocation))
+         (class (or class-name program))
+         (candidates (boogs/exwm-buffer-class-match class)))
+
+    (setq boogs/switch-to-or-start--last-invocation now)
+
+    (if (< delta boogs/switch-to-or-start-double-tap-threshold)
+        ;; double tap -> always spawn new
+        (start-process program nil program)
+      ;; single tap -> switch or spawn
+      (if candidates
+          (switch-to-buffer (car candidates))
+        (start-process program nil program)))))
 
 (defun boogs/start-new (program)
   "Start a new instance of PROGRAM, regardless of existing instances."
@@ -109,7 +122,7 @@ CLASS-NAME is used for matching instead of PROGRAM name if provided."
  "s-y"
  (lambda ()
    (interactive)
-   (boogs/switch-to-or-start "alacritty")))
+   (boogs/switch-to-or-start "alacritty" "Alacritty")))
 
 (boogs/exwm-global-set-key
  "s-Y"
