@@ -1,7 +1,10 @@
 ;;; -*- mode: emacs-lisp; -*-
 
+(require 'exwm)
 (require 'perspective-exwm)
-(perspective-exwm-mode)
+
+(setq exwm-workspace-number 10)
+
 (setq perspective-exwm-override-initial-name
       '((0 . "boogs")
         (1 . "shukaku")
@@ -14,23 +17,28 @@
         (8 . "gyuki")
         (9 . "kurama")))
 
-(require 'slack)
-(slack-start)
-
-(require 'exwm)
-(setq exwm-workspace-number 10)
+(perspective-exwm-mode)
 
 (setq exwm-input-global-keys
-      `(
-        ;; Switch workspace
+      `(;; Switch workspace
         ([?\s-w] . exwm-workspace-switch)
-        ;; 's-N': Switch to certain workspace with Super (Win) plus a number key (0 - 9)
-        ,@(mapcar (lambda (i)
-                    `(,(kbd (format "s-%d" i)) .
-                      (lambda ()
-                        (interactive)
-                        (exwm-workspace-switch-create ,i))))
-                  (number-sequence 0 9))))
+        ;; 's-N': Switch to certain workspace with Super (Win) plus a
+        ;; number key (0 - 9)
+        ,@(mapcar
+           (lambda (i)
+             `(,(kbd (format "s-%d" i)) .
+               (lambda ()
+                 (interactive)
+                 (exwm-workspace-switch-create ,i))))
+           (number-sequence 0 9))))
 
 (exwm-wm-mode)
+
+(run-at-time
+ "2 sec" nil
+ (lambda ()
+   (when (require 'slack nil t)
+     (ignore-errors
+       (slack-start)))))
+
 (server-start)
