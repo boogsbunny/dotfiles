@@ -369,7 +369,7 @@ With prefix argument, UPDATE the databases with custom uptions thanks to the
               (string-match-p
                (concat (regexp-opt '("aac" "mp3" "mp4" "m4a" "ogg" "opus" "flac" "spx" "wma" "wv"))
                        "$")
-                              (file-name-extension candidate)))))
+               (file-name-extension candidate)))))
    1))
 
 (defun boogs/helm-external-command-cleanup-dotted (old-function &optional args)
@@ -451,9 +451,9 @@ Useful for Guix."
                    append
                    (with-current-buffer buf
                      (mapcar (lambda (item)
-                              (cons (format "%s [in %s]" (car item) (buffer-name))
-                                    (cons (car item) (cons buf (cdr item)))))
-                            (boogs/lisp-imenu-create-index)))))
+                               (cons (format "%s [in %s]" (car item) (buffer-name))
+                                     (cons (car item) (cons buf (cdr item)))))
+                             (boogs/lisp-imenu-create-index)))))
          (source (helm-make-source "Custom Definitions in All Buffers" 'helm-source-sync
                   :candidates candidates
                   :fuzzy-match t

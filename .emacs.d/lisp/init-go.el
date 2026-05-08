@@ -43,20 +43,18 @@
             (option-list "-tags=" flycheck-go-build-tags concat)
             "-o" null-device)
   :error-patterns
-  (
+  ((warning line-start (file-name) ":" line ":"
+            (optional column ":") " "
+            (message (one-or-more not-newline) "escapes to heap")
+            line-end)
    (warning line-start (file-name) ":" line ":"
-          (optional column ":") " "
-          (message (one-or-more not-newline) "escapes to heap")
-          line-end)
-   (warning line-start (file-name) ":" line ":"
-          (optional column ":") " "
-          (message "moved to heap:" (one-or-more not-newline))
-          line-end)
+            (optional column ":") " "
+            (message "moved to heap:" (one-or-more not-newline))
+            line-end)
    (info line-start (file-name) ":" line ":"
-          (optional column ":") " "
-          (message "inlining call to " (one-or-more not-newline))
-          line-end)
-  )
+         (optional column ":") " "
+         (message "inlining call to " (one-or-more not-newline))
+         line-end))
   :modes go-mode
   :predicate (lambda ()
                (and (flycheck-buffer-saved-p)
@@ -64,7 +62,7 @@
   )
 
 (with-eval-after-load 'flycheck
-   (add-to-list 'flycheck-checkers 'go-build-escape)
-   (flycheck-add-next-checker 'go-gofmt 'go-build-escape))
+  (add-to-list 'flycheck-checkers 'go-build-escape)
+  (flycheck-add-next-checker 'go-gofmt 'go-build-escape))
 
 (provide 'init-go)

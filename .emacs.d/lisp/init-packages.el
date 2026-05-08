@@ -112,7 +112,7 @@
         magit
         magit-todos
         markdown-mode+
-				marginalia
+        marginalia
         modus-themes
         notmuch
         oauth2

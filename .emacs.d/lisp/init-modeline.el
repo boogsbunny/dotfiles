@@ -471,7 +471,7 @@ the symbol `mode-line-format-right-align' is processed by
   "VC state faces.")
 
 (defun boogs/modeline--vc-get-face (key)
-   (alist-get key modeline--vc-faces 'up-to-date))
+  (alist-get key modeline--vc-faces 'up-to-date))
 
 (defun boogs/modeline--vc-face (file backend)
   (boogs/modeline--vc-get-face (vc-state file backend)))

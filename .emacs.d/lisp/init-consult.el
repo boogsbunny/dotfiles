@@ -14,13 +14,13 @@
   (interactive)
   (let ((parent-dir (file-name-directory
                      (directory-file-name default-directory))))
-		(when parent-dir
-			(run-at-time 0 nil
-									 #'consult-ripgrep
-									 parent-dir
-									 (ignore-errors
-										 (buffer-substring-no-properties
-											(1+ (minibuffer-prompt-end)) (point-max))))))
+    (when parent-dir
+      (run-at-time 0 nil
+                   #'consult-ripgrep
+                   parent-dir
+                   (ignore-errors
+                     (buffer-substring-no-properties
+                      (1+ (minibuffer-prompt-end)) (point-max))))))
   (minibuffer-quit-recursive-edit))
 
 (consult-customize
@@ -70,17 +70,17 @@
 (defvar-local consult-toggle-preview-orig nil)
 
 (defun consult-toggle-preview ()
-	"Command to enable/disable preview."
-	(interactive)
-	(if consult-toggle-preview-orig
-			(progn
-				(setq consult--preview-function consult-toggle-preview-orig
-							consult-toggle-preview-orig nil)
-				(message "Live preview is enabled"))
-		(progn
-			(setq consult-toggle-preview-orig consult--preview-function
-						consult--preview-function #'ignore)
-			(message "Live preview is disabled"))))
+  "Command to enable/disable preview."
+  (interactive)
+  (if consult-toggle-preview-orig
+      (progn
+        (setq consult--preview-function consult-toggle-preview-orig
+              consult-toggle-preview-orig nil)
+        (message "Live preview is enabled"))
+    (progn
+      (setq consult-toggle-preview-orig consult--preview-function
+            consult--preview-function #'ignore)
+      (message "Live preview is disabled"))))
 
 (define-key vertico-map (kbd "C-c C-f") #'consult-toggle-preview)
 
@@ -89,18 +89,18 @@
                  consult-buffer-filter)))
 
 (defvar boogs/consult-perspective-ignored-modes
-	'(exwm-mode
-		notmuch-search-mode
-		notmuch-tree-mode
-		notmuch-show-mode
-		notmuch-message-mode
-		notmuch-hello-mode))
+  '(exwm-mode
+    notmuch-search-mode
+    notmuch-tree-mode
+    notmuch-show-mode
+    notmuch-message-mode
+    notmuch-hello-mode))
 
 (defun boogs/consult--persp-buffer-allowed-p (buf)
-	(and (buffer-live-p buf)
-			 (not (memq (buffer-local-value 'major-mode buf)
-									boogs/consult-perspective-ignored-modes))
-			 (boogs/consult--name-allowed-p (buffer-name buf))))
+  (and (buffer-live-p buf)
+       (not (memq (buffer-local-value 'major-mode buf)
+                  boogs/consult-perspective-ignored-modes))
+       (boogs/consult--name-allowed-p (buffer-name buf))))
 
 (defun boogs/consult--not-exwm-buffer-p (buf)
   (and (buffer-live-p buf)
@@ -114,20 +114,20 @@
                 ((fboundp 'persp-get-buffer-names)
                  (mapcar #'get-buffer (persp-get-buffer-names)))
                 (t nil))))
-		(->> bufs
-				 (seq-filter #'boogs/consult--persp-buffer-allowed-p)
-				 (seq-map #'buffer-name)
-				 (seq-filter #'boogs/consult--name-allowed-p))))
+    (->> bufs
+         (seq-filter #'boogs/consult--persp-buffer-allowed-p)
+         (seq-map #'buffer-name)
+         (seq-filter #'boogs/consult--name-allowed-p))))
 
 (defvar boogs/consult-source-perspective
   `(:name "Perspective"
-					:narrow ?s
-					:category buffer
-					:face consult-buffer
-					:default t
-					;; :action ,#'consult--buffer-action
-					:state ,#'consult--buffer-state
-					:items ,#'boogs/consult-perspective-items)
+    :narrow ?s
+    :category buffer
+    :face consult-buffer
+    :default t
+    ;; :action ,#'consult--buffer-action
+    :state ,#'consult--buffer-state
+    :items ,#'boogs/consult-perspective-items)
   "Current perspective buffers only (EXWM excluded).")
 
 (defun boogs/consult-exwm-items ()
@@ -139,49 +139,49 @@
        (seq-filter #'boogs/consult--name-allowed-p)))
 
 (defvar boogs/consult-source-exwm
-	`(:name "EXWM"
-					:narrow ?x
-					:category buffer
-					:face consult-buffer
-					;; :action ,#'consult--buffer-action
-					:state ,#'consult--buffer-state
-					:items ,#'boogs/consult-exwm-items)
-	"EXWM buffers in a separate group, no preview.")
+  `(:name "EXWM"
+    :narrow ?x
+    :category buffer
+    :face consult-buffer
+    ;; :action ,#'consult--buffer-action
+    :state ,#'consult--buffer-state
+    :items ,#'boogs/consult-exwm-items)
+  "EXWM buffers in a separate group, no preview.")
 
 (defun boogs/consult--insert-front (src)
-	"Insert SRC at the front of `consult-buffer-sources' without duplicates."
-	(setq consult-buffer-sources
-				(cons src (remove src consult-buffer-sources))))
+  "Insert SRC at the front of `consult-buffer-sources' without duplicates."
+  (setq consult-buffer-sources
+        (cons src (remove src consult-buffer-sources))))
 
 (boogs/consult--insert-front 'boogs/consult-source-exwm)
 (boogs/consult--insert-front 'boogs/consult-source-perspective)
 
 (unless (memq 'consult--source-hidden-buffer consult-buffer-sources)
-	(add-to-list 'consult-buffer-sources 'consult--source-hidden-buffer 'append))
+  (add-to-list 'consult-buffer-sources 'consult--source-hidden-buffer 'append))
 
 (consult-customize consult--source-buffer :hidden t :default nil)
-(consult-customize boogs/consult-source-perspective :sort t)
-(consult-customize boogs/consult-source-exwm :sort t)
+(consult-customize boogs/consult-source-perspective :sort nil)
+(consult-customize boogs/consult-source-exwm :sort nil)
 
 (defun boogs/consult-org-items ()
-	(consult--buffer-query
-	 :as #'buffer-name
-	 :predicate (lambda (b)
-								(memq (buffer-local-value 'major-mode b)
-											'(org-mode
-												org-agenda-mode
-												org-capture-mode
-												org-src-mode)))))
+  (consult--buffer-query
+   :as #'buffer-name
+   :predicate (lambda (b)
+                (memq (buffer-local-value 'major-mode b)
+                      '(org-mode
+                        org-agenda-mode
+                        org-capture-mode
+                        org-src-mode)))))
 
 (defvar boogs/consult-source-org
   `(:name "Org"
-					:narrow ?o
-					:hidden t
-					:category buffer
-					:face consult-buffer
-					:history buffer-name-history
-					:state ,#'consult--buffer-state
-					:items ,#'boogs/consult-org-items))
+    :narrow ?o
+    :hidden t
+    :category buffer
+    :face consult-buffer
+    :history buffer-name-history
+    :state ,#'consult--buffer-state
+    :items ,#'boogs/consult-org-items))
 
 (cl-pushnew 'boogs/consult-source-org consult-buffer-sources :test #'eq)
 

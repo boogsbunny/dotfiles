@@ -11,10 +11,11 @@
 (setq git-commit-summary-max-length fill-column)
 ;; (define-key magit-mode-map (kbd "s-<tab>") nil)
 (setq magit-diff-refine-hunk 'all)
-(setq magit-repository-directories '(("~/.password-store")
-                                     ("~/common-lisp" . 1)
-                                     ("~/repos" . 1)
-                                     ("~/projects" . 9)))
+(setq magit-repository-directories
+      '(("~/.password-store")
+        ("~/common-lisp" . 1)
+        ("~/repos" . 1)
+        ("~/projects" . 9)))
 
 (setq magit-log-margin '(t age magit-log-margin-width t 18))
 
@@ -31,12 +32,12 @@
 
 ;; Permit searching hidden files e.g., dotfiles.
 (setq magit-todos-rg-extra-args
-			'("--hidden"
-				"--glob=!.cache/*"
-				"--glob=!.git/*"
-				"--glob=!build/*"
-				"--glob=!node_modules/*"
-				"--glob=!target/*"))
+      '("--hidden"
+        "--glob=!.cache/*"
+        "--glob=!.git/*"
+        "--glob=!build/*"
+        "--glob=!node_modules/*"
+        "--glob=!target/*"))
 
 (setq magit-todos-keywords-list
       '("BUG"

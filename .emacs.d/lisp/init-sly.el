@@ -360,9 +360,9 @@ returns a string."
   "Go to the beginning of the previous REPL prompt."
   (interactive)
   (cl-flet ((go-back ()
-                     (goto-char
-                      (previous-single-char-property-change
-                       (point) 'sly-mrepl--prompt))))
+              (goto-char
+               (previous-single-char-property-change
+                (point) 'sly-mrepl--prompt))))
     (if (boogs/sly-prompt-line-p)
         (progn
           (unless (boogs/sly-end-of-prompt-p)
@@ -393,7 +393,7 @@ returns a string."
   (interactive)
   (if (<= (point-max) (point))
       (sly-mrepl-return)
-      (newline-and-indent)))
+    (newline-and-indent)))
 
 (setq sly--mode-line-format nil)
 

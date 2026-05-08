@@ -148,7 +148,7 @@ SEEN is the set of already visited files to avoid recursion loops."
                             consult-tramp-default-method
                             user host port host)
                     out))))))
-      (nreverse out)))
+    (nreverse out)))
 
 (defun consult-tramp--docker-cands ()
   "Docker candidates using TRAMP docker method."

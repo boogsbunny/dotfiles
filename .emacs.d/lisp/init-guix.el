@@ -42,20 +42,20 @@ The channel specification is looked up in
 `boogs/guix-channel-spec-directory'.")
 
 (cl-defun boogs/guix-query-file (&key file directory
-                                         (filter ".")
-                                         (prompt "File: ")
-                                         (name-function #'identity)
-                                         (multiple? nil))
+                                      (filter ".")
+                                      (prompt "File: ")
+                                      (name-function #'identity)
+                                      (multiple? nil))
   "Query a file matching FILTER in DIRECTORY.
 Return (NAME FILE).
 If FILE is non-nil, then this function is useful to derive the name of the manifest.
 NAME-FUNCTION takes the file base name as argument and returns NAME.
 If MULTIPLE? is non-nil, return a list of (NAME FILE) of the selected manifests."
   (cl-flet ((name (file)
-                  (replace-regexp-in-string
-                   "guix-" ""
-                   (funcall name-function
-                            (file-name-base file)))))
+              (replace-regexp-in-string
+               "guix-" ""
+               (funcall name-function
+                        (file-name-base file)))))
     (if file
         (list (name file) file)
       (let ((files (mapcar (lambda (file)
@@ -133,7 +133,7 @@ If MANIFEST is nil, it is queried from the manifests found in `boogs/guix-manife
   "Return the channel specification file matching PATTERN in
 `boogs/guix-channel-spec-directory'."
   (cl-first (directory-files boogs/guix-channel-spec-directory 'full
-                          (concat pattern "-channel"))))
+                             (concat pattern "-channel"))))
 
 (defun boogs/run-in-eshell (command)
   (let ((eshell-buffer-name "*guix*"))
@@ -189,12 +189,12 @@ If MANIFEST is nil, it is queried from the manifests found in `boogs/guix-manife
                                      (list "echo" (format "'==> Installing manifest %S to profile %S'"
                                                           manifest-name profile)
                                            ";"
-                                      guix "package" (concat "--manifest=" manifest)
-                                      (if (string= "default" manifest-name)
-                                          ""
-                                        (concat "--profile=" profile
-                                                "/" manifest-name
-                                                "/" manifest-name)))
+                                           guix "package" (concat "--manifest=" manifest)
+                                           (if (string= "default" manifest-name)
+                                               ""
+                                             (concat "--profile=" profile
+                                                     "/" manifest-name
+                                                     "/" manifest-name)))
                                      " ")))
                                 manifests)
                         " ; "))))
