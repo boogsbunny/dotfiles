@@ -10,11 +10,16 @@
 
 (setq prefix-help-command #'embark-prefix-help-command)
 
-(define-key embark-buffer-map (kbd "M") 'magit-status)
-(define-key embark-file-map (kbd "M") 'magit-status)
+(defun boogs/embark-magit-status (file)
+  "Run magit-status on the directory containing FILE."
+  (interactive "f")
+  (magit-status (if (file-directory-p file)
+                    file
+                  (file-name-directory file))))
 
-(define-key embark-buffer-map (kbd "m") 'magit-status)
-(define-key embark-file-map (kbd "m") 'magit-status)
+(define-key embark-file-map (kbd "m") #'boogs/embark-magit-status)
+(define-key embark-file-map (kbd "M") #'boogs/embark-magit-status)
+(define-key embark-file-map (kbd "f") #'consult-ls-git)
 
 (setq embark-indicators
       '(embark-mixed-indicator ; default is embark-mixed-indicator
@@ -22,6 +27,6 @@
         embark-isearch-highlight-indicator))
 
 (require 'embark-consult)
-(add-hook 'embark-collect-mode 'consult-preview-at-point-mode)
+(add-hook 'embark-collect-mode-hook 'consult-preview-at-point-mode)
 
 (provide 'init-embark)
