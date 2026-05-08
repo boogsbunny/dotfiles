@@ -87,9 +87,10 @@
 
 ;; display images
 (setq org-startup-with-inline-images t)
-(add-hook 'org-babel-after-execute-hook (lambda ()
-                                          (when org-inline-image-overlays
-                                            (org-redisplay-inline-images))))
+(add-hook 'org-babel-after-execute-hook
+          (lambda ()
+            (when org-inline-image-overlays
+              (org-redisplay-inline-images))))
 
 ;; prevent confirmation
 (setq org-confirm-babel-evaluate nil)
@@ -115,7 +116,6 @@
 (setq org-hide-emphasis-markers t)
 
 (add-hook 'org-mode-hook 'visual-line-mode)
-
 (add-hook 'org-mode-hook 'variable-pitch-mode)
 
 (defun boogs/maybe-disable-variable-pitch ()
@@ -213,14 +213,16 @@
 (defun org-roam-node-insert-immediate (arg &rest args)
   (interactive "P")
   (let ((args (push arg args))
-        (org-roam-capture-templates (list (append (car org-roam-capture-templates)
-                                                  '(:immediate-finish t)))))
+        (org-roam-capture-templates
+         (list (append (car org-roam-capture-templates)
+                       '(:immediate-finish t)))))
     (apply #'org-roam-node-insert args)))
 
 
 (defun boogs/org-roam-goto-month ()
   (interactive)
-  (org-roam-capture- :goto (when (org-roam-node-from-title-or-alias (format-time-string "%Y-%B"))
+  (org-roam-capture- :goto (when (org-roam-node-from-title-or-alias
+                                  (format-time-string "%Y-%B"))
                              '(4))
                      :node (org-roam-node-create)
                      :templates '(("m" "month" plain "\n* Goals\n\n%?* Summary\n\n"
@@ -230,7 +232,8 @@
 
 (defun boogs/org-roam-goto-year ()
   (interactive)
-  (org-roam-capture- :goto (when (org-roam-node-from-title-or-alias (format-time-string "%Y")) '(4))
+  (org-roam-capture- :goto (when (org-roam-node-from-title-or-alias
+                                  (format-time-string "%Y")) '(4))
                      :node (org-roam-node-create)
                      :templates '(("y" "year" plain "\n* Goals\n\n%?* Summary\n\n"
                                    :if-new (file+head "%<%Y>.org"
@@ -256,7 +259,8 @@
   (require 'org-roam-dailies)
 
   (defun boogs/org-roam-project-finalize-hook ()
-    "Adds the captured project file to `org-agenda-files' if the capture was not aborted."
+    "Adds the captured project file to `org-agenda-files' if the
+capture was not aborted."
     ;; Remove the hook since it was added temporarily
     (remove-hook
      'org-capture-after-finalize-hook #'boogs/org-roam-project-finalize-hook)
@@ -274,7 +278,7 @@
      nil
      nil
      (boogs/org-roam-filter-by-tag "project")
-		 nil
+     nil
      :templates
      '(("p" "project" plain "* Goals\n\n%?\n\n* Tasks\n\n** TODO Add initial tasks\n\n* Dates\n\n"
         :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+category: ${title}\n#+filetags: project")
@@ -302,8 +306,7 @@
       ;; Only refile if the target file is different than the current
       (unless (equal (file-truename today-file)
                      (file-truename (buffer-file-name)))
-        (org-refile nil nil (list "Tasks" today-file nil pos)))))
-  )
+        (org-refile nil nil (list "Tasks" today-file nil pos))))))
 
 (defun boogs/get-todays-journal-file-name ()
   "Gets the journal file name for today's date"
@@ -594,8 +597,8 @@
             ,(format "UID:%s\n" id)
             ,(boogs/build-contact-item "FN:%s" "ITEM")
             ,(if-let ((phones (org-entry-get nil "PHONE")))
-                  (boogs/build-phone-items phones)
-                "")
+                 (boogs/build-phone-items phones)
+               "")
             ,(boogs/build-contact-item "EMAIL:%s" "EMAIL")
             ,(boogs/build-contact-item "ORG:%s" "GROUP")
             ,(boogs/build-contact-item "ADR;HOME:;;%s" "ADDRESS_HOME")
