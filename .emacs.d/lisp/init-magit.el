@@ -19,6 +19,16 @@
 
 (setq magit-log-margin '(t age magit-log-margin-width t 18))
 
+(transient-define-suffix boogs/magit-submodule-update-all ()
+  "Update all submodules"
+  :description "Update All     git submodule update --init --recursive"
+  (interactive)
+  (magit-with-toplevel
+    (magit-run-git-async "submodule" "update" "--init" "--recursive")))
+
+(transient-append-suffix 'magit-submodule "u"
+  '("U" boogs/magit-submodule-update-all))
+
 ;; (when (require 'magit-todos nil 'noerror)
 ;;   (magit-todos-mode))
 
