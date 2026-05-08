@@ -64,6 +64,7 @@
         evil-magit
         evil-multiedit
         evil-org
+        exec-path-from-shell
         exwm
         flycheck
         forge
