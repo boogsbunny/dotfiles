@@ -10,11 +10,13 @@ Example:
 Running `ffap' on the first /home would not work as expected."
   (rainbow-delimiters-mode -1))
 (advice-add 'sly-mrepl-return :before 'boogs/disable-rainbow-delimiters)
-;; (advice-add 'sly-mrepl-return-at-end :before 'boogs/disable-rainbow-delimiters)
+(advice-add 'sly-mrepl-return-at-end :before 'boogs/disable-rainbow-delimiters)
 
 (defun boogs/enable-rainbow-delimiters (_orig &rest args)
   "See `boogs/disable-rainbow-delimiters'."
   (rainbow-delimiters-mode 1))
 (advice-add 'sly-mrepl--insert-prompt :before 'boogs/enable-rainbow-delimiters)
+
+(setq rainbow-delimiters-max-face-count 6)
 
 (provide 'patch-sly-rainbow)
