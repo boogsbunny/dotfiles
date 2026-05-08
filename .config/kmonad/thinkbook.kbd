@@ -152,7 +152,7 @@
   esc  mute vold volu                           prnt slck pause ins del  home pgup
        f1   f2   f3   f4    f5   f6   f7   f8   f9   f10  f11   f12      end  pgdn
   ~    %    1    2    3     @lss 5    6    7    8    @lss 9     0        bspc
-  tab  :    ^    =    @tok  *    XX   &    %    @tik @    |     ?        \_
+  tab  :    ^    =    @tok  *    XX   &    %    @tik @    ?     |        \_
   bspc @t$h @t[h @t{h @t/h  bspc XX   bspc @t\h @t}h @t]h @t+h  XX
   lsft <    |    >    /     -    ~    !    \\   #    ;    ,              XX
   wkup @tdv @tdv @tdv           @tdv           @tdv @tdv @tdv       back up   fwd
