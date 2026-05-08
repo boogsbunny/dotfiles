@@ -4,7 +4,11 @@
 
 ;; (add-to-list 'auto-mode-alist '("\\.go\\'" . go-mode))
 ;; (add-to-list 'auto-mode-alist '("\\.go\\.mod\\'" . go-mod-ts-mode))
-;; (add-hook 'go-ts-mode-hook #'gofmt-before-save)
+;; (add-hook 'go-ts-mode-hook
+;;           (lambda ()
+;;             (add-hook 'before-save-hook
+;;                       #'gofmt-before-save
+;;                       nil t)))
 
 (add-to-list 'exec-path "~/go/bin")
 (setq gofmt-command "goimports")
@@ -13,7 +17,11 @@
 
 ;; (add-hook 'go-mode-hook #'tree-sitter-mode)
 ;; (add-hook 'go-mode-hook #'tree-sitter-hl-mode)
-(add-hook 'before-save-hook 'gofmt-before-save)
+(add-hook 'go-mode-hook
+          (lambda ()
+            (add-hook 'before-save-hook
+                      #'gofmt-before-save
+                      nil t)))
 
 ;; eglot
 ;; (add-hook 'go-mode-hook 'eglot-ensure)

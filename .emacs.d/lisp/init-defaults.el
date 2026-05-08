@@ -126,7 +126,12 @@
 (global-prettify-symbols-mode +1)
 
 ;; delete trailing whitespace on save
-(add-hook 'before-save-hook 'delete-trailing-whitespace)
+;; (add-hook 'before-save-hook 'delete-trailing-whitespace)
+(defun boogs/delete-trailing-whitespace-maybe ()
+  (unless (or (derived-mode-p 'org-mode)
+              (> (buffer-size) 100000))
+    (delete-trailing-whitespace)))
+(add-hook 'before-save-hook #'boogs/delete-trailing-whitespace-maybe)
 
 (setq whitespace-style
       '(face

@@ -13,6 +13,11 @@
 (setq tab-width 4)
 
 (add-hook 'python-ts-mode-hook 'eglot-ensure)
-(add-hook 'before-save-hook 'python-black-on-save-mode-enable-dwim)
+
+(add-hook 'python-ts-mode-hook
+          (lambda ()
+            (add-hook 'before-save-hook
+                      #'python-black-on-save-mode-enable-dwim
+                      nil t)))
 
 (provide 'init-python)
