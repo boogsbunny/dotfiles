@@ -126,6 +126,16 @@
 
 (add-hook 'org-mode-hook #'boogs/maybe-disable-variable-pitch)
 
+(defun boogs/org-large-buffer-optimizations ()
+  "Reduce expensive UI features in large Org buffers."
+  (when (> (buffer-size) 100000)
+    (visual-line-mode -1)
+    (display-line-numbers-mode 0)
+    (when (bound-and-true-p variable-pitch-mode)
+      (variable-pitch-mode -1))))
+
+(add-hook 'org-mode-hook #'boogs/org-large-buffer-optimizations)
+
 (setq org-list-indent-offset 4)
 
 (define-key org-mode-map (kbd "C-<tab>") 'org-global-cycle)
