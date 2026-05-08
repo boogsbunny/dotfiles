@@ -159,8 +159,16 @@
 ;; org roam
 ;;--------------------------------------------------------------------;
 
+(add-to-list 'display-buffer-alist
+             '("\\*org-roam\\*"
+               (display-buffer-in-direction)
+               (direction . right)
+               (window-width . 0.33)
+               (window-height . fit-window-to-buffer)))
+
 (setq org-roam-directory org-roam-dir
       org-roam-dailies-directory "journal/")
+
 (setq boogs/daily-note-filename "%<%Y-%m-%d>.org"
       boogs/daily-note-header "#+title: %<%Y-%m-%d %a>\n\n[[roam:%<%Y-%B>]]\n\n")
 
