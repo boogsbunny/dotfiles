@@ -14,10 +14,12 @@
     (kbd "C-x C-e") #'lispy-eval
     (kbd "C-<return>") #'lispy-join
     (kbd "M-<backspace>") 'lispyville-delete-backward-word
+    (kbd "C-(") 'lispyville-wrap-round
     ")" #'lispy-right)
   (lispyville--define-key 'insert
     (kbd "<backspace>") 'lispy-delete-backward
     (kbd "M-<backspace>") 'lispyville-delete-backward-word
+    (kbd "C-(") 'lispyville-wrap-round
     ";" 'lispy-comment
     "'" 'lispy-tick
     "`" 'lispy-backtick
