@@ -184,6 +184,34 @@ Double-tap quickly to force a new instance."
          (consult-buffer-sources local-sources))
     (consult-buffer)))
 
+(defun boogs/project-root ()
+  (or (when (fboundp 'magit-toplevel)
+        (ignore-errors (magit-toplevel)))
+      (when (fboundp 'project-current)
+        (when-let ((proj (project-current nil)))
+          (project-root proj)))))
+
+(defun boogs/consult-ripgrep-here ()
+  (interactive)
+  (consult-ripgrep default-directory))
+
+(defun boogs/consult-ripgrep-project ()
+  (interactive)
+  (let ((root (boogs/project-root)))
+    (if root
+        (consult-ripgrep root)
+      (consult-ripgrep default-directory))))
+
+(defun boogs/consult-git-grep-here ()
+  (interactive)
+  (consult-git-grep default-directory))
+
+(defun boogs/consult-git-grep-project ()
+  (interactive)
+  (if-let ((root (boogs/project-root)))
+      (consult-git-grep root)
+    (user-error "Not in a Git/project root")))
+
 (when (require 'consult nil 'noerror)
   (global-set-key (kbd "C-x C-b") #'consult-buffer)
   (boogs/exwm-global-set-key "s-m" #'consult-notmuch-inbox)
@@ -191,8 +219,9 @@ Double-tap quickly to force a new instance."
   (boogs/exwm-global-set-key "s-b" #'consult-buffer)
   (boogs/exwm-global-set-key "s-e" #'boogs/consult-exwm-buffers)
   (boogs/exwm-global-set-key "C-c t" #'boogs/consult-tramp)
-  (boogs/exwm-global-set-key "s-g" #'consult-ripgrep)
-  (boogs/exwm-global-set-key "s-G" #'consult-git-grep)
+  (boogs/exwm-global-set-key "s-g" #'boogs/consult-ripgrep-here)
+  (boogs/exwm-global-set-key "s-G" #'boogs/consult-ripgrep-project)
+  (boogs/exwm-global-set-key "s-SPC" #'boogs/consult-git-grep-project)
   (boogs/exwm-global-set-key "C-x c i" #'consult-imenu)
   (boogs/exwm-global-set-key "C-x r g" #'consult-ls-git))
 
