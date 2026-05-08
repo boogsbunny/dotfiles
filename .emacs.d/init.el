@@ -114,3 +114,18 @@
         (expand-file-name (format "emacs-custom-%s.el" (user-uid)) temporary-file-directory)))
 (load custom-file t)
 (put 'scroll-left 'disabled nil)
+
+(eval-and-compile
+  (defconst emacs-start-time (current-time))
+
+  (defun report-time-since-load (&optional suffix)
+    (message "Loading init...done (%.3fs)%s"
+             (float-time
+              (time-subtract (current-time) emacs-start-time))
+             suffix)))
+
+(add-hook 'after-init-hook
+          (lambda () (report-time-since-load " [after-init]"))
+          t)
+
+(add-hook 'after-init-hook #'garbage-collect t)
