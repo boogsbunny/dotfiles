@@ -107,39 +107,38 @@
                   (adaptive? #t)))
         (service tlp-service-type
                  (tlp-configuration
+                  ;; CPU Settings
                   ;; Force powersave governor always
                   (cpu-scaling-governor-on-ac (list "powersave"))
                   (cpu-scaling-governor-on-bat (list "powersave"))
-
                   ;; Limit CPU performance
-                  (cpu-max-perf-on-ac 60) ;; Limit to 60% on AC
-                  (cpu-max-perf-on-bat 30) ;; Limit to 30% on battery
-                  (cpu-boost-on-ac? #f)    ;; Disable turbo boost
+                  (cpu-max-perf-on-ac 20)
+                  (cpu-max-perf-on-bat 20)
+                  (cpu-boost-on-ac? #f)
                   (cpu-boost-on-bat? #f)
+
+                  (energy-perf-policy-on-ac "powersave")
+                  (energy-perf-policy-on-bat "powersave")
 
                   ;; Aggressive scheduler power saving
                   (sched-powersave-on-ac? #t)
                   (sched-powersave-on-bat? #t)
 
-                  ;; Maximize power management
-                  (runtime-pm-on-ac "auto")
-                  (runtime-pm-on-bat "auto")
-                  (runtime-pm-all? #t)
+                  ;; Longer dirty page timeout on battery (default is 60)
+                  (max-lost-work-secs-on-bat 120)
+
+                  ;; Runtime Power Management for AHCI controller and disks
+                  (ahci-runtime-pm-on-bat? #t)
 
                   ;; Aggressive disk power saving
-                  (disk-idle-secs-on-ac 5)
-                  (disk-idle-secs-on-bat 2)
-                  (disk-spindown-timeout-on-ac (list "120"))
-                  (disk-spindown-timeout-on-bat (list "60"))
+                  (disk-idle-secs-on-ac 10)
+                  (disk-idle-secs-on-bat 5)
+                  (disk-spindown-timeout-on-ac (list "0"))
+                  (disk-spindown-timeout-on-bat (list "0"))
 
                   ;; PCIe power saving
-                  (pcie-aspm-on-ac "powersave")
+                  (pcie-aspm-on-ac "default")
                   (pcie-aspm-on-bat "powersave")
-
-                  ;; Other power savings
-                  (wifi-pwr-on-ac? #t)
-                  (wifi-pwr-on-bat? #t)
-                  (nmi-watchdog? #f)
 
                   ;; Misc
                   (usb-autosuspend? #f)))
