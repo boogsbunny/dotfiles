@@ -1,6 +1,7 @@
 (define-module (default)
   #:use-module (srfi srfi-1)
   #:use-module (gnu)
+  #:use-module (gnu system)
   #:use-module (gnu system mapped-devices)
   #:use-module (gnu system nss)
   #:use-module (guix packages)
@@ -9,6 +10,8 @@
   #:use-module (gnu packages fontutils)
   #:use-module (gnu packages suckless)
   #:use-module (gnu packages syncthing)
+  #:use-module (nongnu packages linux)
+  #:use-module (rosenthal services networking)
   #:use-module (backup)
   #:use-module (keyboard))
 
@@ -196,13 +199,17 @@ host	all	all	::1/128 	md5"))))))
             "tty5"
             "tty6")))))
 
+(define %external-services
+  (list (service tailscale-service-type)))
+
 (define-public %boogs/services
   (append (list (kmonad-service "/home/boogs/.config/kmonad/thinkbook.kbd"))
           %backup-services
           %base-services
           %desktop-environment
           %development-services
-          %desktop-services-customization))
+          %desktop-services-customization
+          %external-services))
 
 (define-public %boogs/firmware
   %base-firmware)
