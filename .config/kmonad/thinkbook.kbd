@@ -119,9 +119,9 @@
   esc  mute vold volu                          prnt slck pause ins del  home pgup
        f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11   f12      end  pgdn
   grv  =    1    2    3    4    5    6    7    8    9    0     -        bspc
-  tab  ;    ,    .    @tpd y    XX   XX   f    g    @tcd r     q        @tsd
-  XX   @tad @tod @ted @tud @tid XX   XX   @tdd @thd @ttd @tnd  XX
-  lsft 102d '    x    j    k    b    XX   z    l    m    w              v
+  tab  ;    ,    .    @tpd y    XX   f    g    @tcd r    q     XX       ret
+  XX   @tad @tod @ted @tud @tid XX   @tdd @thd @ttd @tnd @tsd  XX
+  lsft 102d '    x    j    k    b    z    l    m    w    v              XX
   wkup @tdl @tdl @tdl            @tdl           @tdl @tdl @tdl      back up   fwd
                                                                     left down rght
 )
@@ -130,9 +130,9 @@
   esc  mute vold volu                          prnt slck pause ins del  home pgup
        f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11   f12      end  pgdn
   ~    %    1    2    3    4    5    6    7    8    9    0     XX       bspc
-  tab  :    <    >    @tPd Y    XX   XX   F    G    @tCd R     Q        @csd
-  bspc @cad @cod @ned @sud @tId XX   XX   @tDd @shd @ntd @cnd  XX
-  lsft 102d  "   X    J    K    B    XX   Z    L    M    W              V
+  tab  :    <    >    @tPd Y    XX   F    G    @tCd R    Q     XX       ret
+  bspc @cad @cod @ned @sud @tId XX   @tDd @shd @ntd @cnd @csd  XX
+  lsft 102d  "   X    J    K    B    Z    L    M    W    V              XX
   wkup @tdv @tdv @tdv          @tdv            @tdv  @tdv @tdv     back up   fwd
                                                                    left down rght
 )
@@ -141,9 +141,9 @@
   esc  mute vold volu                          prnt slck pause ins del  home pgup
        f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11   f12      end  pgdn
   ~    %    1    2    3    @lsc 5    6    7    8    @lsc 9     0        bspc
-  tab  :    <    >    @tPd Y    XX   XX   F    G    @tCd R     Q        @tSd
-  bspc @tAd @tOd @tEd @tUd @tId XX   XX   @tDd @tHd @tTd @tNd  XX
-  lsft 102d "    X    J    K    B    XX   Z    L    M    W              V
+  tab  :    <    >    @tPd Y    XX   F    G    @tCd R    Q     XX       ret
+  bspc @tAd @tOd @tEd @tUd @tId XX   @tDd @tHd @tTd @tNd @tSd  XX
+  lsft 102d "    X    J    K    B    Z    L    M    W    V              XX
   wkup @tdv @tdv @tdv           @tdv           @tdv @tdv @tdv      back up   fwd
                                                                    left down rght
 )
@@ -152,9 +152,9 @@
   esc  mute vold volu                           prnt slck pause ins del  home pgup
        f1   f2   f3   f4    f5   f6   f7   f8   f9   f10  f11   f12      end  pgdn
   ~    %    1    2    3     @lss 5    6    7    8    @lss 9     0        bspc
-  tab  :    ^    =    @tok  *    XX   &    %    @tik @    |     ?        @t+h
-  bspc @t$h @t[h @t{h @t/h  bspc XX   XX   bspc @t\h @t}h @t]h  \_
-  lsft <    |    >    -     /    ~    XX   !    #    \\   ;              ,
+  tab  :    ^    =    @tok  *    XX   &    %    @tik @    |     ?        \_
+  bspc @t$h @t[h @t{h @t/h  bspc XX   bspc @t\h @t}h @t]h @t+h  XX
+  lsft <    |    >    /     -    ~    !    \\   #    ;    ,              XX
   wkup @tdv @tdv @tdv           @tdv           @tdv @tdv @tdv       back up   fwd
                                                                     left down rght
 )
@@ -163,9 +163,9 @@
   esc  mute vold volu                          prnt slck pause ins del  home pgup
        f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11   f12      end  pgdn
   XX   XX   XX   XX   XX   @lsn XX   XX   XX   XX   @lsn XX    XX       bspc
-  XX   :    ,    .    tab  XX   XX   XX   XX   ret  XX   XX    XX       @t0h
-  XX   @t1h @t2h @t3h @t4h @t5h XX   XX   @t6h @t7h @t8h @t9h  \_
-  XX   XX   XX   XX   -    /    "    &    =    XX   XX   XX             rsft
+  XX   :    ,    .    tab  XX   XX   XX   XX   ret  XX   XX    XX       \_
+  XX   @t1h @t2h @t3h @t4h @t5h XX   @t6h @t7h @t8h @t9h @t0h  XX
+  XX   XX   XX   XX   /    -    "    &    =    XX   XX   XX             rsft
   wkup @tdv @tdv @tdv           @tdv           @tdv @tdv @tdv      back up   fwd
                                                                    left down rght
 )
