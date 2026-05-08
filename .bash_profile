@@ -1,10 +1,10 @@
 #!/bin/sh
 
 appendpath () {
-	[ $# -eq 2 ] && PATHVAR=$2 || PATHVAR=PATH
-	[ -d "$1" ] || return
-	eval echo \$$PATHVAR | grep -q "\(:\|^\)$1\(:\|$\)" && return
-	eval export $PATHVAR="\$$PATHVAR:$1"
+  [ $# -eq 2 ] && PATHVAR=$2 || PATHVAR=PATH
+  [ -d "$1" ] || return
+  eval echo \$$PATHVAR | grep -q "\(:\|^\)$1\(:\|$\)" && return
+  eval export $PATHVAR="\$$PATHVAR:$1"
 }
 
 appendpath "${HOME}/.local/bin"
@@ -12,19 +12,20 @@ appendpath "${HOME}/.local/bin/statusbar"
 appendpath "${HOME}/go/bin"
 appendpath "${HOME}/go/bin/gopls"
 appendpath "${HOME}/.npm-packages/bin"
+appendpath "${HOME}/.cargo/bin"
 
 appendxdgdata () {
-	[ $# -eq 2 ] && PATHVAR=$2 || PATHVAR=XDG_DATA_DIRS
-	[ -d "$1" ] || return
-	eval echo \$$PATHVAR | grep -q "\(:\|^\)$1\(:\|$\)" && return
-	eval export $PATHVAR="\$$PATHVAR:$1"
+  [ $# -eq 2 ] && PATHVAR=$2 || PATHVAR=XDG_DATA_DIRS
+  [ -d "$1" ] || return
+  eval echo \$$PATHVAR | grep -q "\(:\|^\)$1\(:\|$\)" && return
+  eval export $PATHVAR="\$$PATHVAR:$1"
 }
 
 appendxdgdata "${HOME}/.local/share/flatpak/exports/share"
 export XDG_DATA_DIRS=/var/lib/flatpak/exports/share:$XDG_DATA_DIRS
 
 for i in emacsclient em emacs vim nano vi; do
-	command -v $i >/dev/null 2>&1 && export EDITOR=$i && break
+  command -v $i >/dev/null 2>&1 && export EDITOR=$i && break
 done
 
 GIT_EDITOR="$EDITOR"
@@ -60,17 +61,17 @@ export NODE_PATH="$HOME/.npm-packages/lib/node_modules"
 export GUIX_DISTRO_AGE_WARNING=1m
 export GUIX_EXTRA_PROFILES="$HOME/.guix-extra-profiles"
 for i in $GUIX_EXTRA_PROFILES/*; do
-    profile=$i/$(basename "$i")
-    if [ -f "$profile"/etc/profile ]; then
-        # if [[ "$i" != *"emacs"* ]]; then
-        GUIX_PROFILE="$profile" ; . "$profile"/etc/profile
-        export MANPATH="$profile"/share/man:$MANPATH
-        export INFOPATH="$profile"/share/info:$INFOPATH
-        export XDG_DATA_DIRS="$profile"/share:$XDG_DATA_DIRS
-        export XDG_CONFIG_DIRS="$profile"/etc/xdg:$XDG_CONFIG_DIRS
-        # fi
+  profile=$i/$(basename "$i")
+  if [ -f "$profile"/etc/profile ]; then
+    if [[ "$i" != *"emacs"* ]]; then
+      GUIX_PROFILE="$profile" ; . "$profile"/etc/profile
+      export MANPATH="$profile"/share/man:$MANPATH
+      export INFOPATH="$profile"/share/info:$INFOPATH
+      export XDG_DATA_DIRS="$profile"/share:$XDG_DATA_DIRS
+      export XDG_CONFIG_DIRS="$profile"/etc/xdg:$XDG_CONFIG_DIRS
     fi
-    unset profile
+  fi
+  unset profile
 done
 
 ## SSH-Agent
