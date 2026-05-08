@@ -503,20 +503,20 @@ the symbol `mode-line-format-right-align' is processed by
   (put construct 'risky-local-variable t))
 
 (setq-default mode-line-format
-      '("%e"
-        modeline-narrow
-        modeline-buffer-status
-        modeline-evil
-        modeline-buffer-identification
-        " "
-        modeline-major-mode
-        " "
-        modeline-vc-branch
-        " "
-        ;; modeline-align-right
-        mode-line-format-right-align
-        " "
-        modeline-misc-info))
+              '("%e"
+                modeline-narrow
+                modeline-buffer-status
+                modeline-evil
+                modeline-buffer-identification
+                " "
+                modeline-major-mode
+                " "
+                modeline-vc-branch
+                " "
+                ;; modeline-align-right
+                mode-line-format-right-align
+                " "
+                modeline-misc-info))
 
 ;;; subtle
 (defun boogs/modeline-set-faces (_theme)
