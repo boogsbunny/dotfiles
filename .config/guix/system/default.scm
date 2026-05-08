@@ -59,7 +59,6 @@
          font-fira-mono
          font-aporetic
          font-iosevka
-         font-iosevka-comfy
          font-iosevka-term
          font-google-noto
          font-openmoji
