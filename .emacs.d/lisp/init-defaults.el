@@ -42,8 +42,6 @@
 ;; avoid outdated byte-compiled elisp files
 (setq load-prefer-newer t)
 
-(setq-default truncate-lines t)
-
 ;;; Support for Emacs pinentry.
 ;;; Required for eshell/sudo and everything relying on GPG queries.
 (setq epa-pinentry-mode 'loopback) ; This will fail if gpg >= 2.1 is not available.
@@ -68,11 +66,12 @@
 ;; completion cycling
 (setq completion-cycle-threshold t)
 
-;; set tabs to 2 spaces
-(setq-default tab-width 2)
+;; set tab width to 8
+(setq-default tab-width 8)
 ;; (defvaralias 'standard-indent 'tab-width)
-(setq-default indent-tabs-mode t)
-(add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
+;; (setq-default indent-tabs-mode t)
+(setq-default indent-tabs-mode nil)
+;; (add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
 (setq highlight-indent-guides-method 'character)
 
 ;;; time
@@ -190,14 +189,16 @@
 (setq backward-delete-char-untabify-method 'hungry)
 
 ;; turn on line numbers
-(global-display-line-numbers-mode 1)
+;; (global-display-line-numbers-mode 1)
 (setq display-line-numbers 'relative)
 (setq display-line-numbers-type'relative)
+(add-hook 'prog-mode-hook #'display-line-numbers-mode)
 
 (setq fill-column (string-to-number "140"))
 (add-hook 'prog-mode-hook #'display-fill-column-indicator-mode)
 
 (electric-pair-mode 1)
+(global-set-key (kbd "C-<return>") 'electric-newline-and-maybe-indent)
 
 (require 'auth-source-pass)
 (setq auth-sources '("~/.authinfo.gpg" "~/.authinfo" "~/.netrc"))
