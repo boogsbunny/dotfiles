@@ -19,8 +19,8 @@
 
 (setq magit-log-margin '(t age magit-log-margin-width t 18))
 
-(when (require 'magit-todos nil 'noerror)
-  (magit-todos-mode))
+;; (when (require 'magit-todos nil 'noerror)
+;;   (magit-todos-mode))
 
 (setq magit-todos-exclude-globs
       '("*.har"
