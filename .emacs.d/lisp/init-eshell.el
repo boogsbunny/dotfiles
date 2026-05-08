@@ -12,6 +12,23 @@
 (add-hook 'eshell-mode-hook #'eat-eshell-mode)
 (add-hook 'eshell-mode-hook #'eat-eshell-visual-command-mode)
 
+(defun boogs-fix-path-tilde ()
+  (let* ((paths (split-string (getenv "PATH") path-separator t))
+         (expanded (mapcar #'expand-file-name paths)))
+    (setenv "PATH" (mapconcat #'identity expanded path-separator))
+    (setq exec-path expanded)
+    (setq eshell-path-env (getenv "PATH"))))
+
+(add-hook 'after-init-hook #'boogs-fix-path-tilde)
+(add-hook 'eshell-first-time-mode-hook #'boogs-fix-path-tilde)
+
+;; If you use exec-path-from-shell, fix after it runs.
+(with-eval-after-load 'exec-path-from-shell
+  (add-hook 'after-init-hook #'boogs-fix-path-tilde))
+
+;; Always fix per Eshell buffer (covers the first session too).
+(add-hook 'eshell-mode-hook #'boogs-fix-path-tilde)
+
 ;; Emacs pinentry for GPG.
 (require 'init-defaults)
 
