@@ -78,4 +78,13 @@
 (with-eval-after-load 'orgit
   (setq orgit-store-repository-id t))
 
+(defun boogs/projectile-add-known-project (path)
+  (when (and (featurep 'projectile) path)
+    (projectile-add-known-project path)))
+
+(add-hook 'magit-worktree-checkout-hook
+          (lambda ()
+            (boogs/projectile-add-known-project
+             (magit-toplevel))))
+
 (provide 'init-magit)
