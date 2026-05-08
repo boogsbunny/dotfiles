@@ -3,6 +3,12 @@
 ;; early-init
 ;;--------------------------------------------------------------------
 
+(setq init-file-debug t
+      initial-buffer-choice t)
+
+(require 'profiler)
+(profiler-start 'cpu+mem)
+
 ;; additional config in 'lisp' folder
 (add-to-list 'load-path (expand-file-name "patches/" user-emacs-directory))
 (add-to-list 'load-path (expand-file-name "lisp/" user-emacs-directory))
