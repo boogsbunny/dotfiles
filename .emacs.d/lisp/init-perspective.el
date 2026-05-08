@@ -23,6 +23,10 @@ and normal buffer kills."
 
 (add-hook 'persp-mode-hook #'boogs/persp-unadvise-kill-buffer)
 
+(with-eval-after-load 'perspective
+  (boogs/persp-unadvise-kill-buffer)
+  (advice-add 'persp-mode :after #'boogs/persp-unadvise-kill-buffer))
+
 (persp-mode)
 
 (provide 'init-perspective)
