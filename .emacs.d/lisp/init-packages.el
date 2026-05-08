@@ -24,10 +24,6 @@
         circe
         cl-generic
         code-review
-        company
-        company-box
-        company-go
-        company-restclient
         consult
         consult-ls-git
         corfu
