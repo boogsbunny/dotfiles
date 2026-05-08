@@ -2,26 +2,34 @@
 ;; init
 ;;--------------------------------------------------------------------
 
-(require 'init-modeline)
-(require 'init-perspective)
+(require 'functions)
 (require 'init-defaults)
+(require 'init-defuns)
+
+(require 'init-modeline)
 (require 'init-olivetti)
 (require 'init-styles)
-(require 'init-defuns)
+(require 'init-icons)
+
+(require 'init-perspective)
 (require 'init-projectile)
 (require 'init-projectile-perspective)
-(require 'init-marginalia)
-(require 'init-icons)
+
+(require 'init-views)
 (require 'init-orderless)
 (require 'init-vertico)
-(require 'init-embark)
+(require 'init-marginalia)
 (require 'init-consult)
-(require 'init-consult-notmuch)
+(require 'init-embark)
 (require 'init-corfu)
 (require 'init-prescient)
+
+(require 'init-consult-notmuch)
+
 (require 'init-avy)
+
+
 (require 'init-web)
-(require 'functions)
 
 (with-eval-after-load 'dired (require 'init-dired))
 (with-eval-after-load 'eshell (require 'init-eshell))
