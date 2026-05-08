@@ -4,7 +4,6 @@
 
 (require 'slack)
 (require 'alert)
-(require 'init-helm-slack)
 
 (url-cookie-store "d" "")
 
