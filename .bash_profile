@@ -1,10 +1,10 @@
 #!/bin/sh
 
 appendpath () {
-  [ $# -eq 2 ] && PATHVAR=$2 || PATHVAR=PATH
-  [ -d "$1" ] || return
-  eval echo \$$PATHVAR | grep -q "\(:\|^\)$1\(:\|$\)" && return
-  eval export $PATHVAR="\$$PATHVAR:$1"
+    [ $# -eq 2 ] && PATHVAR=$2 || PATHVAR=PATH
+    [ -d "$1" ] || return
+    eval echo \$$PATHVAR | grep -q "\(:\|^\)$1\(:\|$\)" && return
+    eval export $PATHVAR="\$$PATHVAR:$1"
 }
 
 appendpath "${HOME}/.local/bin"
@@ -15,17 +15,17 @@ appendpath "${HOME}/.npm-packages/bin"
 appendpath "${HOME}/.cargo/bin"
 
 appendxdgdata () {
-  [ $# -eq 2 ] && PATHVAR=$2 || PATHVAR=XDG_DATA_DIRS
-  [ -d "$1" ] || return
-  eval echo \$$PATHVAR | grep -q "\(:\|^\)$1\(:\|$\)" && return
-  eval export $PATHVAR="\$$PATHVAR:$1"
+    [ $# -eq 2 ] && PATHVAR=$2 || PATHVAR=XDG_DATA_DIRS
+    [ -d "$1" ] || return
+    eval echo \$$PATHVAR | grep -q "\(:\|^\)$1\(:\|$\)" && return
+    eval export $PATHVAR="\$$PATHVAR:$1"
 }
 
 appendxdgdata "${HOME}/.local/share/flatpak/exports/share"
 export XDG_DATA_DIRS=/var/lib/flatpak/exports/share:$XDG_DATA_DIRS
 
 for i in emacsclient em emacs vim nano vi; do
-  command -v $i >/dev/null 2>&1 && export EDITOR=$i && break
+    command -v $i >/dev/null 2>&1 && export EDITOR=$i && break
 done
 
 GIT_EDITOR="$EDITOR"
@@ -85,7 +85,7 @@ fi
 ## Set SSH to use gpg-agent
 unset SSH_AGENT_PID
 if [ "${gnupg_SSH_AUTH_SOCK_by:-0}" -ne $$ ]; then
-  export SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
+    export SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
 fi
 
 # Set GPG TTY
