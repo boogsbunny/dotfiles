@@ -11,6 +11,8 @@
 (require 'init-styles)
 (require 'init-icons)
 
+(require 'init-password-store)
+
 (require 'init-perspective)
 (require 'init-projectile)
 (require 'init-projectile-perspective)
