@@ -1,0 +1,5 @@
+--adopt
+--ignore=.mozilla/firefox/.*lock
+--ignore=\.config/alsa/asoundrc
+--ignore=\.config/guix/current
+--ignore=\.config/shepherd/init\.scm
