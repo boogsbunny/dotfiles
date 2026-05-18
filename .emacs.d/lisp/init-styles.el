@@ -253,6 +253,40 @@
               100)
          '(85 . 50) '(100 . 100)))))
 
+;;--------------------------------------------------------------------
+;; Alacritty theme sync (light/dark)
+;;--------------------------------------------------------------------
+
+(defvar boogs/alacritty-theme-light
+  "~/.config/alacritty/themes/rose_pine_dawn.toml")
+(defvar boogs/alacritty-theme-dark
+  "~/.config/alacritty/themes/github_dark_colorblind.toml")
+(defvar boogs/alacritty-current-theme
+  "~/.config/alacritty/current-theme.toml")
+
+(defun boogs/sync-alacritty-theme (is-dark)
+  "Switch Alacritty theme by copying the file."
+  (let ((theme-file (if is-dark
+                        boogs/alacritty-theme-dark
+                      boogs/alacritty-theme-light)))
+    (if (not (file-exists-p theme-file))
+        (message "Warning: Alacritty theme file not found: %s" theme-file)
+
+      (when (file-exists-p boogs/alacritty-current-theme)
+        (delete-file boogs/alacritty-current-theme))
+
+      (copy-file theme-file boogs/alacritty-current-theme t)
+
+      (start-process "alacritty-reload"
+                     nil
+                     "alacritty"
+                     "msg"
+                     "reload")
+
+      (message
+       "Info: Alacritty switched to %s theme"
+       (if is-dark "dark" "light")))))
+
 (defun run-gsettings-safely (is-dark)
   "Run gsettings commands safely to switch theme mode.
 IS-DARK should be non-nil for dark mode, nil for light mode."
@@ -286,35 +320,56 @@ IS-DARK should be non-nil for dark mode, nil for light mode."
                     (car cmd) (error-message-string err))))))
     (sleep-for 0.5)))
 
+;;--------------------------------------------------------------------
+;; Theme switching helpers (light / dark)
+;;--------------------------------------------------------------------
+
+(defun boogs/apply-light-theme ()
+  "Apply everything for light mode."
+  (run-kde-theme-safely nil)
+  ;; (run-gsettings-safely nil)
+  (load-theme 'modus-operandi-tinted t)
+  (set-helm-ls-git-faces-for-modus-operandi-tinted)
+  (set-org-faces-for-modus-operandi-tinted)
+  (boogs/sync-alacritty-theme nil)
+  ;; TODO: fix closure since color variable is void
+  ;; (set-rainbow-delimiters-for-modus-operandi-tinted)
+  ;; (set-helm-for-modus-operandi-tinted)
+  (message "🌞 Switched to light theme"))
+
+(defun boogs/apply-dark-theme ()
+  "Apply everything for dark mode."
+  (run-kde-theme-safely t)
+  ;; (run-gsettings-safely t)
+  (load-theme 'modus-vivendi-tinted t)
+  (set-helm-ls-git-faces-for-modus-vivendi-tinted)
+  (set-org-faces-for-modus-vivendi-tinted)
+  (boogs/sync-alacritty-theme t)
+  ;; TODO: fix closure since color variable is void
+  ;; (set-rainbow-delimiters-for-modus-operandi-tinted)
+  ;; (set-helm-for-modus-vivendi-tinted)
+  (message "🌙 Switched to dark theme"))
+
+(defun boogs/toggle-theme ()
+  "Manually toggle between light and dark theme."
+  (interactive)
+  (if (eq (car custom-enabled-themes) 'modus-operandi-tinted)
+      (boogs/apply-dark-theme)
+    (boogs/apply-light-theme)))
+
 (defun switch-theme-based-on-time ()
-  "Switch between 'modus-operandi-tinted' and 'modus-vivendi-tinted' based on the time of day."
+  "Switch theme based on time of day (called by timers)."
   (let ((hour (string-to-number (format-time-string "%H"))))
-    (if (and (>= hour 7) (< hour 20)) ; from 7:00 to 19:59 use 'modus-operandi-tinted, then 'moduse-vivendi-tinted
-        (progn
-          ;; (run-gsettings-safely nil)
-          (run-kde-theme-safely nil)
-          (load-theme 'modus-operandi-tinted t)
-          (set-helm-ls-git-faces-for-modus-operandi-tinted)
-          (set-org-faces-for-modus-operandi-tinted)
-          ;; TODO: fix closure since color variable is void
-          ;; (set-rainbow-delimiters-for-modus-operandi-tinted)
-          ;; (set-helm-for-modus-operandi-tinted)
-          )
-      (progn
-        ;; (run-gsettings-safely t)
-        (run-kde-theme-safely t)
-        (load-theme 'modus-vivendi-tinted t)
-        (set-helm-ls-git-faces-for-modus-vivendi-tinted)
-        (set-org-faces-for-modus-vivendi-tinted)
-        ;; TODO: fix closure since color variable is void
-        ;; (set-rainbow-delimiters-for-modus-operandi-tinted)
-        ;; (set-helm-for-modus-vivendi-tinted)
-        ))))
+    (if (and (>= hour 3) (< hour 20))
+        (boogs/apply-light-theme)
+      (boogs/apply-dark-theme))))
 
 ;;; run the theme switch function at the start
 (switch-theme-based-on-time)
 
-(run-at-time "07:00" (* 24 60 60)'switch-theme-based-on-time) ; switch to day theme at 7:00 AM
-(run-at-time "20:00" (* 24 60 60)'switch-theme-based-on-time) ; switch to night theme at 8:00 PM
+ ; switch to day theme at 9:00 AM
+(run-at-time "03:00" (* 24 60 60) 'switch-theme-based-on-time)
+ ; switch to night theme at 8:00 PM
+(run-at-time "14:00" (* 24 60 60) 'switch-theme-based-on-time)
 
 (provide 'init-styles)

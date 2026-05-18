@@ -1,7 +1,7 @@
 [general]
 live_config_reload = true
 import = [
-    "~/.config/alacritty/themes/themes/rose_pine_dawn.toml"
+    "~/.config/alacritty/current-theme.toml"
 ]
 
 [env]
