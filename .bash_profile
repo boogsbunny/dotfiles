@@ -57,22 +57,29 @@ export NODE_PATH="$HOME/.npm-packages/lib/node_modules"
 # export LD_LIBRARY_PATH="/home/boogs/.guix-profile/lib"
 # export LD_LIBRARY_PATH=$LIBRARY_PATH
 
-## Guix
-export GUIX_DISTRO_AGE_WARNING=1m
-export GUIX_EXTRA_PROFILES="$HOME/.guix-extra-profiles"
-for i in $GUIX_EXTRA_PROFILES/*; do
-  profile=$i/$(basename "$i")
-  if [ -f "$profile"/etc/profile ]; then
-    if [[ "$i" != *"emacs"* ]]; then
-      GUIX_PROFILE="$profile" ; . "$profile"/etc/profile
-      export MANPATH="$profile"/share/man:$MANPATH
-      export INFOPATH="$profile"/share/info:$INFOPATH
-      export XDG_DATA_DIRS="$profile"/share:$XDG_DATA_DIRS
-      export XDG_CONFIG_DIRS="$profile"/etc/xdg:$XDG_CONFIG_DIRS
-    fi
-  fi
-  unset profile
-done
+if [ -d /run/current-system ]; then
+    export GUIX_DISTRO_AGE_WARNING=1m
+    export GUIX_EXTRA_PROFILES="${HOME}/.guix-extra-profiles"
+
+    for i in $GUIX_EXTRA_PROFILES/*; do
+        profile=$i/$(basename "$i")
+        if [ -f "$profile/etc/profile" ]; then
+            GUIX_PROFILE="$profile"
+            . "$profile/etc/profile"
+            export MANPATH="$profile/share/man:$MANPATH"
+            export INFOPATH="$profile/share/info:$INFOPATH"
+            export XDG_DATA_DIRS="$profile/share:$XDG_DATA_DIRS"
+            export XDG_CONFIG_DIRS="$profile/etc/xdg:$XDG_CONFIG_DIRS"
+        fi
+        unset profile
+    done
+
+    # export PATH="$PATH:/home/boogs/.guix-profile/lib"
+    # export LD_LIBRARY_PATH="/home/boogs/.guix-profile/lib"
+
+    # Shepherd
+    (shepherd 2>>"$HOME/.config/guix/home/shepherd.log" || true) &
+fi
 
 ## SSH-Agent
 ## Set SSH to use gpg-agent
@@ -86,9 +93,5 @@ export GPG_TTY=$(tty)
 # Refresh gpg-agent tty in case user switches into an X session
 gpg-connect-agent updatestartuptty /bye >/dev/null
 
+# Source .bashrc if this is bash
 echo "$0" | grep "bash$" >/dev/null && [ -f ~/.bashrc ] && . "$HOME/.bashrc"
-
-# export DISPLAY=:0
-# unset LD_LIBRARY_PATH
-
-(shepherd 2>>"$HOME/.config/guix/home/shepherd.log" || true) &
