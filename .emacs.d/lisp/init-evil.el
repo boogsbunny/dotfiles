@@ -101,10 +101,4 @@
     (evil-define-key '(normal visual) evil-org-mode-map
       (kbd "<backtab>") 'org-shifttab)))
 
-(require 'evil-escape)
-(evil-escape-mode 1)
-(setq-default evil-escape-key-sequence "hu")
-(setq-default evil-escape-delay 0.2)
-(setq evil-escape-unordered-key-sequence 1)
-
 (provide 'init-evil)

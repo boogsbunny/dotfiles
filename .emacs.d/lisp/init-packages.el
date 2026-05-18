@@ -55,7 +55,6 @@
         evil
         evil-collection
         evil-commentary
-        evil-escape
         evil-ledger
         evil-magit
         evil-multiedit
