@@ -17,7 +17,7 @@ then
 fi
 
 # Source the system-wide file.
-source /etc/bashrc
+[[ -f /etc/bashrc ]] && source /etc/bashrc
 
 bold="$(tput bold)"
 reset="$(tput sgr0)"
