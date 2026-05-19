@@ -264,28 +264,33 @@
 (defvar boogs/alacritty-current-theme
   "~/.config/alacritty/current-theme.toml")
 
+(defcustom boogs/alacritty-enabled
+  (executable-find "alacritty")
+  "Non-nil if Alacritty theme syncing should be active.
+Automatically detected at startup, but you can override it."
+  :type 'boolean
+  :group 'boogs
+  :safe #'booleanp)
+
 (defun boogs/sync-alacritty-theme (is-dark)
-  "Switch Alacritty theme by copying the file."
-  (let ((theme-file (if is-dark
-                        boogs/alacritty-theme-dark
-                      boogs/alacritty-theme-light)))
-    (if (not (file-exists-p theme-file))
-        (message "Warning: Alacritty theme file not found: %s" theme-file)
-
-      (when (file-exists-p boogs/alacritty-current-theme)
-        (delete-file boogs/alacritty-current-theme))
-
-      (copy-file theme-file boogs/alacritty-current-theme t)
-
-      (start-process "alacritty-reload"
-                     nil
-                     "alacritty"
-                     "msg"
-                     "reload")
-
-      (message
-       "Info: Alacritty switched to %s theme"
-       (if is-dark "dark" "light")))))
+  "Switch Alacritty theme by copying the file.
+Does nothing `boogs/alacritty-enabled` is nil."
+  (when boogs/alacritty-enabled
+    (let ((theme-file (if is-dark
+                          boogs/alacritty-theme-dark
+                        boogs/alacritty-theme-light)))
+      (if (not (file-exists-p theme-file))
+          (message "Warning: Alacritty theme file not found: %s" theme-file)
+        (when (file-exists-p boogs/alacritty-current-theme)
+          (delete-file boogs/alacritty-current-theme))
+        (copy-file theme-file boogs/alacritty-current-theme t)
+        (start-process "alacritty-reload"
+                       nil
+                       "alacritty"
+                       "msg"
+                       "reload")
+        (message "Info: Alacritty switched to %s theme"
+         (if is-dark "dark" "light"))))))
 
 (defun run-gsettings-safely (is-dark)
   "Run gsettings commands safely to switch theme mode.
