@@ -135,13 +135,13 @@ Double-tap quickly to force a new instance."
  "s-i"
  (lambda ()
    (interactive)
-   (boogs/switch-to-or-start "zen")))
+   (boogs/switch-to-or-start "firefox")))
 
 (boogs/exwm-global-set-key
  "s-I"
  (lambda ()
    (interactive)
-   (boogs/start-new "zen")))
+   (boogs/start-new "firefox")))
 
 (global-set-key (kbd "s-d") 'sql-connect)
 (boogs/exwm-global-set-key "s-d" 'sql-connect)
