@@ -216,7 +216,7 @@ Requires `call-process-to-string' from `functions'."
            (or arg (split-string (boogs/call-process-to-string "git" "ls-files" "-z") "\0" t)))
       ;; faster
       (helm-do-grep-ag arg)
-      ;; (helm-grep-do-git-grep arg)
+    ;; (helm-grep-do-git-grep arg)
     (helm-do-grep-ag nil)))
 
 (defun boogs/helm-grep-git-all-or-ag ()
@@ -424,7 +424,7 @@ Useful for Guix."
          (str (thing-at-point 'symbol))
          (init-reg (and str (concat "\\_<" (regexp-quote str) "\\_>")))
          (custom-source (helm-make-source "Custom Definitions" 'helm-imenu-source
-                         :candidates (boogs/lisp-imenu-create-index))))
+                          :candidates (boogs/lisp-imenu-create-index))))
     (helm :sources custom-source
           :default (and str (list init-reg str))
           :preselect (helm-aif (which-function)
@@ -455,20 +455,20 @@ Useful for Guix."
                                      (cons (car item) (cons buf (cdr item)))))
                              (boogs/lisp-imenu-create-index)))))
          (source (helm-make-source "Custom Definitions in All Buffers" 'helm-source-sync
-                  :candidates candidates
-                  :fuzzy-match t
-                  :persistent-action (lambda (candidate)
-                                     (switch-to-buffer (cadr candidate))
-                                     (goto-char (cddr candidate))
-                                     (helm-highlight-current-line))
-                  :action (lambda (candidate)
-                           (switch-to-buffer (cadr candidate))
-                           (goto-char (cddr candidate))))))
+                   :candidates candidates
+                   :fuzzy-match t
+                   :persistent-action (lambda (candidate)
+                                        (switch-to-buffer (cadr candidate))
+                                        (goto-char (cddr candidate))
+                                        (helm-highlight-current-line))
+                   :action (lambda (candidate)
+                             (switch-to-buffer (cadr candidate))
+                             (goto-char (cddr candidate))))))
     (helm :sources source
           :default (and str (list init-reg str))
           :preselect (helm-aif (which-function)
-                        (concat "\\_<" (regexp-quote it) "\\_>")
-                      init-reg)
+                         (concat "\\_<" (regexp-quote it) "\\_>")
+                       init-reg)
           :buffer "*helm custom imenu*")))
 
 (add-hook 'lisp-mode-hook

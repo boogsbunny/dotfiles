@@ -32,7 +32,6 @@
 
 (require 'init-avy)
 
-
 (require 'init-web)
 
 (with-eval-after-load 'dired (require 'init-dired))
@@ -105,8 +104,11 @@
       (call-process "transmission-daemon")
       (sleep-for 1)))
   (advice-add 'transmission :before 'boogs/transmission-start-daemon)
-  (setq transmission-refresh-modes '(transmission-mode transmission-files-mode transmission-info-mode transmission-peers-mode)
-                                        transmission-refresh-interval 1))
+  (setq transmission-refresh-modes '(transmission-mode
+                                     transmission-files-mode
+                                     transmission-info-mode
+                                     transmission-peers-mode)
+        transmission-refresh-interval 1))
 
 
 ;;--------------------------------------------------------------------

@@ -244,9 +244,10 @@ Double-tap quickly to force a new instance."
 (autoload 'boogs/helm-selector-sly "init-sly")
 (if (not (require 'helm-selector nil :noerror))
     (progn
-      (exwm-input-set-key (kbd "s-t") (lambda ()
-                                        (interactive)
-                                        (find-file (car org-agenda-files)))))
+      (exwm-input-set-key (kbd "s-t")
+                          (lambda ()
+                            (interactive)
+                            (find-file (car org-agenda-files)))))
   (boogs/exwm-global-set-key "s-t" 'gptel)
   (boogs/exwm-global-set-key "s-T" 'gptel-menu)
   (boogs/exwm-global-set-key "s-<return>" 'boogs/helm-selector-sly)
@@ -405,6 +406,7 @@ Double-tap quickly to force a new instance."
 
 (defvar boogs/exwm-change-screen-turn-off-primary nil
   "Turn off primary display when cable is plugged.")
+
 ;; Function to automatically toggle between internal/external screens.
 (defun boogs/exwm-change-screen-hook ()
   (let* ((xrandr-output-regexp "\n\\([^ ]+\\) connected ")
