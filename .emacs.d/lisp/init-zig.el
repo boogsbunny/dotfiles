@@ -2,7 +2,6 @@
 ;; zig
 ;;--------------------------------------------------------------------
 
-(add-hook 'zig-mode-hook #'tree-sitter-mode)
-(add-hook 'zig-mode-hook #'tree-sitter-hl-mode)
+(add-to-list 'major-mode-remap-alist '(zig-mode . zig-ts-mode))
 
 (provide 'init-zig)

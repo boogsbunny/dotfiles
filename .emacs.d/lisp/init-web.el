@@ -2,8 +2,6 @@
 ;; web
 ;;--------------------------------------------------------------------
 
-(setq treesit-extra-load-path '("~/.guix-extra-profiles/default/default/lib/tree-sitter"))
-
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js-ts-mode))
 (add-to-list 'auto-mode-alist '("\\.json\\'" . json-ts-mode))
 (add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-ts-mode))

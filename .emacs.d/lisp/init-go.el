@@ -2,33 +2,24 @@
 ;; golang
 ;;--------------------------------------------------------------------
 
-;; (add-to-list 'auto-mode-alist '("\\.go\\'" . go-mode))
-;; (add-to-list 'auto-mode-alist '("\\.go\\.mod\\'" . go-mod-ts-mode))
-;; (add-hook 'go-ts-mode-hook
-;;           (lambda ()
-;;             (add-hook 'before-save-hook
-;;                       #'gofmt-before-save
-;;                       nil t)))
+(add-to-list 'major-mode-remap-alist '(go-mode . go-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.go\\'" . go-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.go\\.mod\\'" . go-mod-ts-mode))
 
-(add-to-list 'exec-path "~/go/bin")
-(setq gofmt-command "goimports")
-
-(add-hook 'go-mode-hook (function (lambda () (setq fill-column 120))))
-
-;; (add-hook 'go-mode-hook #'tree-sitter-mode)
-;; (add-hook 'go-mode-hook #'tree-sitter-hl-mode)
-(add-hook 'go-mode-hook
+(add-hook 'go-ts-mode-hook
           (lambda ()
             (add-hook 'before-save-hook
                       #'gofmt-before-save
                       nil t)))
 
-;; eglot
-;; (add-hook 'go-mode-hook 'eglot-ensure)
+(add-to-list 'exec-path "~/go/bin")
+(setq gofmt-command "goimports")
+
+(add-hook 'go-ts-mode-hook (function (lambda () (setq fill-column 120))))
 
 (defun boogs/go-setup ()
   (setq tab-width 8))
-(add-hook 'go-mode-hook #'boogs/go-setup)
+(add-hook 'go-ts-mode-hook #'boogs/go-setup)
 
 (define-skeleton boogs/go-main
   "Insert main function with basic includes."
@@ -41,7 +32,7 @@
   > @ _ \n
   "}" > \n)
 
-(boogs/local-set-keys "C-c m" 'boogs/go-main)
+(define-key go-mode-map (kbd "C-c m") #'boogs/go-main)
 
 (flycheck-define-checker go-build-escape
   "A Go escape checker using `go build -gcflags -m'."
@@ -63,11 +54,10 @@
          (optional column ":") " "
          (message "inlining call to " (one-or-more not-newline))
          line-end))
-  :modes go-mode
+  :modes go-ts-mode
   :predicate (lambda ()
                (and (flycheck-buffer-saved-p)
-                    (not (string-suffix-p "_test.go" (buffer-file-name)))))\
-  )
+                    (not (string-suffix-p "_test.go" (buffer-file-name))))))
 
 (with-eval-after-load 'flycheck
   (add-to-list 'flycheck-checkers 'go-build-escape)

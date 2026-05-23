@@ -6,6 +6,8 @@
 (require 'init-defaults)
 (require 'init-defuns)
 
+(require 'init-treesit)
+
 (require 'init-modeline)
 (require 'init-olivetti)
 (require 'init-styles)
@@ -77,9 +79,11 @@
 (with-eval-after-load 'rust-mode (require 'init-rust))
 (defvaralias 'rust-indent-offset 'tab-width)
 
-(with-eval-after-load 'zig-mode (require 'init-zig))
-(with-eval-after-load 'python-mode (require 'init-python))
+(require 'init-nix)
+
 (with-eval-after-load 'go-mode (require 'init-go))
+(with-eval-after-load 'python-mode (require 'init-python))
+(with-eval-after-load 'zig-mode (require 'init-zig))
 
 (with-eval-after-load 'sql (require 'init-sql))
 

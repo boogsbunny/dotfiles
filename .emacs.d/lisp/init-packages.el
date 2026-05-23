@@ -109,6 +109,7 @@
         markdown-mode+
         marginalia
         modus-themes
+        nix-ts-mode
         notmuch
         oauth2
         olivetti
@@ -152,9 +153,6 @@
         svg-lib
         svg-tag-mode
         transmission
-        treesit-auto
-        tree-sitter
-        tree-sitter-langs
         typescript-mode
         vertico
         vertico-prescient
