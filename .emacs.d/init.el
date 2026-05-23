@@ -83,12 +83,14 @@
 (with-eval-after-load 'go-mode (require 'init-go))
 (with-eval-after-load 'python-mode (require 'init-python))
 (with-eval-after-load 'zig-mode (require 'init-zig))
-
 (with-eval-after-load 'sql (require 'init-sql))
 
 (with-eval-after-load 'ledger-mode (require 'init-ledger))
 
 (with-eval-after-load 'emms (require 'init-emms))
+
+(require 'init-consult-gh)
+(require 'init-pr-review)
 
 (with-eval-after-load 'slack (require 'init-slack))
 

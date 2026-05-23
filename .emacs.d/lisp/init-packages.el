@@ -26,8 +26,12 @@
         cargo
         circe
         cl-generic
-        code-review
         consult
+        consult-gh
+        consult-gh-embark
+        consult-gh-forge
+        consult-gh-nerd-icons
+        consult-gh-with-pr-review
         consult-ls-git
         corfu
         corfu-prescient
@@ -138,6 +142,7 @@
         prettier
         prettier-js
         projectile
+        pr-review
         python-black
         rainbow-delimiters
         rainbow-mode
