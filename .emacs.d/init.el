@@ -45,7 +45,7 @@
 (with-eval-after-load 'magit (require 'init-magit))
 
 (when (display-graphic-p)
-	(require 'init-pdf))
+  (require 'init-pdf))
 
 (when (fboundp 'rainbow-delimiters-mode)
   (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
@@ -67,7 +67,7 @@
   (require 'init-guix))
 
 (when (executable-find "notmuch")
-	(with-eval-after-load 'notmuch (require 'init-notmuch)))
+  (with-eval-after-load 'notmuch (require 'init-notmuch)))
 
 (with-eval-after-load 'lisp-mode (require 'init-lisp))
 (with-eval-after-load 'scheme (require 'init-scheme))
@@ -93,14 +93,14 @@
 (with-eval-after-load 'slack (require 'init-slack))
 
 (with-eval-after-load 'transmission
-  ; `transmission' will fail to start and will not run any hook if the daemon
-  ; is not up yet.
-  ; We need to advice the function :before to guarantee it starts.
+  ;; `transmission' will fail to start and will not run any hook if
+  ;; the daemon is not up yet.
+  ;; We need to advice the function :before to guarantee it starts.
   (defun boogs/transmission-start-daemon ()
     (unless (member "transmission-da"
-                   (mapcar
-                    (lambda (pid) (alist-get 'comm (process-attributes pid)))
-                    (list-system-processes)))
+                    (mapcar
+                     (lambda (pid) (alist-get 'comm (process-attributes pid)))
+                     (list-system-processes)))
       (call-process "transmission-daemon")
       (sleep-for 1)))
   (advice-add 'transmission :before 'boogs/transmission-start-daemon)
