@@ -219,9 +219,9 @@ Double-tap quickly to force a new instance."
   (boogs/exwm-global-set-key "s-b" #'consult-buffer)
   (boogs/exwm-global-set-key "s-e" #'boogs/consult-exwm-buffers)
   (boogs/exwm-global-set-key "C-c t" #'boogs/consult-tramp)
-  (boogs/exwm-global-set-key "s-g" #'boogs/consult-ripgrep-here)
-  (boogs/exwm-global-set-key "s-G" #'boogs/consult-ripgrep-project)
-  (boogs/exwm-global-set-key "s-SPC" #'boogs/consult-git-grep-project)
+  (boogs/exwm-global-set-key "s-SPC" #'boogs/consult-ripgrep-here)
+  (boogs/exwm-global-set-key "s-g" #'boogs/consult-ripgrep-project)
+  (boogs/exwm-global-set-key "s-G" #'boogs/consult-git-grep-project)
   (boogs/exwm-global-set-key "C-x c i" #'consult-imenu)
   (boogs/exwm-global-set-key "C-x r g" #'consult-ls-git))
 
