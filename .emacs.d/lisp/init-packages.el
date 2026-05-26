@@ -26,6 +26,7 @@
         cargo
         circe
         cl-generic
+        compat
         consult
         consult-gh
         consult-gh-embark
