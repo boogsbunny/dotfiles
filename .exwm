@@ -34,11 +34,40 @@
 
 (exwm-wm-mode)
 
-(run-at-time
- "2 sec" nil
- (lambda ()
-   (when (require 'slack nil t)
-     (ignore-errors
-       (slack-start)))))
+(defun boogs/wifi-connected-p ()
+  "Return non-nil when a wireless interface is up."
+  (catch 'connected
+    (dolist (iface (file-expand-wildcards "/sys/class/net/w*"))
+      (let ((state-file (expand-file-name "operstate" iface)))
+        (when (and (file-readable-p state-file)
+                   (with-temp-buffer
+                     (insert-file-contents state-file)
+                     (string-prefix-p "up" (buffer-string))))
+          (throw 'connected t))))
+    nil))
+
+(defun boogs/slack-connected-p ()
+  "Return non-nil when at least one Slack websocket is connected."
+  (and (fboundp 'slack-team-connected-list)
+       (ignore-errors (not (null (slack-team-connected-list))))))
+
+(defvar boogs/slack-startup-timer nil
+  "Timer that retries Slack start until connected.")
+
+(defun boogs/slack-start-if-wifi ()
+  "Start Slack once Wi-Fi is available, then stop retrying."
+  (when (and (boogs/wifi-connected-p)
+             (not (boogs/slack-connected-p))
+             (require 'slack nil t))
+    (slack-start))
+  (when (and (boogs/slack-connected-p)
+             (timerp boogs/slack-startup-timer))
+    (cancel-timer boogs/slack-startup-timer)
+    (setq boogs/slack-startup-timer nil)))
+
+(run-at-time "5 sec" nil #'boogs/slack-start-if-wifi)
+
+(setq boogs/slack-startup-timer
+      (run-at-time "20 sec" 20 #'boogs/slack-start-if-wifi))
 
 (server-start)
