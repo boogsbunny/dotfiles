@@ -156,10 +156,10 @@
 (boogs/consult--insert-front 'boogs/consult-source-exwm)
 (boogs/consult--insert-front 'boogs/consult-source-perspective)
 
-(unless (memq 'consult--source-hidden-buffer consult-buffer-sources)
-  (add-to-list 'consult-buffer-sources 'consult--source-hidden-buffer 'append))
+(unless (memq 'consult-source-hidden-buffer consult-buffer-sources)
+  (add-to-list 'consult-buffer-sources 'consult-source-hidden-buffer 'append))
 
-(consult-customize consult--source-buffer :hidden t :default nil)
+(consult-customize consult-source-buffer :hidden t :default nil)
 (consult-customize boogs/consult-source-perspective :sort nil)
 (consult-customize boogs/consult-source-exwm :sort nil)
 
