@@ -1,0 +1,9 @@
+emacs
+git
+gnupg
+mosh
+neovim
+pass
+ripgrep
+stow
+zellij

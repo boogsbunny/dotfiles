@@ -1,0 +1,15 @@
+#!/data/data/com.termux/files/usr/bin/bash
+set -euo pipefail
+
+echo "Setting up Termux packages."
+
+pkg update -y && pkg upgrade -y
+
+mapfile -t pkgs < <(grep -v '^\s*#' "$HOME/.termux/packages.txt" | xargs)
+
+if [ ${#pkgs[@]} -gt 0 ]; then
+  pkg install -y "${pkgs[@]}"
+fi
+
+echo "Termux packages installed."
+echo "Termux setup complete! Run 'termux-reload-settings' if needed."
