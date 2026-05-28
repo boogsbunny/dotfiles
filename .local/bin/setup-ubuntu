@@ -1,0 +1,75 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+echo "=== Setting up Ubuntu VPS with Nix + Home Manager + Tailscale ==="
+
+sudo apt update -y && sudo apt upgrade -y
+
+if ! command -v nix &> /dev/null; then
+    echo "Installing Nix..."
+    sh <(curl -L https://nixos.org/nix/install) --daemon
+fi
+
+echo "Enabling Nix experimental features..."
+sudo mkdir -p /etc/nix
+sudo tee /etc/nix/nix.conf > /dev/null << EOF
+experimental-features = nix-command flakes
+trusted-users = root $USER
+max-jobs = auto
+cores = 0
+EOF
+
+sudo systemctl restart nix-daemon 2>/dev/null || true
+
+if [ -f /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh ]; then
+    . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+fi
+
+sudo apt install -y git curl stow mosh gnupg build-essential
+
+echo "Base packages installed."
+
+DOTFILES_DIR="${HOME}/dotfiles/nix"
+
+if [[ ! -d "$DOTFILES_DIR" ]]; then
+    echo "Error: Dotfiles not found at $DOTFILES_DIR"
+    exit 1
+fi
+
+cd "$DOTFILES_DIR"
+
+echo "Applying Home Manager configuration..."
+nix run nixpkgs#home-manager -- switch --flake "$DOTFILES_DIR" -b backup --show-trace
+
+echo "=== Home Manager done! ==="
+
+echo "Loading Home Manager environment..."
+. "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh" 2>/dev/null || true
+export PATH="$HOME/.nix-profile/bin:$PATH"
+
+echo "Setting up Tailscale..."
+if command -v tailscale &> /dev/null; then
+    echo "Tailscale found at: $(which tailscale)"
+
+    echo "Starting tailscaled service..."
+    systemctl enable --now tailscaled 2>/dev/null || true
+    systemctl start tailscaled 2>/dev/null || true
+    sleep 3
+
+    if ! tailscale status &> /dev/null; then
+        echo "Trying direct tailscaled start..."
+        /root/.nix-profile/bin/tailscaled --state=/var/lib/tailscale/tailscaled.state --socket=/run/tailscale/tailscaled.sock --port=41641 &
+        sleep 2
+    fi
+
+    tailscale up --ssh --accept-routes || echo "-> Tailscale up failed (needs login or already running)"
+else
+    echo "Warning: tailscale not found"
+fi
+
+echo ""
+echo "=== Setup Complete! ==="
+echo "Next steps:"
+echo "   1. cloudflared tunnel login"
+echo "   2. tailscale status"
+echo "   3. Restart shell:   exec \$SHELL"
