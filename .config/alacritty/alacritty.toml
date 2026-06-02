@@ -33,3 +33,8 @@ opacity = 1
 [window.padding]
 x = 5
 y = 5
+
+[keyboard]
+bindings = [
+  { key = "Space", mods = "Control", action = "ToggleViMode" },
+]
