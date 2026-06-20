@@ -59,7 +59,8 @@
 (with-eval-after-load 'org (require 'init-org))
 
 (with-eval-after-load 'exwm
-  (require 'init-exwm))
+  (require 'init-exwm)
+  (require 'init-exwm-browser))
 
 (with-eval-after-load 'eww (require 'init-eww))
 
