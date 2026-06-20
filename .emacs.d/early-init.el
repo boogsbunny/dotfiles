@@ -6,6 +6,8 @@
 (setq init-file-debug t
       initial-buffer-choice t)
 
+(setq package-install-upgrade-built-in t)
+
 (require 'profiler)
 (profiler-start 'cpu+mem)
 
