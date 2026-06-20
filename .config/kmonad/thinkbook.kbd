@@ -64,18 +64,27 @@
   lnd (tap-hold 120 down ralt)
   lsd (tap-hold 120 rght rsft)
   ;; modifiers in dvorak layer
-  tpd (tap-hold 120 p tab)
-  tcd (tap-hold 120 c ret)
-  tad (tap-hold 120 a lsft)
-  tod (tap-hold 120 o lalt)
-  ted (tap-hold 120 e lctl)
-  tud (tap-hold 120 u lmet)
-  tid (tap-hold 85 i bspc)
+  tpd (tap-hold 100 p tab)
+  tcd (tap-hold 100 c ret)
+
+  tjd (tap-hold 85 j (layer-switch numbers))
+  tld (tap-hold 85 l (layer-switch specials))
+
+  trd (tap-hold 100 r ralt)
+  tmd (tap-hold 100 m ralt)
+  t.d (tap-hold 100 . lalt)
+  txd (tap-hold 100 x lalt)
+
+  tad (tap-hold 120 a (layer-switch specials))
+  tod (tap-hold 85 o (layer-switch numbers))
+  ted (tap-hold 100 e lctl)
+  tud (tap-hold 100 u lmet)
+  tid (tap-hold 85 i (layer-switch caps))
   tdd (tap-hold 85 d bspc)
-  thd (tap-hold 120 h lmet)
-  ttd (tap-hold 120 t rctl)
-  tnd (tap-hold 120 n ralt)
-  tsd (tap-hold 120 s rsft)
+  thd (tap-hold 100 h lmet)
+  ttd (tap-hold 100 t rctl)
+  tnd (tap-hold 85 n (layer-switch specials))
+  tsd (tap-hold 120 s (layer-switch numbers))
   ;; modifiers in caps layer
   lsc (layer-switch caps)
   tPd (tap-hold 120 P tab)
@@ -119,9 +128,9 @@
   esc  mute vold volu                          prnt slck pause ins del  home pgup
        f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11   f12      end  pgdn
   grv  =    1    2    3    4    5    6    7    8    9    0     -        bspc
-  tab  ;    ,    .    @tpd y    XX   f    g    @tcd r    q     XX       ret
-  XX   @tad @tod @ted @tud @tid XX   @tdd @thd @ttd @tnd @tsd  XX
-  lsft 102d '    x    j    k    b    z    l    m    w    v              XX
+  tab  ;    ,    @t.d @tpd y    XX   f    g    @tcd @trd q     XX       ret
+  XX   @tad @tod @ted @tud @tid lalt @tdd @thd @ttd @tnd @tsd  XX
+  lsft 102d '    @txd j    k    b    z    l    @tmd w    v              XX
   wkup @tdl @tdl @tdl            @tdl           @tdl @tdl @tdl      back up   fwd
                                                                     left down rght
 )
