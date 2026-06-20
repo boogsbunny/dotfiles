@@ -14,11 +14,11 @@
   "Perspective-scoped view bookmarks."
   :group 'convenience)
 
-(defcustom boogs/views-key (kbd "C-c v")
+(defcustom boogs/views-key (kbd "C-c V")
   "Keybinding for `boogs/view` (DWIM open-or-save)."
   :type 'key-sequence)
 
-(defcustom boogs/views-prefix-key (kbd "C-c V")
+(defcustom boogs/views-prefix-key (kbd "C-c v")
   "Prefix key for view-related commands."
   :type 'key-sequence)
 
