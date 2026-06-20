@@ -16,6 +16,10 @@
   (eq system-type 'darwin)
   "Are we running on a Mac system?")
 
+(if *sys/linux*
+    (progn
+      (setenv "CC" "gcc")))
+
 (if *sys/mac*
     (progn
       (setq mac-command-modifier 'meta) ; command = Meta
