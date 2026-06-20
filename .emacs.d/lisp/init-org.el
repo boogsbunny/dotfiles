@@ -34,6 +34,7 @@
          "SOMEDAY(s/!)"
          "|"
          "DONE(d@)"
+         "ASYNC(a@)"
          "UNFINISHED(u@)"
          "CANCELED(c@)")))
 
