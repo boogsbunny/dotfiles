@@ -7,16 +7,26 @@
 
 (fset #'jsonrpc--log-event #'ignore)
 
-(setq eglot-events-buffer-size 0
-      eglot-sync-connect nil
+(setq eglot-autoreconnect t
+      eglot-autoshutdown t
+      eglot-confirm-server-edits nil
       eglot-connect-timeout nil
+      eglot-events-buffer-size 0
+      eglot-extend-to-xref t
       eglot-ignored-server-capabilities '(:hoverProvider
                                           :documentHighlightProvider)
-      eglot-autoshutdown t)
+      eglot-report-progress t
+      eglot-sync-connect nil)
 
 (add-hook 'eglot-managed-mode-hook
           (lambda ()
-            "Make sure Eldoc will show us all of the feedback at point."
+            ;; Show flymake diagnostics first.
+            (setq eldoc-documentation-functions
+                  (cons #'flymake-eldoc-function
+                        (remove #'flymake-eldoc-function
+                                eldoc-documentation-functions)))
+            ;; Make sure Eldoc will show us all of the feedback at
+            ;; point.
             (setq-local eldoc-documentation-strategy
                         #'eldoc-documentation-compose)))
 
@@ -34,5 +44,9 @@
 (define-key eglot-mode-map (kbd "C-c e d") #'eglot-find-typeDefinition)
 (define-key eglot-mode-map (kbd "C-c e D") #'eglot-find-declaration)
 (define-key eglot-mode-map (kbd "C-c e R") #'eglot-reconnect)
+
+(global-set-key (kbd "C-c e e") 'eglot)
+(global-set-key (kbd "C-c e s") 'eglot-shutdown)
+(global-set-key (kbd "C-c e a") 'eglot-shutdown-all)
 
 (provide 'init-eglot)
