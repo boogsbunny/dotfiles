@@ -94,7 +94,9 @@
 (with-eval-after-load 'emms (require 'init-emms))
 
 (require 'init-consult-gh)
-(require 'init-pr-review)
+
+(when (require 'pr-review nil t)
+  (require 'init-pr-review))
 
 (with-eval-after-load 'slack (require 'init-slack))
 
