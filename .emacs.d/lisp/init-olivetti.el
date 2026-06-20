@@ -34,6 +34,7 @@
     org-mode
     prog-mode
     slack-mode
+    speed-type-mode
     text-mode
     yaml-mode)
   "Major modes in which Olivetti may be auto-enabled.")
