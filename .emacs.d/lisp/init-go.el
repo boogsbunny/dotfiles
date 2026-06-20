@@ -6,14 +6,18 @@
 (add-to-list 'auto-mode-alist '("\\.go\\'" . go-ts-mode))
 (add-to-list 'auto-mode-alist '("\\.go\\.mod\\'" . go-mod-ts-mode))
 
-(add-hook 'go-ts-mode-hook
-          (lambda ()
-            (add-hook 'before-save-hook
-                      #'gofmt-before-save
-                      nil t)))
-
-(add-to-list 'exec-path "~/go/bin")
+(add-to-list 'exec-path (expand-file-name "~/go/bin"))
 (setq gofmt-command "goimports")
+
+(defun boogs/go-format-on-save ()
+  (when (derived-mode-p 'go-mode 'go-ts-mode)
+    (gofmt)))
+
+(defun boogs/go-enable-format-on-save ()
+  (add-hook 'before-save-hook #'boogs/go-format-on-save nil t))
+
+(add-hook 'go-mode-hook #'boogs/go-enable-format-on-save)
+(add-hook 'go-ts-mode-hook #'boogs/go-enable-format-on-save)
 
 (add-hook 'go-ts-mode-hook (function (lambda () (setq fill-column 120))))
 
@@ -62,5 +66,24 @@
 (with-eval-after-load 'flycheck
   (add-to-list 'flycheck-checkers 'go-build-escape)
   (flycheck-add-next-checker 'go-gofmt 'go-build-escape))
+
+(with-eval-after-load 'dape
+  (setq dape-request-timeout 120)
+  (add-to-list 'dape-configs
+               '(dlv-go-test-local
+                 modes (go-mode go-ts-mode)
+                 ensure dape-ensure-command
+                 command "dlv"
+                 command-args ("dap" "--listen" "127.0.0.1::autoport")
+                 command-cwd (if buffer-file-name
+                                 (file-name-directory buffer-file-name)
+                               default-directory)
+                 port :autoport
+                 :request "launch"
+                 :type "go"
+                 :mode "test"
+                 :cwd "."
+                 :program "."
+                 :args [])))
 
 (provide 'init-go)
