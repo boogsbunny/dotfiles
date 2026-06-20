@@ -9,17 +9,18 @@
       slack-prefer-current-team t
       slack-enable-global-mode-string t
       slack-emit-periodic-presence-p t
-      alert-default-style 'notifier)
+      alert-default-style 'notifier
+      alert-fade-time 10)
 
-(global-set-key (kbd "C-c S c") 'slack-select-rooms)
-(global-set-key (kbd "C-c S u") 'slack-select-unread-rooms)
-(global-set-key (kbd "C-c S m") 'slack-im-select)
-(global-set-key (kbd "C-c S s") 'slack-search-from-messages)
-(global-set-key (kbd "C-c S r") 'slack-thread-show-or-create)
-(global-set-key (kbd "C-c S a") 'slack-message-add-reaction)
-(global-set-key (kbd "C-c S e") 'slack-insert-emoji)
-(global-set-key (kbd "C-c S q") 'slack-quote-and-reply)
-(global-set-key (kbd "C-c S K") 'slack-stop)
+(global-set-key (kbd "C-c s c") 'slack-select-rooms)
+(global-set-key (kbd "C-c s u") 'slack-select-unread-rooms)
+(global-set-key (kbd "C-c s m") 'slack-im-select)
+(global-set-key (kbd "C-c s s") 'slack-search-from-messages)
+(global-set-key (kbd "C-c s r") 'slack-thread-show-or-create)
+(global-set-key (kbd "C-c s a") 'slack-message-add-reaction)
+(global-set-key (kbd "C-c s e") 'slack-insert-emoji)
+(global-set-key (kbd "C-c s q") 'slack-quote-and-reply)
+(global-set-key (kbd "C-c s K") 'slack-stop)
 
 (define-key slack-mode-map (kbd "C-c C-o") 'slack-open-url)
 (define-key slack-mode-map (kbd "@") 'slack-message-embed-mention)
