@@ -93,7 +93,8 @@
 
 (with-eval-after-load 'emms (require 'init-emms))
 
-(require 'init-consult-gh)
+(when (require 'consult-gh nil t)
+  (require 'init-consult-gh))
 
 (when (require 'pr-review nil t)
   (require 'init-pr-review))
