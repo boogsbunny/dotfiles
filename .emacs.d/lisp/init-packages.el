@@ -37,10 +37,12 @@
         corfu
         corfu-prescient
         dap-mode
+        dape
         dash
         difftastic
         disk-usage
         dired-du
+        direnv
         dmenu
         docker
         docker-compose-mode
@@ -63,6 +65,7 @@
         evil
         evil-collection
         evil-commentary
+        evil-ghostel
         evil-ledger
         evil-magit
         evil-multiedit
@@ -70,9 +73,11 @@
         exec-path-from-shell
         exwm
         flycheck
+        flycheck-rust
         forge
         geiser
         geiser-guile
+        ghostel
         go
         gptel
         guix
@@ -113,6 +118,7 @@
         lispy
         lispyville
         magit
+        magit-popup
         magit-todos
         markdown-mode+
         marginalia
@@ -159,6 +165,7 @@
         sly-quicklisp
         sly-named-readtables
         smart-mode-line
+        speed-type
         svg-lib
         svg-tag-mode
         transmission
