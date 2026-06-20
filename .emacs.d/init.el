@@ -44,6 +44,9 @@
 (when (require 'evil nil t) (require 'init-evil))
 (with-eval-after-load 'magit (require 'init-magit))
 
+(when (require 'direnv nil t)
+  (require 'init-direnv))
+
 (when (display-graphic-p)
   (require 'init-pdf))
 
