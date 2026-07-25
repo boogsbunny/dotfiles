@@ -111,19 +111,23 @@
                   (cpu-scaling-governor-on-ac (list "powersave"))
                   (cpu-scaling-governor-on-bat (list "powersave"))
                   ;; Limit CPU performance
-                  (cpu-max-perf-on-ac 20)
-                  (cpu-max-perf-on-bat 20)
+                  (cpu-max-perf-on-ac 100)
+                  (cpu-max-perf-on-bat 60)
+                  ;; Boost off = base clock ceiling (~1.9 GHz), no
+                  ;; turbo spikes the weak EC fan can't clear
                   (cpu-boost-on-ac? #f)
                   (cpu-boost-on-bat? #f)
 
-                  (energy-perf-policy-on-ac "powersave")
+                  (energy-perf-policy-on-ac "performance")
                   (energy-perf-policy-on-bat "powersave")
 
                   ;; Aggressive scheduler power saving
                   (sched-powersave-on-ac? #t)
                   (sched-powersave-on-bat? #t)
 
-                  ;; Longer dirty page timeout on battery (default is 60)
+                  ;; Batch writes into bursts so the NVMe gets long
+                  ;; idle windows -> drops to PS4
+                  (max-lost-work-secs-on-ac 60)
                   (max-lost-work-secs-on-bat 120)
 
                   ;; Runtime Power Management for AHCI controller and disks
