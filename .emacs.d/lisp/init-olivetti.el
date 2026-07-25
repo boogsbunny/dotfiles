@@ -32,6 +32,7 @@
     notmuch-show-mode
     org-agenda-mode
     org-mode
+    pr-review-mode
     prog-mode
     slack-mode
     speed-type-mode
