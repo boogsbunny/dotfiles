@@ -37,7 +37,9 @@ export VISUAL
 
 export TERMINAL="screen-256color"
 export BROWSER="firefox"
-export TERM="xterm"
+if [ "${TERM:-}" = "xterm" ]; then
+  export TERM="xterm-256color"
+fi
 export READER="zathura"
 export MANWIDTH=70
 # export GDK_SCALE=2
