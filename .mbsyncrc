@@ -37,39 +37,39 @@ SyncState *
 
 ################################################################################
 
-IMAPAccount uva
-Host imap.gmail.com
-Port 993
-User ba2ra@virginia.edu
-PassCmd "pass email/uva/app-password"
-TLSType IMAPS
+# IMAPAccount uva
+# Host imap.gmail.com
+# Port 993
+# User ba2ra@virginia.edu
+# PassCmd "pass email/uva/app-password"
+# TLSType IMAPS
 
-IMAPStore uva-remote
-Account uva
+# IMAPStore uva-remote
+# Account uva
 
-MaildirStore uva-local
-# The trailing "/" is important
-Path /media/personal/mail/uva/
-Inbox /media/personal/mail/uva/inbox
-SubFolders Verbatim
+# MaildirStore uva-local
+# # The trailing "/" is important
+# Path /media/personal/mail/uva/
+# Inbox /media/personal/mail/uva/inbox
+# SubFolders Verbatim
 
-Channel uva-all
-Far :uva-remote:
-Near :uva-local:
-Patterns * "!Sent"
-Create Both
-# Create Near
-# Sync All
-Expunge Both
-SyncState *
+# Channel uva-all
+# Far :uva-remote:
+# Near :uva-local:
+# Patterns * "!Sent"
+# Create Both
+# # Create Near
+# # Sync All
+# Expunge Both
+# SyncState *
 
-Channel uva-sent
-Far :uva-remote:
-Near :uva-local:
-Patterns !* "Sent"
-Create Both
-Expunge Both
-SyncState *
+# Channel uva-sent
+# Far :uva-remote:
+# Near :uva-local:
+# Patterns !* "Sent"
+# Create Both
+# Expunge Both
+# SyncState *
 
 ################################################################################
 
@@ -144,3 +144,42 @@ Patterns !* "Sent"
 Create Both
 Expunge Both
 SyncState *
+
+################################################################################
+
+IMAPAccount miyagi
+Host imap.gmail.com
+Port 993
+User boogs@trymiyagi.de
+PassCmd "pass email/boogs@trymiyagi.de/app-password"
+TLSType IMAPS
+
+IMAPStore miyagi-remote
+Account miyagi
+
+MaildirStore miyagi-local
+# The trailing "/" is important
+Path /media/personal/mail/miyagi/
+Inbox /media/personal/mail/miyagi/inbox
+SubFolders Verbatim
+
+Channel miyagi-all
+Far :miyagi-remote:
+Near :miyagi-local:
+# Patterns * "!Sent"
+Patterns "*"
+Create Near
+Sync All
+# Create Both
+Expunge Both
+SyncState *
+
+Channel miyagi-sent
+Far :miyagi-remote:
+Near :miyagi-local:
+Patterns !* "Sent"
+Create Both
+Expunge Both
+SyncState *
+
+################################################################################
