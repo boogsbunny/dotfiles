@@ -2,6 +2,10 @@
 ;; pr-review
 ;;--------------------------------------------------------------------
 
+(require 'patch-pr-review)
+
+(add-hook 'pr-review-search-mode #'display-line-numbers-mode)
+
 (defun boogs/pr-review-search-dispatch (&rest _)
   "Prefer fast single-select search when available."
   (interactive)
@@ -24,6 +28,15 @@
 ;; Mark as internal so explicit external opens can bypass this handler.
 (function-put 'pr-review-open-url 'browse-url-browser-kind 'internal)
 
+(defun boogs/pr-review-switch-to-search-buffer ()
+  "Switch to existing pr-review search buffer without refreshing."
+  (interactive)
+  (let ((buf (get-buffer "*pr-review search*")))
+    (if buf
+        (switch-to-buffer buf)
+      (user-error "No pr-review search buffer"))))
+
+(global-set-key (kbd "C-c g b") #'boogs/pr-review-switch-to-search-buffer)
 (global-set-key (kbd "C-c g v") #'pr-review)
 (global-set-key (kbd "C-c g s") #'pr-review-search)
 (global-set-key (kbd "C-c g n") #'pr-review-notification)
