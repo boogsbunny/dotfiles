@@ -1,11 +1,10 @@
-@-moz-document url(chrome://browser/content/browser.xhtml)
-{
+@-moz-document url(chrome://browser/content/browser.xhtml) {
   /* tabs on bottom of window */
   /* requires that you set
-	 * toolkit.legacyUserProfileCustomizations.stylesheets = true
-	 * in about:config
-	 * figure out current firefox's profile folder in about:support
-	 */
+   * toolkit.legacyUserProfileCustomizations.stylesheets = true
+   * in about:config
+   * figure out current firefox's profile folder in about:support
+   */
   #main-window body {
     flex-direction: column-reverse !important;
   }
@@ -21,76 +20,80 @@
   }
 
   #urlbar > * {
-    flex: none !important;
+    flex: none;
   }
 
   #urlbar .urlbar-input-container {
-    order: 2 !important;
+    order: 2;
   }
 
   #urlbar > .urlbarView {
-    order: 1 !important;
-    border-bottom: 0 !important;
+    order: 1;
+    border-bottom: 1px solid #666;
   }
 
-  /* position results above the urlbar */
-  #urlbar[open] {
-    overflow: visible !important;
-  }
-
-  #urlbar[open] > .urlbarView {
-    position: absolute !important;
-    bottom: 100% !important;
-    margin-bottom: 2px !important;
-    transform-origin: bottom center !important;
-    z-index: 9999 !important;
-  }
-
-  /* remove the fade mask that can hide the top/selected row when flipped */
-  .urlbarView-body-inner {
-    -webkit-mask-image: none !important;
-    mask-image: none !important;
-  }
-
-  /* make sure selected/active row text never goes "blank" */
-  .urlbarView-row:is([selected], [aria-selected="true"]) .urlbarView-title,
-  .urlbarView-row:is([selected], [aria-selected="true"]) .urlbarView-url,
-  .urlbarView-row:is([selected], [aria-selected="true"]) .urlbarView-action,
-  .urlbarView-row:is([selected], [aria-selected="true"])
-    .urlbarView-title-separator,
-  .urlbarView-row:is([selected], [aria-selected="true"])
-    .urlbarView-description {
-    opacity: 1 !important;
-    color: inherit !important;
-    -webkit-text-fill-color: currentColor !important;
-    mix-blend-mode: normal !important;
-  }
-
-  #urlbar[open] > .urlbarView {
-    position: absolute !important;
-    bottom: 100% !important;
-    margin-bottom: 2px !important;
-    transform-origin: bottom center !important;
-
-    z-index: 9999 !important;
-    background-color: var(
-      --toolbar-field-focus-background-color,
-      var(--arrowpanel-background, #2b2a33)
-    ) !important;
-    border: 1px solid rgba(0, 0, 0, 0.35) !important;
-    border-radius: 8px !important;
-    box-shadow: var(
-      --arrowpanel-shadow,
-      0 6px 24px rgba(0, 0, 0, 0.3)
-    ) !important;
+  #urlbar-results {
+    display: flex;
+    flex-direction: column-reverse;
   }
 
   .search-one-offs {
     display: none !important;
   }
 
+  .tab-background {
+    border-top: none !important;
+  }
+
+  #navigator-toolbox::after {
+    border: none;
+  }
+
+  #urlbar[open] {
+    z-index: 1000 !important;
+  }
+
+  #urlbar[open] > .urlbarView {
+    position: absolute !important;
+    top: auto !important;
+    bottom: calc(100% + 2px) !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    margin: 0 !important;
+    transform-origin: bottom center !important;
+
+    background: var(--toolbar-field-focus-background-color, Field) !important;
+    color: var(--toolbar-field-focus-color, FieldText) !important;
+    border: 1px solid var(--toolbar-field-focus-border-color, #666) !important;
+    border-radius: 8px !important;
+    box-shadow: 0 -6px 18px rgba(0, 0, 0, 0.35) !important;
+    overflow: hidden !important;
+  }
+
+  #urlbar[open] .urlbarView-body-outer,
+  #urlbar[open] .urlbarView-body-inner,
+  #urlbar[open] .urlbarView-results,
+  #urlbar[open] #urlbar-results {
+    background: inherit !important;
+  }
+
+  #urlbar[open] .urlbarView-row {
+    background: transparent !important;
+  }
+
+  #urlbar[open] .urlbarView-row[selected] > .urlbarView-row-inner,
+  #urlbar[open] .urlbarView-row:hover > .urlbarView-row-inner {
+    background: var(--urlbarView-highlight-background, Highlight) !important;
+    color: var(--urlbarView-highlight-color, HighlightText) !important;
+  }
+
+  .urlbarView {
+    flex-direction: column-reverse !important;
+  }
+
   #TabsToolbar {
-    visibility: collapse !important;
+    visibility: collapse;
   }
 
   #TabsToolbar .tabbrowser-arrowscrollbox,
@@ -100,11 +103,11 @@
   }
 
   .tabbrowser-tab {
-    font-size: 80% !important;
+    font-size: 80%;
   }
 
   .tab-content {
-    padding: 0 5px !important;
+    padding: 0 5px;
   }
 
   .tab-close-button .toolbarbutton-icon {
@@ -112,35 +115,48 @@
     height: 12px !important;
   }
 
-  /* panels: auto-flip upward; no hardcoded colors */
-  :root {
-    --uc-navbar-height: 40px;
+  toolbox[inFullscreen="true"] {
+    display: none;
   }
 
-  #mainPopupSet > panel[type="arrow"],
-  #navigator-toolbox panel[type="arrow"] {
-    height: auto !important;
-    margin-top: 0 !important;
+  /*
+   * the following makes it so that the on-click panels in the nav-bar
+   * extend upwards, not downwards. some of them are in the #mainPopupSet
+   * (hamburger + unified extensions), and the rest are in
+   * #navigator-toolbox.
+   */
+  #mainPopupSet panel.panel-no-padding:not(#appMenu-popup) {
+    margin-top: calc(-50vh + 40px) !important;
+  }
+
+  #mainPopupSet #appMenu-popup.panel-no-padding {
+    margin-top: calc(-50vh - 50px) !important;
+  }
+
+  #appMenu-popup {
+    margin-top: calc(-50vh - 96px) !important;
   }
 
   #mainPopupSet .panel-viewstack,
-  #navigator-toolbox .panel-viewstack,
-  panelmultiview .panel-subview-body {
-    max-height: calc(100vh - var(--uc-navbar-height) - 12px) !important;
-    overflow: auto !important;
+  #mainPopupSet popupnotification {
+    max-height: 50vh !important;
+    height: 50vh;
   }
 
-  panel[type="arrow"][side="top"] {
-    transform-origin: bottom center !important;
+  #mainPopupSet panel.panel-no-padding.popup-notification-panel {
+    margin-top: calc(-50vh - 35px) !important;
   }
 
-  panelview.cui-widget-panelview,
+  #navigator-toolbox .panel-viewstack {
+    max-height: 75vh !important;
+  }
+
+  panelview.cui-widget-panelview {
+    flex: 1;
+  }
+
   panelview.cui-widget-panelview > vbox {
-    min-height: 0 !important;
-    flex: 1 1 auto !important;
-  }
-
-  :root[sizemode="fullscreen"] #navigator-toolbox {
-    display: none;
+    flex: 1;
+    min-height: 50vh;
   }
 }
