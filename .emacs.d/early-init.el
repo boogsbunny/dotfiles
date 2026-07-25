@@ -11,6 +11,8 @@
 (require 'profiler)
 (profiler-start 'cpu+mem)
 
+(require 'cl-lib)
+
 ;; additional config in 'lisp' folder
 (add-to-list 'load-path (expand-file-name "patches/" user-emacs-directory))
 (add-to-list 'load-path (expand-file-name "lisp/" user-emacs-directory))
