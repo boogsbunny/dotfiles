@@ -7,20 +7,16 @@
 ;;; general
 (defun boogs/get-face-attribute-height ()
   (if (laptop-screen-p)
-      ;; 120
-      ;; 150
-      ;; 250
-      ;; 200
-      250
-    200
-    ))
+      120
+    200))
 
 (set-face-attribute 'default nil
                     :font "Iosevka Term"
                     :width 'normal
                     :height (boogs/get-face-attribute-height))
 
-(set-face-background 'mouse "#777777")  ; darker mouse, less distracting.
+;; darker mouse, less distracting.
+(set-face-background 'mouse "#777777")
 
 ;;; when i want to change the font size
 (defhydra hydra-zoom (global-map "C-c")
@@ -179,8 +175,8 @@
      `(org-level-2 ((t (,@headline ,@variable-tuple :height 1.5))))
      `(org-level-1 ((t (,@headline ,@variable-tuple :height 1.75))))
      `(org-document-title ((t (,@headline ,@variable-tuple :height 2.0 :underline nil))))
-     `(variable-pitch ((t (:family "Iosevka Comfy" :height 280 :weight thin))))
-     `(fixed-pitch ((t (:family "Fira Code Retina" :height 250))))
+     `(variable-pitch ((t (:family "Iosevka Comfy" :height 220 :weight thin))))
+     `(fixed-pitch ((t (:family "Fira Code Retina" :height 200))))
      `(org-block ((t (:inherit fixed-pitch :background ,(cdr (assoc 'background-dim colors))))))
      `(org-code ((t (:inherit (shadow fixed-pitch) :background ,(cdr (assoc 'background-dim colors))))))
      `(org-document-info ((t (:foreground ,(cdr (assoc 'foreground-dim colors))))))

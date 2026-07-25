@@ -1,5 +1,12 @@
 ;;; -*- mode: emacs-lisp; -*-
 
+(defun boogs/start-xsettingsd ()
+  (when (and (eq window-system 'x)
+             (executable-find "xsettingsd"))
+    (start-process "xsettingsd" nil "xsettingsd")))
+
+(add-hook 'exwm-init-hook #'boogs/start-xsettingsd)
+
 (require 'exwm)
 (require 'perspective-exwm)
 

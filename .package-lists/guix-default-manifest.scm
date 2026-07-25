@@ -121,6 +121,7 @@
    "xprop"
    "xrandr"
    "xrdb"
+   "xsettingsd"
    "xss-lock"
    "xxd"
    "yt-dlp"
