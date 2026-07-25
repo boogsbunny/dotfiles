@@ -1,24 +1,24 @@
 -- -*- mode: lua; -*-
 
 conky.config = {
-	 background = false,
-	 border_width = 1,
-	 cpu_avg_samples = 2,
-	 extra_newline = false,
-	 net_avg_samples = 2,
-	 no_buffers = true,
-	 out_to_console = true,
-	 out_to_stderr = false,
-	 out_to_x = false,
-   own_window = true,
-   own_window_type = 'dock',
-   own_window_class = 'Conky',
-   own_window_transparent = true,
-	 update_interval = 1.0,
-	 update_interval_on_battery = 1.0,
-	 uppercase = false,
-	 use_spacer = left,
-	 times_in_seconds = true,
+  background = false,
+  border_width = 1,
+  cpu_avg_samples = 2,
+  extra_newline = false,
+  net_avg_samples = 2,
+  no_buffers = true,
+  out_to_console = true,
+  out_to_stderr = false,
+  out_to_x = false,
+  own_window = true,
+  own_window_type = 'dock',
+  own_window_class = 'Conky',
+  own_window_transparent = true,
+  update_interval = 10.0,
+  update_interval_on_battery = 30.0,
+  uppercase = false,
+  use_spacer = left,
+  times_in_seconds = true,
 };
 
 -- Colors are in dzen2 format.
@@ -33,8 +33,8 @@ conky.text =
 ^fg(grey)↑ ^fg(DeepSkyBlue)${upspeedf ${gw_iface}} KiB \
        \
 ^fg(grey)^fn(FontAwesome:size=$STATUSBARSIZE)^fn(IosevkaComfy:size=$STATUSBARSIZE) ^fg(DeepSkyBlue)${battery_percent}% \
-${if_match "${exec pactl list sinks | awk '/^\tMute:/ {print $2;exit}'}" == "no"}^fg(grey) ^fn(FontAwesome:size=$STATUSBARSIZE) ^fn(IosevkaComfy:size=$STATUSBARSIZE)^fg(DeepSkyBlue)${exec pactl list sinks | awk '/^\tVolume:/ {print $5;exit}'}${endif} \
+${if_match "${execi 5 pactl list sinks | awk '/^\tMute:/ {print $2;exit}'}" == "no"}^fg(grey) ^fn(FontAwesome:size=$STATUSBARSIZE) ^fn(IosevkaComfy:size=$STATUSBARSIZE)^fg(DeepSkyBlue)${execi 5 pactl list sinks | awk '/^\tVolume:/ {print $5;exit}'}${endif} \
        \
-^fg(grey)^fn(FontAwesome:size=$STATUSBARSIZE)^fg(DeepSkyBlue)^fn(IosevkaComfy:size=$STATUSBARSIZE)${wireless_link_qual_perc wlp2s0}% ${wireless_essid wlp2s0} ^fg(grey)${exec curl -s www.icanhazip.com} \
+^fg(grey)^fn(FontAwesome:size=$STATUSBARSIZE)^fg(DeepSkyBlue)^fn(IosevkaComfy:size=$STATUSBARSIZE)${wireless_link_qual_perc ${gw_iface}}% ${wireless_essid ${gw_iface}} ^fg(grey)${execi 900 curl -s --max-time 2 www.icanhazip.com} \
        \
 ]]
