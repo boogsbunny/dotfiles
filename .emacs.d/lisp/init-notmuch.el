@@ -6,6 +6,8 @@
 (require 'patch-notmuch)
 (require 'init-notmuch-sync)
 
+(setq-default notmuch-search-oldest-first nil)
+
 (setq notmuch-fcc-dirs
       '(("boogs@venatores.group" . "vg/Sent +sent -inbox -unread")
         ("bugrahanabdulkarim@gmail.com" . "gmail/Sent +sent -inbox -unread")
