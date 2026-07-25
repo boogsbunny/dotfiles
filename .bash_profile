@@ -65,6 +65,14 @@ if [ -d /run/current-system ]; then
     export GUIX_EXTRA_PROFILES="${HOME}/.guix-extra-profiles"
 
     for i in $GUIX_EXTRA_PROFILES/*; do
+        # if [[ "$(basename "$i")" == "rust" ]]; then
+        #     continue
+        # fi
+
+        # if [[ "$(basename "$i")" == "emacs" ]]; then
+        #     continue
+        # fi
+
         profile=$i/$(basename "$i")
         if [ -f "$profile/etc/profile" ]; then
             GUIX_PROFILE="$profile"
