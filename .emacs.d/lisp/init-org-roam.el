@@ -49,7 +49,16 @@
 (defun boogs/org-path (path)
   (expand-file-name path org-roam-directory))
 
-(setq org-default-notes-file (boogs/org-path "inbox.org"))
+(defvar boogs/org-inbox-file
+  (boogs/org-path "20260724122358-inbox.org"))
+
+(defvar boogs/org-tickler-file
+  (boogs/org-path "20260724123202-tickler.org"))
+
+(defvar boogs/org-slack-file
+  (boogs/org-path "20260725143134-slack.org"))
+
+(setq org-default-notes-file boogs/org-inbox-file)
 
 (defvar boogs/org-roam-project-template
   '("p" "project" plain "** TODO %?"
@@ -140,7 +149,7 @@
     (interactive)
     (org-roam-capture- :node (org-roam-node-create)
                        :templates '(("i" "inbox" plain "* %?"
-                                     :if-new (file+head "inbox.org" "#+title: inbox\n")))))
+                                     :if-new (file+head boogs/org-inbox-file "#+title: inbox\n")))))
 
   (defun boogs/org-roam-copy-todo-to-today ()
     (interactive)

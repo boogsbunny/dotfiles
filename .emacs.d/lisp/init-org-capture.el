@@ -34,15 +34,17 @@
 ;; org capture templates
 (setq org-capture-templates
       `(("t" "Tasks")
-        ("tt" "TODO entry" entry (file ,(boogs/org-path "inbox.org"))
-         "* TODO %?\n  %U\n  %a\n  %i" :empty-lines 1)
-        ("tw" "WAITING entry" entry (file ,(boogs/org-path "inbox.org"))
+        ("tt" "TODO entry" entry
+         (file ,boogs/org-inbox-file)
+         "* TODO %?\n:PROPERTIES:\n:CREATED: %<%Y-%m-%d %H:%M>\n:END:\n%a\n%i"
+         :empty-lines 1)
+        ("tw" "WAITING entry" entry (file ,boogs/org-inbox-file)
          "* WAITING %^{DESCRIPTION}\n :PROPERTIES:\n :CREATED: %U\n :END:" :empty-lines 1)
-        ("td" "DELEGATED entry" entry (file ,(boogs/org-path "inbox.org"))
+        ("td" "DELEGATED entry" entry (file ,boogs/org-inbox-file)
          "* DELEGATED %^{DESCRIPTION}\n :PROPERTIES:\n :CREATED: %U\n :END:" :empty-lines 1)
-        ("tb" "BOOK RECOMMENDATION entry" entry (file ,(boogs/org-path "inbox.org"))
+        ("tb" "BOOK RECOMMENDATION entry" entry (file ,boogs/org-inbox-file)
          "* SOMEDAY %^{AUTHOR} - %^{TITLE}\n :PROPERTIES:\n :CREATED: %U\n :PAGES: %^{PAGES}\n :GENRE: %^{GENRE}\n :END:\n - Recommended by: %^{recommended by}\n" :empty-lines 1)
-        ("ti" "IDEA entry" entry (file ,(boogs/org-path "tickler.org"))
+        ("ti" "IDEA entry" entry (file ,boogs/org-tickler-file)
          "* SOMEDAY %^{TITLE}\n - %^{DESCRIPTION}\n :PROPERTIES:\n :CREATED: %U\n :END:" :empty-lines 1)
         ("ts" "Clocked Entry Subtask" entry (clock)
          "* TODO %?\n  %U\n  %a\n  %i" :empty-lines 1)

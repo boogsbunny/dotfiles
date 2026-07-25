@@ -48,13 +48,41 @@
         (delete-dups
          (append
           (boogs/org-existing-files
-           (boogs/org-path "inbox.org")
-           (boogs/org-path "tickler.org"))
+           boogs/org-inbox-file
+           boogs/org-tickler-file
+           boogs/org-slack-file)
           (boogs/org-agenda-project-files)
           (boogs/org-recent-daily-files)
           (boogs/org-last-existing-daily-files)))))
 
 (boogs/org-refresh-agenda-files)
+
+(defun boogs/org-agenda-redo (&optional all)
+  "Refresh `org-agenda-files' before rebuilding the agenda."
+  (interactive "P")
+  (boogs/org-refresh-agenda-files)
+  (org-agenda-redo all))
+
+(defun boogs/org-agenda-redo-all (&optional exhaustive)
+  "Refresh `org-agenda-files' before rebuilding agenda buffers."
+  (interactive "P")
+  (boogs/org-refresh-agenda-files)
+  (org-agenda-redo-all exhaustive))
+
+(with-eval-after-load 'evil-org-agenda
+  (evil-define-key 'motion org-agenda-mode-map
+    "gr" #'boogs/org-agenda-redo
+    "gR" #'boogs/org-agenda-redo-all))
+
+(defun boogs/org-refresh-open-agendas ()
+  "Refresh agenda files and rebuild open agenda buffers."
+  (boogs/org-refresh-agenda-files)
+  (dolist (buffer (buffer-list))
+    (with-current-buffer buffer
+      (when (derived-mode-p 'org-agenda-mode)
+        (org-agenda-redo t)))))
+
+(run-at-time "00:05" (* 24 60 60) #'boogs/org-refresh-open-agendas)
 
 ;; agenda
 (global-set-key (kbd "C-c a") 'org-agenda)
@@ -81,7 +109,7 @@
       org-agenda-use-time-grid t
 
       org-agenda-time-grid
-      '((daily today require-timed)
+      '((daily today)
         (0600 0700 0800 0900 1000 1100
               1200 1300 1400 1500 1600
               1700 1800 1900 2000 2100)
@@ -101,6 +129,7 @@
   '((agenda "" ((org-deadline-warning-days 0)
                 (org-agenda-span 1)
                 (org-agenda-start-on-weekday nil)
+                (org-agenda-include-inactive-timestamps t)
                 (org-agenda-start-day (org-today))
                 (org-agenda-overriding-header "Today\n")))
     (tags-todo "+PRIORITY=\"A\""
@@ -111,9 +140,13 @@
                 (org-agenda-skip-function '(org-agenda-skip-if nil '(scheduled deadline)))
                 (org-agenda-overriding-header "\nRecent daily tasks\n")))
     (tags-todo "+TODO=\"TODO\"-PRIORITY=\"A\"-followup"
-               ((org-agenda-files `(,(boogs/org-path "inbox.org")))
+               ((org-agenda-files `(,boogs/org-inbox-file))
                 (org-agenda-skip-function '(org-agenda-skip-if nil '(scheduled deadline)))
-                (org-agenda-overriding-header "\nInbox\n"))))
+                (org-agenda-overriding-header "\nInbox\n")))
+    (tags-todo "+slack"
+               ((org-agenda-files `(,boogs/org-slack-file))
+                (org-agenda-skip-function '(org-agenda-skip-if nil '(scheduled deadline)))
+                (org-agenda-overriding-header "\nSlack Inbox\n"))))
   "Focused agenda for today's work, avoiding duplicated task sections.")
 
 (defvar boogs/org-review-agenda
@@ -131,7 +164,7 @@
                ((org-agenda-skip-function '(org-agenda-skip-if nil '(scheduled deadline)))
                 (org-agenda-overriding-header "\nAwaiting response\n")))
     (tags-todo "+TODO=\"SOMEDAY\"-followup"
-               ((org-agenda-files `(,(boogs/org-path "tickler.org")))
+               ((org-agenda-files `(,boogs/org-tickler-file))
                 (org-agenda-overriding-header "\nIdeas\n"))))
   "Review agenda for triage and next-action planning.")
 
