@@ -321,6 +321,18 @@ IS-DARK should be non-nil for dark mode, nil for light mode."
                     (car cmd) (error-message-string err))))))
     (sleep-for 0.5)))
 
+(defun set-pr-review-faces-for-modus-operandi-tinted ()
+  "Configure pr-review search faces for the modus-operandi-tinted theme."
+  (custom-set-faces
+   '(boogs/pr-review-search-pr-column-face
+     ((t (:inherit pr-review-listview-status-face))))))
+
+(defun set-pr-review-faces-for-modus-vivendi-tinted ()
+  "Configure pr-review search faces for the modus-vivendi-tinted theme."
+  (custom-set-faces
+   '(boogs/pr-review-search-pr-column-face
+     ((t (:inherit pr-review-listview-status-face))))))
+
 ;;--------------------------------------------------------------------
 ;; Theme switching helpers (light / dark)
 ;;--------------------------------------------------------------------
@@ -331,6 +343,7 @@ IS-DARK should be non-nil for dark mode, nil for light mode."
   ;; (run-gsettings-safely nil)
   (load-theme 'modus-operandi-tinted t)
   (set-helm-ls-git-faces-for-modus-operandi-tinted)
+  (set-pr-review-faces-for-modus-operandi-tinted)
   (set-org-faces-for-modus-operandi-tinted)
   (boogs/sync-alacritty-theme nil)
   ;; TODO: fix closure since color variable is void
@@ -344,6 +357,7 @@ IS-DARK should be non-nil for dark mode, nil for light mode."
   ;; (run-gsettings-safely t)
   (load-theme 'modus-vivendi-tinted t)
   (set-helm-ls-git-faces-for-modus-vivendi-tinted)
+  (set-pr-review-faces-for-modus-vivendi-tinted)
   (set-org-faces-for-modus-vivendi-tinted)
   (boogs/sync-alacritty-theme t)
   ;; TODO: fix closure since color variable is void
