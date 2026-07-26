@@ -2,6 +2,7 @@
 ##############################
 *.tags
 *tags
+.config/
 .config/mpd/*
 
 # emacs #
