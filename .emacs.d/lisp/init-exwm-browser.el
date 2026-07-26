@@ -11,7 +11,7 @@
   :type 'string
   :group 'boogs-browser)
 
-(defcustom boogs/browser-cpu-limit 40
+(defcustom boogs/browser-cpu-limit 80
   "CPU limit percentage for the browser."
   :type 'integer
   :group 'boogs-browser)
