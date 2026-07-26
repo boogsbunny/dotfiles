@@ -77,12 +77,12 @@
 
   tad (tap-hold 120 a (layer-switch specials))
   tod (tap-hold 85 o (layer-switch numbers))
-  ted (tap-hold 100 e lctl)
+  ted (tap-hold-next-release 320 e lctl :timeout-button (layer-toggle cursor))
   tud (tap-hold 100 u lmet)
   tid (tap-hold 85 i (layer-switch caps))
   tdd (tap-hold 85 d bspc)
   thd (tap-hold 100 h lmet)
-  ttd (tap-hold 100 t rctl)
+  ttd (tap-hold-next-release 320 t rctl :timeout-button (layer-toggle cursor))
   tnd (tap-hold 85 n (layer-switch specials))
   tsd (tap-hold 120 s (layer-switch numbers))
   ;; modifiers in caps layer
