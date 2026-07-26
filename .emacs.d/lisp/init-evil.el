@@ -54,8 +54,10 @@
 
 (setq evil-collection-setup-minibuffer t
       evil-collection-term-sync-state-and-mode-p t)
+
 (when (require 'evil-collection nil t)
-  (evil-collection-init))
+  (progn
+    (evil-collection-init)))
 
 (with-eval-after-load 'consult
   (define-key evil-motion-state-map "'" 'consult-global-mark)
