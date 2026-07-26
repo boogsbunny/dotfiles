@@ -386,11 +386,6 @@ Double-tap quickly to force a new instance."
     (exwm-input-release-keyboard (exwm--buffer->id (window-buffer)))))
 (add-hook 'exwm-manage-finish-hook 'boogs/exwm-start-in-char-mode)
 
-;; Askpass.
-(add-to-list 'exwm-manage-configurations
-             '((string= exwm-class-name "lxqt-openssh-askpass")
-               floating t))
-
 (defvar boogs/exwm-change-screen-turn-off-primary nil
   "Turn off primary display when cable is plugged.")
 
