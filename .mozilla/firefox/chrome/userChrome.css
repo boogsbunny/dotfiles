@@ -1,9 +1,27 @@
 @-moz-document url(chrome://browser/content/browser.xhtml) {
-  /* tabs on bottom of window */
-  /* requires that you set
+  /*
+   * Requires:
    * toolkit.legacyUserProfileCustomizations.stylesheets = true
-   * in about:config
-   * figure out current firefox's profile folder in about:support
+   *
+   * Adjust these values to leave space between Firefox popups and the
+   * bottom edge of the Firefox window or an EXWM mode line.
+   */
+  :root {
+    --bottom-toolbar-app-menu-popup-gap: 62px;
+    --bottom-toolbar-popup-gap: 86px;
+  }
+
+  /* Hide the navigation interface in fullscreen mode. */
+  :root[inFullscreen] #navigator-toolbox,
+  :root[inFullscreen] #nav-bar,
+  :root[inFullscreen] #urlbar,
+  toolbox[inFullscreen="true"] {
+    display: none !important;
+  }
+
+  /*
+   * Move the navigation toolbox to the bottom of the window and reverse
+   * its contents so the navigation bar remains above the hidden tab bar.
    */
   #main-window body {
     flex-direction: column-reverse !important;
@@ -13,6 +31,10 @@
     flex-direction: column-reverse !important;
   }
 
+  /*
+   * Keep the URL input at the bottom of the URL bar and display search
+   * results upward from it.
+   */
   #urlbar {
     box-shadow: none !important;
     display: flex !important;
@@ -49,6 +71,10 @@
     border: none;
   }
 
+  /*
+   * Position the open URL results panel above the URL input and give it
+   * an opaque background so page content does not show through.
+   */
   #urlbar[open] {
     z-index: 1000 !important;
   }
@@ -62,7 +88,6 @@
     width: 100% !important;
     margin: 0 !important;
     transform-origin: bottom center !important;
-
     background: var(--toolbar-field-focus-background-color, Field) !important;
     color: var(--toolbar-field-focus-color, FieldText) !important;
     border: 1px solid var(--toolbar-field-focus-border-color, #666) !important;
@@ -92,6 +117,10 @@
     flex-direction: column-reverse !important;
   }
 
+  /*
+   * Hide Firefox's native tab toolbar. The remaining tab rules preserve
+   * compact sizing if the toolbar is shown temporarily by Firefox.
+   */
   #TabsToolbar {
     visibility: collapse;
   }
@@ -115,42 +144,68 @@
     height: 12px !important;
   }
 
-  toolbox[inFullscreen="true"] {
-    display: none;
+  /*
+   * Panels under #mainPopupSet do not automatically reposition correctly
+   * for a bottom toolbar. Give them a fixed height and move them upward.
+   */
+  #mainPopupSet panel.panel-no-padding:not(#appMenu-popup) {
+    margin-top:
+      calc(-50vh + 40px - var(--bottom-toolbar-popup-gap)) !important;
   }
 
   /*
-   * the following makes it so that the on-click panels in the nav-bar
-   * extend upwards, not downwards. some of them are in the #mainPopupSet
-   * (hamburger + unified extensions), and the rest are in
-   * #navigator-toolbox.
+   * The hamburger menu uses different sizing and positioning, so it needs
+   * its own gap value. Clear margin-bottom to avoid applying two offsets.
    */
-  #mainPopupSet panel.panel-no-padding:not(#appMenu-popup) {
-    margin-top: calc(-50vh + 40px) !important;
-  }
-
-  #mainPopupSet #appMenu-popup.panel-no-padding {
-    margin-top: calc(-50vh - 50px) !important;
-  }
-
   #appMenu-popup {
-    margin-top: calc(-50vh - 96px) !important;
+    margin-top:
+      calc(-50vh + 16px - var(--bottom-toolbar-app-menu-popup-gap)) !important;
+    margin-bottom: 0 !important;
   }
 
+  /*
+   * Panels attached to the navigation toolbox already open upward.
+   * Their bottom margin provides clearance for the EXWM mode line.
+   */
+  #navigator-toolbox panel:not(#appMenu-popup),
+  #customizationui-widget-panel,
+  #unified-extensions-panel,
+  #fxa-menu-profiles,
+  #notification-popup {
+    margin-bottom: var(--bottom-toolbar-popup-gap) !important;
+  }
+
+  /*
+   * Firefox calculates these panel heights from their distance to the
+   * bottom of the screen. Fixing their height makes upward positioning
+   * predictable with the bottom toolbar.
+   */
   #mainPopupSet .panel-viewstack,
   #mainPopupSet popupnotification {
     max-height: 50vh !important;
-    height: 50vh;
+    height: 50vh !important;
   }
 
-  #mainPopupSet panel.panel-no-padding.popup-notification-panel {
-    margin-top: calc(-50vh - 35px) !important;
+  /*
+   * Permission and notification panels use a different native offset.
+   */
+  #mainPopupSet panel.popup-notification-panel {
+    margin-top:
+      calc(-50vh - 35px - var(--bottom-toolbar-popup-gap)) !important;
   }
 
+  /*
+   * Reserve the configured bottom clearance when Firefox calculates the
+   * maximum height of panels attached to the navigation toolbox.
+   */
   #navigator-toolbox .panel-viewstack {
-    max-height: 75vh !important;
+    max-height: calc(75vh - var(--bottom-toolbar-popup-gap)) !important;
   }
 
+  /*
+   * Newer unified panels do not always grow to the corrected panel height
+   * by default, so allow their panel views and content boxes to flex.
+   */
   panelview.cui-widget-panelview {
     flex: 1;
   }
